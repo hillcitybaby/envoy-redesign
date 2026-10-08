@@ -1,0 +1,26 @@
+Hero stage — Wedding [F] 0,0 1372x830 r38
+  Blob — cyan [E] 1080,330 640x540 bg#7fd3ea@70 fx:L200      (behind photo, invisible)
+  Blob — indigo [E] 420,560 900x620 bg#5b45d8@85 fx:L200     (behind photo, invisible)
+  Gemini_..._nbglfmnbglfmnbgl 1 [R] -176,-26 1974x1102 IMAGE
+  Overlay card [F] 22,22 563x764 AL:V gap0 p26 r30 bg#ffffff fx:DROP70
+    Brand row [F] 48,48 511x21 AL:H SPACE_BETWEEN ca:CENTER
+      Brand [F] 48,48 76x21 AL:H gap8 ca:CENTER
+        Envoy mark 20x20 @48,49
+        "Envoy" [T] 76,48 48x21 fs17 SemiBold lh:auto ls-2% c#0c1024
+    Hero copy [F] 48,69 511x691 AL:V gap16 pTop30 pa:SPACE_BETWEEN ca:MIN
+      Frame 1 [F] 48,99 511x219 AL:V gap16 pa:SPACE_BETWEEN
+        H1 [T] 48,99 403x84 fs40 Medium lh106% ls-3.5% c#0c1024
+        Lede [T] 48,234 371x84 fs18 Regular lh155% ls0 c#484d6b
+      4 · Start [F] 48,573 511x187 AL:V gap16 ca:CENTER
+        Composer [F] 48,573 511x155 r22 bg#ffffff st#d2d5ea/1 fx:DROP60
+        Micro [T] 215,744 177x16 fs13 Regular c#484d6b  (centred)
+  Utility pills [F] 1264,22 86x32 AL:H gap8 ca:CENTER
+    Log in pill [F] 1264,22 86x32 p8,15,8,11 r999 bg#ffffff@94
+      Account icon 15x15 @1275,31 stroke#0c1024/1.25
+      "Log in" [T] 1298,30 37x16 fs13 SemiBold c#0c1024
+  Tooltip Down-Left [C] 620,247 177x66 r22 bg#0c1024 st#484d6b/1 fx:DROP12
+    Text [T] 650,259 117x42 fs13 Medium lh18px ls0 c#ffffff align:CENTER
+    Tail: group 28x8 @628,313 (points down, offset left)
+  Tooltip Right-Top [C] 1001,67 164x66 r14 p12,16,12,16 bg#0c1024 st#484d6b/1 fx:DROP12
+    Text [T] 1017,79 132x42 fs13 Medium lh18px c#ffffff align:CENTER
+    Tail: group 9x18 @1165,80 (points right, near top)

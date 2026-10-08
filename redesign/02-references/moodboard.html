@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy redesign — visual moodboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14151A; --panel:#1C1E24; --panel-2:#24272F; --line:#33373F; --line-2:#454A55;
+  --text:#EEF0F3; --muted:#A9AFBA; --accent:#7DA2FF; --good:#7BD88F; --warn:#F2C879; --bad:#FF9C8F;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --pad:clamp(20px,4vw,56px);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:var(--pad)}
+section{padding-block:clamp(48px,6vw,84px);border-top:1px solid var(--line)}
+h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.15}
+h1{font-size:clamp(1.9rem,4vw,2.9rem);font-weight:600}
+h2{font-size:clamp(1.35rem,2.4vw,1.85rem);font-weight:600}
+h3{font-size:1rem;font-weight:600}
+p{margin:0 0 14px}
+.kick{display:block;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.lede{font-size:clamp(1.02rem,1.5vw,1.2rem);color:var(--muted);max-width:64ch}
+.small{font-size:13.5px;color:var(--muted)}
+
+/* masthead */
+.hd{padding-block:clamp(40px,6vw,72px) clamp(28px,4vw,44px)}
+.hd .one{font-family:"Fraunces",Georgia,serif;font-size:clamp(1.6rem,3.4vw,2.6rem);font-weight:500;line-height:1.2;max-width:22ch;margin:24px 0 0}
+.hd .one em{font-style:italic;color:var(--accent)}
+
+/* the argument */
+.vs{display:grid;gap:20px;grid-template-columns:1fr;margin-top:28px}
+@media(min-width:860px){.vs{grid-template-columns:1fr 1fr}}
+.shot{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.shot .cap{padding:13px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);font-size:13px;font-weight:600}
+.shot .cap span{font-weight:400;color:var(--muted);font-size:12.5px}
+.shot .win{height:230px;overflow:hidden}
+.shot .win img{height:auto;width:100%}
+.verdict{margin-top:20px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:10px;padding:18px 20px;font-size:15px}
+.verdict b{color:var(--text)}
+
+/* palettes */
+.pals{display:grid;gap:22px;grid-template-columns:1fr}
+@media(min-width:900px){.pals{grid-template-columns:repeat(3,1fr)}}
+.pal{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.pal h3{padding:16px 18px 0}
+.pal .sub{padding:4px 18px 14px;font-size:12.5px;color:var(--muted)}
+.sw{display:grid;grid-template-columns:repeat(2,1fr)}
+.sw div{padding:16px 14px;font-size:11px;font-weight:600;letter-spacing:.04em;min-height:74px;display:flex;flex-direction:column;justify-content:flex-end}
+.sw div small{display:block;font-weight:400;opacity:.78;font-size:10.5px;margin-top:3px}
+.ratio{padding:12px 18px 16px;font-size:12px;color:var(--muted);border-top:1px solid var(--line)}
+.ratio b{color:var(--good)}
+
+/* type */
+.types{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:900px){.types{grid-template-columns:repeat(3,1fr)}}
+.type{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
+.type .name{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.type .use{font-size:12.5px;color:var(--muted);margin-bottom:18px}
+.spec-a{font-family:"Instrument Sans",sans-serif;font-size:34px;font-weight:600;letter-spacing:-.025em;line-height:1.1}
+.spec-b{font-family:"Fraunces",Georgia,serif;font-size:36px;font-weight:600;letter-spacing:-.012em;line-height:1.1}
+.spec-c{font-family:"Newsreader",Georgia,serif;font-size:38px;font-weight:500;letter-spacing:-.014em;line-height:1.05}
+.spec-c em{font-style:italic}
+.type .body{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);font-size:14px;color:var(--muted);line-height:1.55}
+.type .body.serif-b{font-family:"Fraunces",Georgia,serif}
+.type .body.serif-c{font-family:"Newsreader",Georgia,serif;font-size:15px}
+
+/* tone spectrum */
+.spectrum{margin-top:30px;position:relative;padding:34px 0 8px}
+.spectrum .bar{height:4px;border-radius:99px;background:linear-gradient(90deg,#5C6B82 0%,#8E7F6E 44%,#C08A6E 72%,#D9A8B4 100%)}
+.ticks{display:flex;justify-content:space-between;margin-top:14px;gap:10px}
+.tick{flex:1;font-size:12.5px;color:var(--muted);text-align:center}
+.tick b{display:block;color:var(--text);font-size:13.5px;margin-bottom:3px}
+.tick.here b{color:var(--accent)}
+.here-mark{position:absolute;top:14px;left:38%;transform:translateX(-50%);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.here-mark::after{content:"";position:absolute;left:50%;top:18px;width:2px;height:16px;background:var(--accent);transform:translateX(-50%)}
+
+/* references */
+.refs{display:grid;gap:20px;grid-template-columns:1fr;margin-top:30px}
+@media(min-width:720px){.refs{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1080px){.refs{grid-template-columns:repeat(3,1fr)}}
+.ref{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.ref .win{height:172px;overflow:hidden;border-bottom:1px solid var(--line);background:#0E0F13}
+.ref .win img{width:100%;height:auto}
+.ref .b{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.ref .t{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between}
+.ref .t b{font-size:14.5px}
+.ref .prob{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:rgba(125,162,255,.12);border:1px solid rgba(125,162,255,.3);padding:3px 8px;border-radius:99px;white-space:nowrap}
+.ref p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.5}
+.ref .steal{margin-top:auto;padding-top:10px;border-top:1px solid var(--line);font-size:13px;color:#D6DAE2}
+.ref .steal b{color:var(--good)}
+
+/* guidance grid */
+.guide{display:grid;gap:18px;grid-template-columns:1fr;margin-top:28px}
+@media(min-width:860px){.guide{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
+.card h3{margin-bottom:10px}
+.card ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.card li{display:flex;gap:10px;font-size:13.5px;color:#D6DAE2;line-height:1.5}
+.card li .m{flex:none;width:14px;text-align:center;font-weight:700}
+.yes .m{color:var(--good)} .no .m{color:var(--bad)}
+.no li.instead .m{color:var(--accent)}
+.no li.instead{margin-top:4px;padding-top:11px;border-top:1px solid var(--line)}
+li b{color:var(--text);font-weight:600}
+.keep{border-left:3px solid var(--good)}
+.anti{border-left:3px solid var(--bad)}
+
+footer{border-top:1px solid var(--line);padding-block:34px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+
+<header class="wrap hd">
+  <span class="kick">Envoy redesign · Phase 3 · visual moodboard</span>
+  <h1>Where this should land</h1>
+  <p class="one">Warm, calm and <em>evidence-led</em> — a page that looks like the product it's selling.</p>
+  <p class="small" style="margin-top:22px;max-width:62ch">Guidance, not law. Companion to <strong>library.md</strong> (the problem-indexed references) and <strong>moodboard.md</strong> (the written version). Every screenshot below was captured live on 2026-08-25.</p>
+</header>
+
+<!-- ================= THE ARGUMENT ================= -->
+<section class="wrap">
+  <span class="kick">Start here</span>
+  <h2>The strongest argument has nothing to do with taste</h2>
+  <p class="lede">The marketing site is a near-black field with an electric-blue WebGL shader. The product it sells is white, soft-blue and friendly. Right now, everyone who converts walks from one into the other and feels a jolt.</p>
+  <div class="vs">
+    <div class="shot">
+      <div class="cap">The landing page today <span>hello-envoy.com</span></div>
+      <div class="win"><img src="../01-current-state/01-hero.png" alt="Current Envoy landing page hero: white wordmark and headline over a dark navy field with an electric blue animated gradient."></div>
+    </div>
+    <div class="shot">
+      <div class="cap">The product behind the login <span>mockvoy.lovable.app</span></div>
+      <div class="win"><img src="../01-current-state/product/demo-07-login-full.png" alt="Envoy sign-in screen: white and pale blue, light grey type, friendly and open."></div>
+    </div>
+  </div>
+  <p class="verdict"><b>So warming the page is a correction, not a preference.</b> "Make it less masculine and technical" isn't a request to abandon the brand — it's a request to make the front door match the house.</p>
+</section>
+
+<!-- ================= PALETTES ================= -->
+<section class="wrap">
+  <span class="kick">Colour</span>
+  <h2>Keep the blue. Stop letting it be the whole system.</h2>
+  <p class="lede">The current palette is one hue with no warm tone anywhere — a large part of why it reads cold. Each direction keeps Envoy's blue and changes what it sits on.</p>
+
+  <div class="pals" style="margin-top:30px">
+    <article class="pal">
+      <h3>A · Conservative</h3>
+      <p class="sub">The existing brand, disciplined.</p>
+      <div class="sw">
+        <div style="background:#061228;color:#DDE7FE">#061228<small>Ground</small></div>
+        <div style="background:#0F2242;color:#DDE7FE">#0F2242<small>Surface</small></div>
+        <div style="background:#003FB3;color:#fff">#003FB3<small>Action</small></div>
+        <div style="background:#7191F7;color:#061228">#7191F7<small>Accent</small></div>
+        <div style="background:#DDE7FE;color:#061228">#DDE7FE<small>Text</small></div>
+        <div style="background:#9DB0D9;color:#061228">#9DB0D9<small>Muted</small></div>
+      </div>
+      <p class="ratio">Muted on ground <b>8.4:1</b> · white on action <b>8.8:1</b></p>
+    </article>
+
+    <article class="pal">
+      <h3>B · Rework <span style="color:var(--accent);font-size:11px;letter-spacing:.1em">RECOMMENDED</span></h3>
+      <p class="sub">Light ground, one warm accent.</p>
+      <div class="sw">
+        <div style="background:#FBF9F6;color:#1A1714">#FBF9F6<small>Paper</small></div>
+        <div style="background:#F4F0E9;color:#1A1714">#F4F0E9<small>Band</small></div>
+        <div style="background:#143C9E;color:#fff">#143C9E<small>Action</small></div>
+        <div style="background:#A94E2C;color:#fff">#A94E2C<small>Clay accent</small></div>
+        <div style="background:#1A1714;color:#FBF9F6">#1A1714<small>Ink</small></div>
+        <div style="background:#5A5248;color:#FBF9F6">#5A5248<small>Muted</small></div>
+      </div>
+      <p class="ratio">Muted on paper <b>7.3:1</b> · clay on paper <b>5.3:1</b> · white on action <b>9.6:1</b></p>
+    </article>
+
+    <article class="pal">
+      <h3>C · Rethink</h3>
+      <p class="sub">Editorial. Paper, ink, one red.</p>
+      <div class="sw">
+        <div style="background:#F5F1E8;color:#16130F">#F5F1E8<small>Paper</small></div>
+        <div style="background:#EDE7DA;color:#16130F">#EDE7DA<small>Band</small></div>
+        <div style="background:#16130F;color:#F5F1E8">#16130F<small>Ink / action</small></div>
+        <div style="background:#9C2F1E;color:#F5F1E8">#9C2F1E<small>Ink red</small></div>
+        <div style="background:#1C3F7A;color:#F5F1E8">#1C3F7A<small>Blue</small></div>
+        <div style="background:#55503F;color:#F5F1E8">#55503F<small>Muted</small></div>
+      </div>
+      <p class="ratio">Muted on paper <b>7.2:1</b> · red on paper <b>6.6:1</b></p>
+    </article>
+  </div>
+  <p class="small" style="margin-top:18px">Ratios measured, not estimated. The current site fails AA — body copy bottoms out at <strong>1.26:1</strong> where the animated shader drives bright cyan behind text.</p>
+</section>
+
+<!-- ================= TYPE ================= -->
+<section class="wrap">
+  <span class="kick">Type</span>
+  <h2>Serif or sans — the question you asked to see both ways</h2>
+  <p class="lede">A geometric sans at 700 with tight tracking is the house style of developer tools. That, as much as the palette, is what "technical" means here. Three positions, rendering live:</p>
+
+  <div class="types" style="margin-top:30px">
+    <article class="type">
+      <div class="name">A · Instrument Sans</div>
+      <div class="use">Display + body. The existing face, at 600 not 700, with looser tracking and six sizes instead of nine.</div>
+      <div class="spec-a">Projects fail in the messy middle</div>
+      <div class="body">Not at the idea stage — when you're finding people, keeping details straight, and waiting for replies.</div>
+    </article>
+
+    <article class="type">
+      <div class="name">B · Fraunces + Instrument Sans</div>
+      <div class="use">Serif display, sans body. Warmth with an optical-size axis; still modern, never bridal.</div>
+      <div class="spec-b">Projects fail in the messy middle</div>
+      <div class="body">Not at the idea stage — when you're finding people, keeping details straight, and waiting for replies.</div>
+    </article>
+
+    <article class="type">
+      <div class="name">C · Newsreader + Instrument Sans</div>
+      <div class="use">Editorial serif for display <em>and</em> body; sans demoted to labels and UI.</div>
+      <div class="spec-c">Projects fail in the <em>messy middle</em></div>
+      <div class="body serif-c">Not at the idea stage — when you're finding people, keeping details straight, and waiting for replies.</div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= TONE ================= -->
+<section class="wrap">
+  <span class="kick">Register</span>
+  <h2>Warmer than utilitarian, well short of bridal</h2>
+  <p class="lede">Envoy has to say <em>"a 1920s kitchen renovation"</em> and <em>"an outdoor wedding for 150"</em> in the same breath without either sounding out of place. That rules out both ends.</p>
+
+  <div class="spectrum">
+    <div class="here-mark">Envoy</div>
+    <div class="bar"></div>
+    <div class="ticks">
+      <div class="tick"><b>Thumbtack</b>utilitarian, transactional</div>
+      <div class="tick here"><b>← here</b>warm, plain, concrete</div>
+      <div class="tick"><b>Zola</b>warm, plural, playful</div>
+      <div class="tick"><b>The Knot</b>bridal, decorative</div>
+    </div>
+  </div>
+
+  <div class="guide">
+    <div class="card keep">
+      <h3>Keep — already written, already good</h3>
+      <ul class="yes">
+        <li><span class="m">✓</span><span>“Projects fail in the messy middle”</span></li>
+        <li><span class="m">✓</span><span>“Not post-and-wait”</span></li>
+        <li><span class="m">✓</span><span>“You're in control. Every message sends from your address only after you approve it.”</span></li>
+        <li><span class="m">✓</span><span>“Delegate outreach without losing your voice”</span></li>
+        <li><span class="m">✓</span><span>“Email me this lineup to finish later”</span></li>
+        <li><span class="m">✓</span><span>Contractions, second person, present tense</span></li>
+      </ul>
+    </div>
+    <div class="card anti">
+      <h3>Banned — the actual source of “technical”</h3>
+      <ul class="no">
+        <li><span class="m">✕</span><span>multi-vendor project · project hub</span></li>
+        <li><span class="m">✕</span><span>commercial build-outs · AV</span></li>
+        <li><span class="m">✕</span><span>service providers · providers</span></li>
+        <li><span class="m">✕</span><span>trades and industries · every trade and category</span></li>
+        <li><span class="m">✕</span><span>Join the waitlist</span></li>
+        <li class="instead"><span class="m">→</span><span>Say <b>venue, caterer, florist, photographer, cabinetmaker</b> instead</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REFERENCES ================= -->
+<section class="wrap">
+  <span class="kick">References · indexed by problem, not by look</span>
+  <h2>What each one is here to solve</h2>
+  <p class="lede">All captured live. Full write-ups in <strong>library.md</strong>.</p>
+
+  <div class="refs">
+    <article class="ref">
+      <div class="win"><img src="img/thumbtack-hero.png" alt="Thumbtack homepage: short headline above a large project-description input field and a Find a pro button, with review and pro counts beneath."></div>
+      <div class="b">
+        <div class="t"><b>Thumbtack</b><span class="prob">P1 · abstract</span></div>
+        <p>Hero's main element is an input, not a claim: “Describe your project or problem — be as detailed as you'd like!”</p>
+        <p class="steal"><b>Steal:</b> when a product serves many project types, make the hero an input. The visitor supplies the specificity the page can't.</p>
+      </div>
+    </article>
+
+    <article class="ref">
+      <div class="win"><img src="img/zola-hero.png" alt="Zola homepage: full-bleed photograph of a couple with a large serif headline over it and soft pill buttons."></div>
+      <div class="b">
+        <div class="t"><b>Zola</b><span class="prob">P1 · register</span></div>
+        <p>Serif display over a real photograph, plural warm copy, and a CTA that reads “Let's do this!”</p>
+        <p class="steal"><b>Steal:</b> serif + human photograph + contractions. And the CTA voice — “Join the waitlist” is a transaction; this is an invitation.</p>
+      </div>
+    </article>
+
+    <article class="ref">
+      <div class="win"><img src="img/notion-hero.png" alt="Notion homepage: abstract headline followed by tabbed sections that swap in different product visuals."></div>
+      <div class="b">
+        <div class="t"><b>Notion</b><span class="prob">P1 · abstract</span></div>
+        <p>Abstract headline, then tabs and hyper-specific use-case cards immediately below.</p>
+        <p class="steal"><b>Steal:</b> two layers — warm promise up top, concrete worked examples below. Exactly the architecture for wedding / kitchen / offsite.</p>
+      </div>
+    </article>
+
+    <article class="ref">
+      <div class="win"><img src="img/linear-hero.png" alt="Linear homepage: dark interface screenshots stacked and layered, occupying most of the viewport."></div>
+      <div class="b">
+        <div class="t"><b>Linear</b><span class="prob">P2 · show</span></div>
+        <p>Roughly 60% of the page is product interface, with real-looking data — real issue IDs, real timelines.</p>
+        <p class="steal"><b>Steal:</b> the ratio, and pairing every claim with the pixel that proves it. <em>Ignore</em> the dense developer aesthetic.</p>
+      </div>
+    </article>
+
+    <article class="ref">
+      <div class="win"><img src="img/theknot-hero.png" alt="The Knot homepage: vendor category imagery — venues, photographers, cakes — shown as photographs."></div>
+      <div class="b">
+        <div class="t"><b>The Knot</b><span class="prob">P2 · show</span></div>
+        <p>Vendor categories rendered as photographs rather than words, immediately below a short hero.</p>
+        <p class="steal"><b>Steal:</b> the fastest way to make “vendors” mean something is to show what a vendor <em>is</em>. Also the cheapest — stock is licensable.</p>
+      </div>
+    </article>
+
+    <article class="ref">
+      <div class="win"><img src="img/wise-hero.png" alt="Wise homepage: a live currency converter embedded directly in the hero showing amount, fee and arrival time."></div>
+      <div class="b">
+        <div class="t"><b>Wise</b><span class="prob">S2 · low commitment</span></div>
+        <p>A working converter in the hero. Real answer, real fee, no account — <em>then</em> the signup ask.</p>
+        <p class="steal"><b>Steal:</b> directly transferable. The vendor-lineup generator is Envoy's currency converter. This one move fixes P2, S2 and the CTA problem at once.</p>
+      </div>
+    </article>
+
+    <article class="ref">
+      <div class="win"><img src="img/plaid-hero.png" alt="Plaid homepage with a headline about connecting financial accounts."></div>
+      <div class="b">
+        <div class="t"><b>Plaid</b><span class="prob">S1 · trust</span></div>
+        <p>“When you connect to an app with Plaid, <em>you're in control</em> of who has access to your financial data.”</p>
+        <p class="steal"><b>Steal:</b> the grammar. Lead with the user's control, not the vendor's security posture. Envoy already owns a sentence of this exact shape.</p>
+      </div>
+    </article>
+
+    <article class="ref">
+      <div class="win"><img src="img/superhuman-hero.png" alt="Superhuman homepage: an enacted product scenario followed by a row of customer logos."></div>
+      <div class="b">
+        <div class="t"><b>Superhuman</b><span class="prob">S1 · counter-example</span></div>
+        <p>Asks for full inbox access and never addresses it on the homepage — trust is entirely by logo association.</p>
+        <p class="steal"><b>Do the opposite.</b> Borrowed credibility is closed to Envoy — no logos, no testimonials. That leaves transparency of mechanism.</p>
+      </div>
+    </article>
+
+    <article class="ref">
+      <div class="win"><img src="img/thumbtack-pro-hero.png" alt="Thumbtack Pro page: a separate hero aimed at service professionals with lead volume claims."></div>
+      <div class="b">
+        <div class="t"><b>Thumbtack Pro</b><span class="prob">S3 · two audiences</span></div>
+        <p>The pro side gets its own page, its own hero and its own tone. One nav link is the only shared surface.</p>
+        <p class="steal"><b>Steal:</b> the architecture — one nav link plus one signposted band low on the page. Everything else lives elsewhere.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= IMAGERY + DENSITY ================= -->
+<section class="wrap">
+  <span class="kick">Imagery, density, motion</span>
+  <h2>The page needs pictures, and three honest kinds exist</h2>
+
+  <div class="vs" style="margin-top:26px">
+    <div class="shot">
+      <div class="cap">1 · Product UI <span>rebuild, never screenshot</span></div>
+      <div class="win"><img src="../01-current-state/product/demo-lineup-wedding-top.png" alt="Envoy vendor lineup in the demo app: categories with a rationale sentence, a count badge, and ranked vendor rows."></div>
+    </div>
+    <div class="shot">
+      <div class="cap">2 · Category photography <span>[TBD — licensable]</span></div>
+      <div class="win" style="display:flex;align-items:center;justify-content:center;height:230px;background:repeating-linear-gradient(45deg,#1C1E24,#1C1E24 12px,#22252C 12px,#22252C 24px);color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;text-align:center;padding:20px">Venue · catering · florals<br>kitchen mid-renovation</div>
+    </div>
+  </div>
+
+  <div class="guide">
+    <div class="card">
+      <h3>Density — the opposite of today</h3>
+      <ul class="yes">
+        <li><span class="m">✓</span><span><b>Kill scroll-snap.</b> It causes the skimming failure, the overflow bug and the section 3/4/5 redundancy.</span></li>
+        <li><span class="m">✓</span><span>Six to seven bands, roughly half the current vertical length.</span></li>
+        <li><span class="m">✓</span><span>Rest comes from contrast, not emptiness — alternate image-dense and text-dense.</span></li>
+        <li><span class="m">✓</span><span>One section should visibly be the densest: the lineup, because it's the most informative.</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Motion &amp; weight</h3>
+      <ul class="yes">
+        <li><span class="m">✓</span><span>Keep the staggered entrances and the existing <code>prefers-reduced-motion</code> discipline — already right.</span></li>
+        <li><span class="m">✕</span><span>Cut the skewed button wipe, the mandatory snap, the slide-up footer.</span></li>
+        <li><span class="m">✕</span><span>The shader as-is: 353 KB gzipped, ships React to draw a gradient, and causes the AA failures.</span></li>
+        <li><span class="m">✓</span><span>If atmosphere is worth keeping, a static CSS gradient in the hero only — never behind body copy.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ANTI-GOALS ================= -->
+<section class="wrap">
+  <span class="kick">Anti-goals</span>
+  <h2>Ways this could go wrong</h2>
+  <div class="guide">
+    <div class="card anti">
+      <h3>Aesthetic</h3>
+      <ul class="no">
+        <li><span class="m">✕</span><span><b>Bridal.</b> No script faces, no blush-and-gold, no florals — it would break the kitchen renovation instantly.</span></li>
+        <li><span class="m">✕</span><span><b>Generic SaaS.</b> Purple gradient, three icon cards, a logo wall we don't have.</span></li>
+        <li><span class="m">✕</span><span><b>Enterprise-serious.</b> Compliance badges, “platform”, “solutions”. Wrong audience entirely.</span></li>
+        <li><span class="m">✕</span><span><b>Sparse instead of hierarchical.</b> Today's failure mode — empty space that directs nothing.</span></li>
+      </ul>
+    </div>
+    <div class="card anti">
+      <h3>Integrity — non-negotiable</h3>
+      <ul class="no">
+        <li><span class="m">✕</span><span>No invented testimonials, counts, ratings, logos or press.</span></li>
+        <li><span class="m">✕</span><span>The demo's “Maya R.” quote and its 48h / 4× / 34-jobs / 4.3× figures are <b>mock</b> and never appear.</span></li>
+        <li><span class="m">✕</span><span>No mock screenshot passed off as a live result — product UI is rebuilt and labelled <em>Illustrative example</em>.</span></li>
+        <li><span class="m">✕</span><span>No SMS or phone-call claims. Email only, per ruling.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  Envoy landing page redesign · visual moodboard · captured and written 2026-08-25 · companion to <strong>library.md</strong> and <strong>moodboard.md</strong>
+</footer>
+
+</body>
+</html>

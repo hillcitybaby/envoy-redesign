@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy redesign — direction comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#15161A; --panel:#1D1F25; --panel-2:#25282F; --line:#33373F;
+  --text:#EDEEF1; --muted:#A8ADB8; --accent:#7DA2FF; --good:#7BD88F; --warn:#F2C879;
+  --f:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--f);line-height:1.55;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+a{color:var(--accent)}
+
+.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:14px clamp(14px,3vw,26px);border-bottom:1px solid var(--line);
+  position:sticky;top:0;background:rgba(21,22,26,.96);backdrop-filter:blur(10px);z-index:20}
+.top h1{font-size:14.5px;font-weight:600;margin:0;letter-spacing:-.01em;white-space:nowrap}
+.top h1 span{color:var(--muted);font-weight:400}
+.grp{display:flex;align-items:center;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px}
+.grp .lab{font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);padding:0 8px 0 6px;white-space:nowrap}
+.grp button{font:inherit;font-size:13px;font-weight:600;color:var(--muted);background:transparent;border:0;padding:8px 13px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.grp button:hover{color:var(--text)}
+.grp button[aria-pressed="true"]{background:var(--panel-2);color:var(--text);box-shadow:inset 0 0 0 1px var(--line)}
+.grp button[aria-pressed="true"].bold{color:#fff;background:#2C3A5C;box-shadow:inset 0 0 0 1px #40598F}
+.spacer{margin-left:auto}
+.openlink{font-size:13px;font-weight:600;text-decoration:none;border:1px solid var(--line);padding:9px 14px;border-radius:9px;color:var(--text);white-space:nowrap}
+.openlink:hover{border-color:var(--accent)}
+
+.layout{display:grid;grid-template-columns:1fr}
+@media(min-width:1140px){.layout{grid-template-columns:minmax(0,1fr) 400px}}
+.stage{padding:clamp(14px,2.5vw,30px);display:flex;justify-content:center;align-items:flex-start;background:linear-gradient(180deg,#101115,#15161A);min-height:60vh;overflow:auto}
+.shell{position:relative;transition:width .22s ease}
+.shell::after{content:attr(data-w);position:absolute;top:-22px;left:0;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+iframe{border:0;display:block;background:#fff;border-radius:8px;box-shadow:0 30px 70px -30px rgba(0,0,0,.85);transform-origin:top left}
+
+.side{border-left:1px solid var(--line);padding:clamp(18px,3vw,26px);background:var(--panel)}
+@media(max-width:1139px){.side{border-left:0;border-top:1px solid var(--line)}}
+.side h2{margin:0 0 4px;font-size:20px;letter-spacing:-.015em}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:11px}
+.side h3{margin:22px 0 7px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.side p{margin:0 0 11px;font-size:13.5px;color:#D5D8DF}
+.side ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.side li{display:flex;gap:9px;font-size:13px;color:#D5D8DF;line-height:1.5}
+.side li b{color:var(--text);font-weight:600}
+.m{flex:none;width:14px;text-align:center;font-weight:700}
+.win .m{color:var(--good)} .give .m{color:var(--warn)}
+.meta{margin-top:20px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:grid;gap:5px}
+.meta b{color:var(--text)}
+.note{margin-top:18px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:13px 15px;font-size:12.5px;color:#D5D8DF}
+.note b{color:var(--text)}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>Envoy redesign <span>· directions</span></h1>
+
+  <div class="grp" role="group" aria-label="Round 3 — reference study">
+    <span class="lab">Round 3</span>
+    <button class="bold" type="button" data-dir="h" aria-pressed="true">H · Overlay study</button>
+  </div>
+
+  <div class="grp" role="group" aria-label="Round 2 — bold">
+    <span class="lab">Round 2 · bold</span>
+    <button class="bold" type="button" data-dir="d" aria-pressed="false">D · Glass</button>
+    <button class="bold" type="button" data-dir="e" aria-pressed="false">E · Mesh</button>
+    <button class="bold" type="button" data-dir="f" aria-pressed="false">F · Inset</button>
+  </div>
+
+  <div class="grp" role="group" aria-label="Round 1">
+    <span class="lab">Round 1</span>
+    <button type="button" data-dir="a" aria-pressed="false">A</button>
+    <button type="button" data-dir="b" aria-pressed="false">B</button>
+    <button type="button" data-dir="c" aria-pressed="false">C</button>
+  </div>
+
+  <div class="grp" role="group" aria-label="Viewport width">
+    <button type="button" data-w="375" aria-pressed="false">375</button>
+    <button type="button" data-w="768" aria-pressed="false">768</button>
+    <button type="button" data-w="1440" aria-pressed="true">1440</button>
+  </div>
+
+  <div class="spacer"></div>
+  <a class="openlink" id="openlink" href="direction-h.html" target="_blank" rel="noopener">Open full page ↗</a>
+</div>
+
+<div class="layout">
+  <div class="stage">
+    <div class="shell" id="shell" data-w="1440px">
+      <iframe id="frame" src="direction-h.html" title="Direction preview" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <aside class="side" aria-live="polite">
+
+    <!-- ============ H ============ -->
+    <div class="pane" data-pane="h">
+      <span class="tag">Direction H · Overlay study</span>
+      <h2>Full-bleed image, card overlaid</h2>
+      <p>A close structural study of the reference you sent. Full-bleed image with a <b>white card overlaid on the left third</b>; floating UI sits on the image rather than beside it. The About section <b>overlaps the hero with a large rounded notch</b>, and the feature cards use <b>corner cut-outs with the titles set inside them</b>, alternating top and bottom.</p>
+      <h3>The interaction</h3>
+      <p>Hovering a project in the translucent picker swaps the <b>image, the lineup, the pipeline numbers and the draft card together</b>. Works on hover, click, focus and arrow keys.</p>
+      <h3>Section map</h3>
+      <p>Hero (value prop + the three case studies) → About (fuller value prop, coloured emphasis words) → Features (four things Envoy does) → the project input → Pricing → For business. The last two are ported from E and retoned to H's palette.</p>
+      <h3>Wins</h3>
+      <ul class="win">
+        <li><span class="m">+</span><span><b>Still compact</b> — 4,579px with all six sections, vs 7,600–8,600 in Round 1</span></li>
+        <li><span class="m">+</span><span>Case studies earn their place by driving the whole hero</span></li>
+        <li><span class="m">+</span><span>The cut-out and notch details give it real craft identity</span></li>
+      </ul>
+      <h3>Gives up</h3>
+      <ul class="give">
+        <li><span class="m">−</span><span><b>Primary action is below the fold</b> — hero CTA only scrolls</span></li>
+        <li><span class="m">−</span><span>Leans hardest of all directions on photography it doesn't have</span></li>
+        <li><span class="m">−</span><span>Hover-only discovery is invisible on touch until tapped</span></li>
+      </ul>
+      <div class="meta"><span>Sections: <b>6</b></span><span>Height at 1440: <b>4,579px</b></span></div>
+    </div>
+
+    <!-- ============ D ============ -->
+    <div class="pane hidden" data-pane="d">
+      <span class="tag">Direction D · Glass</span>
+      <h2>Deep sky &amp; glassmorphism</h2>
+      <p>Full-bleed cool gradient sky with a heavy scrim, floating glass pill nav, and a bento grid of case cards. The headline sets vendor categories as <b>chips inline in the type</b> — skysavvy's move, but carrying real product meaning rather than decoration.</p>
+      <h3>Palette &amp; type</h3>
+      <p>Deep navy → cyan → cobalt. Bricolage Grotesque display over Instrument Sans.</p>
+      <h3>Strongest</h3>
+      <p>The hero. The inline category chips explain the whole product in one line, and the floating lineup card proves it without a word.</p>
+      <h3>Weakest</h3>
+      <p>The bento gets busy — five surfaces of different weights competing in one grid.</p>
+      <h3>Wins</h3>
+      <ul class="win">
+        <li><span class="m">+</span><span><b>Boldest hero</b> of the three; strongest first impression</span></li>
+        <li><span class="m">+</span><span>Keeps a clear blue thread to the current brand</span></li>
+        <li><span class="m">+</span><span>Glass and depth read as premium, not trendy</span></li>
+      </ul>
+      <h3>Gives up</h3>
+      <ul class="give">
+        <li><span class="m">−</span><span>Dark hero → light page is a hard transition</span></li>
+        <li><span class="m">−</span><span>Heaviest scrim work; least forgiving if photos get added</span></li>
+        <li><span class="m">−</span><span>Closest to the old site's coldness</span></li>
+      </ul>
+      <div class="meta"><span>Sections: <b>4</b></span><span>Height at 1440: <b>4,922px</b></span></div>
+    </div>
+
+    <!-- ============ E ============ -->
+    <div class="pane hidden" data-pane="e">
+      <span class="tag">Direction E · Mesh</span>
+      <h2>Organic gradient mesh</h2>
+      <p>Near-white page under a large blurred colour field — violet, cyan, mint, indigo. Centred hero with the composer as the single focal object, then an asymmetric case-study pair and a full-width draft strip. This is the Crucible and moana territory, in cool tones.</p>
+      <h3>Palette &amp; type</h3>
+      <p>White ground, violet <code>#5B45E0</code>, cyan and mint accents. Instrument Sans throughout, 500 weight display with tight tracking.</p>
+      <h3>Strongest</h3>
+      <p>The hero mesh and composer. It looks like a 2026 AI product without saying "AI" once, and the text box is unmistakably the thing to use.</p>
+      <h3>Weakest</h3>
+      <p>The case studies lean on the big lineup panel to carry them; the two side tiles are thin by comparison.</p>
+      <h3>Wins</h3>
+      <ul class="win">
+        <li><span class="m">+</span><span><b>Most contemporary</b> — reads as a current product, not a template</span></li>
+        <li><span class="m">+</span><span>Composer-as-hero makes the primary action unmissable</span></li>
+        <li><span class="m">+</span><span>Light ground matches the real app</span></li>
+        <li><span class="m">+</span><span>Warm without any taupe, terracotta or red</span></li>
+      </ul>
+      <h3>Gives up</h3>
+      <ul class="give">
+        <li><span class="m">−</span><span>Violet mesh is the most common AI-product look right now</span></li>
+        <li><span class="m">−</span><span>Furthest from the existing blue</span></li>
+        <li><span class="m">−</span><span>Mesh needs care at small sizes or it turns to mush</span></li>
+      </ul>
+      <div class="meta"><span>Sections: <b>4</b></span><span>Height at 1440: <b>4,990px</b></span></div>
+    </div>
+
+    <!-- ============ F ============ -->
+    <div class="pane hidden" data-pane="f">
+      <span class="tag">Direction F · Inset</span>
+      <h2>Inset shell &amp; pill system</h2>
+      <p>The whole page sits inside a rounded white shell floating on a grey ground — Evolve Bio's device. Pill-shaped brand and nav, floating stat pills under the hero, tile grid for cases, and expandable rows for the week-five / week-eight story. An icon set inline in the H1.</p>
+      <h3>Palette &amp; type</h3>
+      <p>Grey ground, white shell, cobalt <code>#1B47E0</code> and mint <code>#00A87E</code>. Instrument Sans throughout.</p>
+      <h3>Strongest</h3>
+      <p>The hero split — headline and composer left, full reasoned lineup panel right. You see the promise and the proof in one viewport, no scrolling.</p>
+      <h3>Weakest</h3>
+      <p>The most conventional of the three. The inset shell is the only genuinely unusual move.</p>
+      <h3>Wins</h3>
+      <ul class="win">
+        <li><span class="m">+</span><span><b>Clearest information design</b> — easiest to scan and extend</span></li>
+        <li><span class="m">+</span><span>Stat pills give an honest home for real numbers later</span></li>
+        <li><span class="m">+</span><span>Cobalt keeps the brand blue while feeling new</span></li>
+        <li><span class="m">+</span><span>Safest for the founder to say yes to</span></li>
+      </ul>
+      <h3>Gives up</h3>
+      <ul class="give">
+        <li><span class="m">−</span><span><b>Least bold</b> — closest to a well-made default</span></li>
+        <li><span class="m">−</span><span>Inset shell costs horizontal room on small screens</span></li>
+        <li><span class="m">−</span><span>Mint + cobalt can read fintech if pushed further</span></li>
+      </ul>
+      <div class="meta"><span>Sections: <b>4</b></span><span>Height at 1440: <b>4,634px</b></span></div>
+    </div>
+
+    <!-- ============ A/B/C ============ -->
+    <div class="pane hidden" data-pane="a">
+      <span class="tag">Round 1 · A</span>
+      <h2>Conservative cleanup</h2>
+      <p>Kept the dark brand and existing structure; fixed craft, contrast, scroll-snap, redundancy. The sans option from round one. Superseded by the bold round but kept for reference.</p>
+      <div class="meta"><span>Sections: <b>8</b></span><span>Height at 1440: <b>7,659px</b></span></div>
+    </div>
+    <div class="pane hidden" data-pane="b">
+      <span class="tag">Round 1 · B</span>
+      <h2>Opinionated rework</h2>
+      <p>Warm light ground, Fraunces serif display, clay accent. Was my round-one recommendation. The clay and warm paper are now ruled out — no taupe, terracotta or red — so this survives as reference only.</p>
+      <div class="meta"><span>Sections: <b>8</b></span><span>Height at 1440: <b>8,291px</b></span></div>
+    </div>
+    <div class="pane hidden" data-pane="c">
+      <span class="tag">Round 1 · C</span>
+      <h2>Radical rethink — time axis</h2>
+      <p>The page organised as elapsed time: Day 0 → Week 1 → Week 2 → Week 5 → Week 8. Editorial serif. <b>The week-five idea survived into round two</b> as F's expandable rows and D's status card.</p>
+      <div class="meta"><span>Sections: <b>8</b></span><span>Height at 1440: <b>8,618px</b></span></div>
+    </div>
+
+    <div class="note">
+      <b>Shared across D, E and F:</b> four sections only — hero, case studies, pricing, for business. Hero always holds the text entry. Mark and wordmark kept; everything else new. No taupe, terracotta or red anywhere.
+      <br><br>
+      <b>Integrity:</b> no invented proof. Every placeholder is visibly labelled, all product UI is rebuilt HTML marked <em>Illustrative example</em>, email only — no SMS or calls — and real pricing.
+      <br><br>
+      <b>Photography:</b> all visuals are CSS/SVG-native. I could not source licence-clear stock at the quality these references set, so every photo slot is sized and labelled, ready to receive real images.
+      <br><br>
+      <b>Known gaps:</b> header nav collapses on mobile with no menu yet; contrast on gradient-backed text was verified by calculation rather than by the automated checker, which does not render <code>backdrop-filter</code> in this environment.
+    </div>
+  </aside>
+</div>
+
+<script>
+(function(){
+  var dir='h', w=1440;
+  var frame=document.getElementById('frame'), shell=document.getElementById('shell'), link=document.getElementById('openlink');
+  var stage=document.querySelector('.stage');
+  function fit(){
+    var pad=parseFloat(getComputedStyle(stage).paddingLeft)*2;
+    var avail=stage.clientWidth-pad;
+    var scale=Math.min(1, avail/w);
+    frame.style.width=w+'px';
+    frame.style.height=Math.round(Math.max(window.innerHeight-180,620)/scale)+'px';
+    frame.style.transform='scale('+scale+')';
+    shell.style.width=(w*scale)+'px';
+    shell.style.height=(parseFloat(frame.style.height)*scale)+'px';
+    shell.dataset.w=w+'px';
+  }
+  function render(){
+    frame.src='direction-'+dir+'.html';
+    link.href='direction-'+dir+'.html';
+    document.querySelectorAll('[data-pane]').forEach(function(p){p.classList.toggle('hidden',p.dataset.pane!==dir);});
+    document.querySelectorAll('[data-dir]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.dir===dir));});
+    document.querySelectorAll('.grp [data-w]').forEach(function(b){b.setAttribute('aria-pressed',String(Number(b.dataset.w)===w));});
+    fit();
+  }
+  document.querySelectorAll('[data-dir]').forEach(function(b){b.addEventListener('click',function(){dir=b.dataset.dir;render();});});
+  document.querySelectorAll('.grp [data-w]').forEach(function(b){b.addEventListener('click',function(){w=Number(b.dataset.w);render();});});
+  window.addEventListener('resize',fit);
+  render();
+})();
+</script>
+</body>
+</html>

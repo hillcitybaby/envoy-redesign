@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy — Describe it once. Envoy lines up the vendors.</title>
+<meta name="description" content="Describe your project once. Envoy lines up the right vendors and writes the outreach — you approve every send. Free to plan.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Envoy — Describe it once. Envoy lines up the vendors.">
+<meta property="og:description" content="Describe your project once. Envoy lines up the right vendors and writes the outreach — you approve every send. Free to plan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#08131C; --deep:#0C1E2E; --slate:#22394C;
+  --sky-1:#5AA0E0; --sky-2:#9CCBEE; --sky-3:#D6EAF8; --sky-4:#EFF7FD;
+  --teal:#25C3BC; --blue:#1F6FE5; --blue-hi:#1559C4;
+  --paper:#F4F9FD; --white:#fff;
+  --txt:#0B1A26; --muted:#4A6377; --faint:#52697C;
+  --glass:rgba(255,255,255,.62); --glass-2:rgba(255,255,255,.82); --glass-line:rgba(255,255,255,.75);
+  --r:18px; --r-lg:28px; --r-xl:36px;
+  --pad:clamp(18px,4vw,44px);
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --disp:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;
+  --maxw:1320px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--txt);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:var(--blue)}
+:focus-visible{outline:2.5px solid var(--blue);outline-offset:3px;border-radius:8px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+.skip{position:absolute;left:10px;top:-60px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;z-index:300;transition:top .2s;font-size:14px;text-decoration:none}
+.skip:focus{top:10px}
+
+h1,h2,h3{margin:0;font-family:var(--disp);font-weight:400;letter-spacing:-.03em;line-height:1.02}
+h1{font-size:clamp(2.5rem,6.6vw,5.4rem)}
+h2{font-size:clamp(2rem,4.6vw,3.6rem)}
+h3{font-size:1.15rem;font-weight:500;letter-spacing:-.015em;line-height:1.25}
+p{margin:0}
+.kick{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.kick::before{content:"";width:22px;height:1px;background:currentColor;opacity:.55}
+.lede{font-size:clamp(1rem,1.5vw,1.16rem);color:var(--muted);line-height:1.6;max-width:56ch}
+
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--sans);font-weight:600;font-size:14.5px;
+  border-radius:999px;padding:13px 24px;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:.2s}
+.btn-primary{background:var(--ink);color:#fff}
+.btn-primary:hover{background:var(--blue)}
+.btn-glass{background:var(--glass-2);color:var(--txt);border-color:var(--glass-line);backdrop-filter:blur(14px)}
+.btn-glass:hover{background:#fff}
+.btn-line{background:transparent;color:var(--txt);border-color:rgba(11,26,38,.22)}
+.btn-line:hover{border-color:var(--ink)}
+.btn-lg{padding:16px 30px;font-size:15.5px}
+.arrow{width:26px;height:26px;border-radius:50%;background:currentColor;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.arrow svg{width:13px;height:13px}
+
+/* ============ HEADER ============ */
+header{position:absolute;inset:14px 0 auto;z-index:60}
+.nav{display:flex;align-items:center;gap:12px}
+.pill{background:var(--glass-2);border:1px solid var(--glass-line);backdrop-filter:blur(18px);border-radius:999px;
+  display:flex;align-items:center;gap:6px;padding:6px;box-shadow:0 10px 30px -18px rgba(8,19,28,.5)}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);font-family:var(--disp);font-weight:500;font-size:19px;letter-spacing:-.02em;padding:6px 12px 6px 8px}
+.mark{width:22px;height:22px;flex:none;color:var(--blue)}
+.nav ul{list-style:none;display:flex;gap:2px;margin:0;padding:0}
+.nav ul a{display:block;color:var(--slate);text-decoration:none;font-size:14px;font-weight:500;padding:9px 15px;border-radius:999px}
+.nav ul a:hover{background:rgba(11,26,38,.07);color:var(--ink)}
+.nav .right{margin-left:auto;display:flex;gap:10px;align-items:center}
+@media(max-width:940px){.nav ul{display:none}}
+@media(max-width:520px){.nav .right .btn-glass{display:none}}
+
+/* ============ HERO ============ */
+.hero{position:relative;min-height:min(940px,100svh);display:flex;align-items:flex-end;padding:120px 0 clamp(28px,4vw,48px);overflow:hidden;
+  border-radius:0 0 var(--r-xl) var(--r-xl)}
+.sky{position:absolute;inset:0;z-index:0;background:
+  radial-gradient(120% 85% at 80% 4%, rgba(156,203,238,.55) 0%, rgba(156,203,238,0) 52%),
+  radial-gradient(85% 62% at 94% 58%, rgba(37,195,188,.62) 0%, rgba(37,195,188,0) 55%),
+  radial-gradient(110% 80% at 26% 100%, rgba(31,111,229,.7) 0%, rgba(31,111,229,0) 58%),
+  linear-gradient(168deg,#3C7CB4 0%,#1B4F7C 40%,#0A2138 100%);}
+.sky::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(96deg, rgba(5,17,30,.80) 0%, rgba(5,17,30,.66) 46%, rgba(5,17,30,.50) 72%, rgba(5,17,30,.42) 100%),
+             radial-gradient(130% 90% at 50% 108%, rgba(5,17,30,.45) 0%, rgba(5,17,30,0) 58%);}
+.grain{position:absolute;inset:0;z-index:1;opacity:.5;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.35'/></svg>")}
+.hero .wrap{position:relative;z-index:2;width:100%}
+.hero-top{max-width:900px}
+.hero h1{color:#fff;text-shadow:0 2px 34px rgba(6,26,44,.32)}
+.hero h1 .ln{display:block}
+.chipset{display:inline-flex;flex-wrap:wrap;gap:8px;vertical-align:middle;margin:0 4px}
+.hchip{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-size:clamp(.78rem,1.5vw,1.05rem);font-weight:600;letter-spacing:-.01em;
+  background:var(--glass-2);color:var(--txt);border:1px solid var(--glass-line);backdrop-filter:blur(14px);
+  padding:.36em .8em;border-radius:999px;line-height:1.15;box-shadow:0 8px 24px -14px rgba(6,26,44,.7)}
+.hchip i{width:.72em;height:.72em;border-radius:50%;flex:none;font-style:normal}
+.hchip.v i{background:var(--blue)} .hchip.c i{background:var(--teal)} .hchip.f i{background:#8E7BF0}
+.hero .lede{color:#fff;margin-top:26px;max-width:50ch;text-shadow:0 1px 16px rgba(6,26,44,.4)}
+
+.finder{margin-top:32px;max-width:800px;background:rgba(255,255,255,.9);backdrop-filter:blur(22px);border:1px solid var(--glass-line);
+  border-radius:22px;padding:9px;display:flex;gap:8px;align-items:center;box-shadow:0 30px 70px -34px rgba(6,26,44,.85)}
+.finder label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.finder input{flex:1 1 auto;min-width:0;background:transparent;border:0;color:var(--txt);font:inherit;font-size:15.5px;padding:14px 14px}
+.finder input::placeholder{color:var(--faint)}
+.finder input:focus{outline:2px solid var(--blue);outline-offset:-2px;border-radius:14px}
+.finder .loc{flex:0 1 180px;border-left:1px solid rgba(11,26,38,.12)}
+@media(max-width:680px){.finder{flex-wrap:wrap}.finder .loc{flex:1 1 100%;border-left:0;border-top:1px solid rgba(11,26,38,.12)}.finder .btn{flex:1 1 100%}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{background:rgba(255,255,255,.86);border:1px solid rgba(255,255,255,.9);color:var(--txt);font:inherit;font-size:13px;font-weight:600;
+  padding:9px 15px;border-radius:999px;cursor:pointer;backdrop-filter:blur(12px)}
+.chip:hover{background:#fff}
+.micro{margin-top:16px;font-size:13px;color:#EAF3FA}
+
+/* floating glass lineup card */
+.hero-float{position:absolute;right:calc(var(--pad));bottom:clamp(28px,5vw,56px);width:min(330px,34vw);z-index:3;
+  background:rgba(255,255,255,.9);backdrop-filter:blur(22px);border:1px solid var(--glass-line);border-radius:var(--r-lg);
+  box-shadow:0 40px 80px -40px rgba(6,26,44,.9);overflow:hidden}
+@media(max-width:1080px){.hero-float{display:none}}
+.hf-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 16px;border-bottom:1px solid rgba(11,26,38,.09)}
+.hf-h strong{font-size:13px;font-weight:600}
+.hf-b{padding:6px 8px 10px}
+.hf-row{display:flex;align-items:center;gap:10px;padding:10px 10px;font-size:13.5px}
+.hf-row+.hf-row{border-top:1px solid rgba(11,26,38,.07)}
+.hf-row .n{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--blue-hi);background:rgba(31,111,229,.14);padding:3px 9px;border-radius:999px}
+.tick{width:15px;height:15px;flex:none;color:var(--blue)}
+.exl{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);background:rgba(11,26,38,.07);
+  border:1px solid rgba(11,26,38,.12);padding:4px 8px;border-radius:999px;white-space:nowrap}
+
+/* ============ SECTION FURNITURE ============ */
+section{padding-block:clamp(64px,8vw,120px)}
+.sec-head{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:flex-end;justify-content:space-between;margin-bottom:clamp(30px,4vw,50px)}
+.sec-head h2{max-width:16ch}
+
+/* ============ CASE STUDIES — bento ============ */
+.bento{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.bento{grid-template-columns:repeat(6,1fr);grid-auto-rows:minmax(0,auto)}}
+.card{background:var(--white);border:1px solid rgba(11,26,38,.09);border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:0 24px 60px -46px rgba(6,26,44,.7);display:flex;flex-direction:column;min-width:0}
+@media(min-width:900px){
+  .c-wed{grid-column:span 4} .c-wed-art{grid-column:span 2}
+  .c-kit{grid-column:span 3} .c-off{grid-column:span 3}
+}
+.card-ph{position:relative;min-height:190px;display:flex;align-items:flex-end;padding:18px;color:#fff;overflow:hidden;min-width:0}
+.card-ph .lbl{position:relative;z-index:2;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;max-width:100%;line-height:1.35;
+  background:rgba(5,17,30,.82);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(8px);padding:6px 11px;border-radius:999px}
+.mesh-wed{background:
+  radial-gradient(80% 70% at 20% 20%,#9BC9F2 0%,rgba(155,201,242,0) 62%),
+  radial-gradient(70% 60% at 88% 22%,#25C3BC 0%,rgba(37,195,188,0) 60%),
+  radial-gradient(90% 80% at 60% 110%,#1F4E9E 0%,rgba(31,78,158,0) 62%),
+  linear-gradient(150deg,#7FB5E4,#2A5FA8)}
+.mesh-kit{background:
+  radial-gradient(75% 65% at 18% 18%,#B9D9F2 0%,rgba(185,217,242,0) 60%),
+  radial-gradient(70% 60% at 92% 30%,#5AA0E0 0%,rgba(90,160,224,0) 58%),
+  linear-gradient(160deg,#8FBCE4,#24486F)}
+.mesh-off{background:
+  radial-gradient(70% 60% at 82% 16%,#7BE3DD 0%,rgba(123,227,221,0) 60%),
+  radial-gradient(80% 70% at 14% 84%,#3F7BD6 0%,rgba(63,123,214,0) 62%),
+  linear-gradient(140deg,#6FA9DC,#1D3E63)}
+.card-b{padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card-b p{color:var(--muted);font-size:14.5px;line-height:1.55}
+.tags{list-style:none;margin:auto 0 0;padding:14px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.tags li{font-size:12px;color:var(--slate);background:var(--sky-4);border:1px solid rgba(11,26,38,.08);padding:5px 11px;border-radius:999px}
+
+/* artifact card inside bento */
+.art{background:var(--ink);color:#EAF3FA;border-radius:var(--r-lg);padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.art .top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.art .top strong{font-size:12.5px;font-weight:600;letter-spacing:.02em}
+.art .exl{color:#CFE2EF;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:13px 10px;text-align:center}
+.stat b{display:block;font-family:var(--disp);font-size:26px;font-weight:500;line-height:1;letter-spacing:-.02em}
+.stat span{display:block;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:#BCD5E5;margin-top:6px}
+.stat.hot{background:rgba(37,195,188,.16);border-color:rgba(37,195,188,.42)}
+.stat.hot b{color:#7BE3DD}
+.mail{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;font-size:12.5px;line-height:1.55;color:#CFE2EF}
+.mail .to{color:#AFCADB;font-size:11px;margin-bottom:8px}
+.mail .await{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7BE3DD}
+
+/* ============ PRICING ============ */
+.pricing{background:var(--white);border-radius:var(--r-xl);border:1px solid rgba(11,26,38,.08);
+  box-shadow:0 40px 90px -70px rgba(6,26,44,.8);padding:clamp(28px,4vw,56px)}
+.tiers{display:grid;gap:16px;grid-template-columns:1fr;margin-top:clamp(26px,3vw,40px)}
+@media(min-width:880px){.tiers{grid-template-columns:repeat(3,1fr)}}
+.tier{border:1px solid rgba(11,26,38,.11);border-radius:var(--r-lg);padding:26px;display:flex;flex-direction:column;gap:13px;background:var(--sky-4)}
+.tier.pop{background:var(--ink);color:#EAF3FA;border-color:var(--ink)}
+.tier.pop .price small,.tier.pop li{color:#C6DBE9}
+.tier.pop li svg{color:var(--teal)}
+.tag{align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);background:var(--teal);padding:5px 11px;border-radius:999px}
+.tier h3{font-family:var(--disp);font-size:1.5rem;font-weight:500}
+.price{font-family:var(--disp);font-size:2.4rem;font-weight:400;letter-spacing:-.03em;line-height:1}
+.price small{font-family:var(--sans);font-size:13.5px;font-weight:500;color:var(--muted);letter-spacing:0}
+.tier>p{color:var(--muted);font-size:14px}
+.tier.pop>p{color:#C6DBE9}
+.tier ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px;font-size:13.5px;color:var(--muted)}
+.tier li{display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+.tier li svg{flex:none;margin-top:4px;color:var(--blue)}
+.tier .btn{margin-top:auto}
+.pricing-note{margin-top:22px;font-size:14px;color:var(--muted)}
+
+/* ============ FOR BUSINESS ============ */
+.biz{position:relative;color:#EAF3FA;border-radius:var(--r-xl);overflow:hidden;padding:clamp(34px,5vw,72px)}
+.biz-bg{position:absolute;inset:0;z-index:0;background:
+  linear-gradient(100deg, rgba(6,17,26,.86) 0%, rgba(6,17,26,.7) 42%, rgba(6,17,26,.3) 66%, rgba(6,17,26,0) 100%),
+  radial-gradient(72% 62% at 92% 10%,rgba(31,111,229,.85) 0%,rgba(31,111,229,0) 58%),
+  radial-gradient(64% 56% at 96% 94%,rgba(37,195,188,.8) 0%,rgba(37,195,188,0) 56%),
+  linear-gradient(150deg,#0C1E2E,#08131C)}
+.biz>*:not(.biz-bg){position:relative;z-index:1}
+.biz h2{color:#fff;max-width:15ch}
+.biz .lede{color:#C6DBE9;margin-top:18px}
+.biz-grid{display:grid;gap:clamp(26px,4vw,52px);grid-template-columns:1fr;align-items:center}
+@media(min-width:980px){.biz-grid{grid-template-columns:1fr .95fr}}
+.biz-pills{display:grid;gap:12px;margin-top:28px}
+.bp{display:flex;gap:13px;align-items:flex-start;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);
+  border-radius:18px;padding:16px 18px;backdrop-filter:blur(10px)}
+.bp b{display:block;font-size:14.5px;font-weight:600;color:#fff;margin-bottom:3px}
+.bp span{font-size:13.5px;color:#BCD5E5;line-height:1.5}
+.bp .d{width:9px;height:9px;border-radius:50%;flex:none;margin-top:6px;background:var(--teal)}
+.biz-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.biz .btn-primary{background:#fff;color:var(--ink)}
+.biz .btn-primary:hover{background:var(--teal)}
+.biz .btn-line{color:#fff;border-color:rgba(255,255,255,.34)}
+.biz .btn-line:hover{border-color:#fff}
+.inbox{background:rgba(255,255,255,.94);color:var(--txt);border-radius:var(--r-lg);overflow:hidden;box-shadow:0 40px 90px -50px rgba(0,0,0,.9)}
+.ib-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 18px;background:var(--sky-4);border-bottom:1px solid rgba(11,26,38,.08)}
+.ib-h strong{font-size:13px}
+.ib-row{display:flex;gap:12px;align-items:flex-start;padding:15px 18px}
+.ib-row+.ib-row{border-top:1px solid rgba(11,26,38,.07)}
+.ib-row .who{font-weight:600;font-size:13.5px;display:block}
+.ib-row .what{font-size:12.5px;color:var(--muted);line-height:1.5;display:block;margin-top:2px}
+.ib-row .st{margin-left:auto;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;
+  padding:5px 10px;border-radius:999px;background:rgba(31,111,229,.12);color:var(--blue-hi)}
+.ib-row .st.need{background:rgba(37,195,188,.18);color:#0B6F6A}
+.ib-f{padding:13px 18px;border-top:1px solid rgba(11,26,38,.08);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* ============ FOOTER ============ */
+footer{padding-block:clamp(40px,5vw,64px) 30px}
+.fgrid{display:grid;gap:30px;grid-template-columns:1fr}
+@media(min-width:760px){.fgrid{grid-template-columns:1.6fr 1fr 1fr}}
+.fgrid h3{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);margin-bottom:13px}
+.fgrid ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.fgrid a{color:var(--muted);text-decoration:none;font-size:14px;display:inline-block;padding-block:5px}
+.fgrid a:hover{color:var(--ink)}
+.tagline{color:var(--muted);font-size:14.5px;max-width:32ch;margin-top:12px}
+.fbot{margin-top:34px;padding-top:20px;border-top:1px solid rgba(11,26,38,.1);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;color:var(--faint);font-size:13px}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="wrap nav" aria-label="Primary">
+    <div class="pill">
+      <a class="brand" href="#top">
+        <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 21.5 6.5 12 21 2.5 6.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 8.2c3.4 1.6 6.6 1.6 10 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Envoy
+      </a>
+      <ul>
+        <li><a href="#cases">Projects</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#biz">For business</a></li>
+      </ul>
+    </div>
+    <div class="right">
+      <a class="btn btn-glass" href="#">Log in</a>
+      <a class="btn btn-primary" href="#top">Start a project</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ==================== 1 · HERO ==================== -->
+<section class="hero" id="top" aria-labelledby="h-hero">
+  <div class="sky" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <div class="hero-top">
+      <h1 id="h-hero">
+        <span class="ln">Describe it once.</span>
+        <span class="ln">Envoy lines up the
+          <span class="chipset">
+            <span class="hchip v"><i></i>venue</span><span class="hchip c"><i></i>caterer</span><span class="hchip f"><i></i>florist</span>
+          </span>
+        </span>
+        <span class="ln">— and the seven you forgot.</span>
+      </h1>
+      <p class="lede">A wedding, a renovation, an offsite. Tell Envoy in a sentence — it works out every vendor the project needs, finds them near you, and writes the introductions. You approve every send.</p>
+
+      <form class="finder" id="finder" role="search" aria-label="Describe your project">
+        <label for="proj">Describe your project</label>
+        <input id="proj" type="text" placeholder="What are you planning?" autocomplete="off">
+        <label for="loc">Location</label>
+        <input id="loc" class="loc" type="text" placeholder="Where?" autocomplete="off">
+        <button class="btn btn-primary" type="submit">Line up my vendors</button>
+      </form>
+
+      <div class="chips" role="group" aria-label="Example projects">
+        <button class="chip" type="button" data-fill="Outdoor wedding for 150 guests in fall">Outdoor wedding for 150 in fall</button>
+        <button class="chip" type="button" data-fill="Renovate a 1920s kitchen">Renovate a 1920s kitchen</button>
+        <button class="chip" type="button" data-fill="Company offsite for 40 people">Company offsite for 40</button>
+      </div>
+      <p class="micro">Free to plan — no card required.</p>
+    </div>
+  </div>
+
+  <aside class="hero-float" aria-label="Example vendor lineup">
+    <div class="hf-h"><strong>Outdoor wedding, 150 guests</strong><span class="exl">Example</span></div>
+    <div class="hf-b">
+      <div class="hf-row"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Venue<span class="n">13</span></div>
+      <div class="hf-row"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Catering<span class="n">8</span></div>
+      <div class="hf-row"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Event rentals<span class="n">11</span></div>
+      <div class="hf-row"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Florist<span class="n">9</span></div>
+      <div class="hf-row"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Photography<span class="n">11</span></div>
+    </div>
+  </aside>
+</section>
+
+<!-- ==================== 2 · CASE STUDIES ==================== -->
+<section id="cases" aria-labelledby="h-cases">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">What people run with Envoy</span>
+        <h2 id="h-cases" style="margin-top:16px">Three projects, one messy middle.</h2>
+      </div>
+      <p class="lede" style="max-width:40ch">Anything that needs more than a couple of vendors. Every card below shows a different part of the product doing the work.</p>
+    </div>
+
+    <div class="bento">
+      <article class="card c-wed">
+        <div class="card-ph mesh-wed">
+          <span class="lbl">[Photo slot — outdoor autumn reception]</span>
+        </div>
+        <div class="card-b">
+          <h3>An outdoor wedding for 150</h3>
+          <p>Ten vendor categories, one immovable date, and a rain plan that has to stay open until two weeks out. Envoy reads the constraints you didn't think to state — autumn evenings need heating, no permanent cover needs a tent on soft-hold.</p>
+          <ul class="tags"><li>Venue</li><li>Catering</li><li>Florals</li><li>Photography</li><li>Rentals</li><li>+5</li></ul>
+        </div>
+      </article>
+
+      <aside class="art c-wed-art" aria-label="Example project status">
+        <div class="top"><strong>Week five</strong><span class="exl">Example</span></div>
+        <div class="stats">
+          <div class="stat"><b>23</b><span>Contacts</span></div>
+          <div class="stat hot"><b>2</b><span>Needs you</span></div>
+          <div class="stat"><b>5</b><span>Reaching out</span></div>
+          <div class="stat"><b>13</b><span>Heard back</span></div>
+        </div>
+        <p style="font-size:12.5px;color:#BCD5E5;line-height:1.55;margin:0">Twenty-three conversations running at different speeds. Envoy surfaces only the two that actually need you.</p>
+      </aside>
+
+      <article class="card c-kit">
+        <div class="card-ph mesh-kit">
+          <span class="lbl">[Photo slot — kitchen mid-renovation]</span>
+        </div>
+        <div class="card-b">
+          <h3>A 1920s kitchen renovation</h3>
+          <p>Trades that have to arrive in the right order, quotes that need comparing, and a house you're still living in.</p>
+          <ul class="tags"><li>General contractor</li><li>Cabinetmaker</li><li>Electrician</li><li>+4</li></ul>
+        </div>
+      </article>
+
+      <article class="card c-off">
+        <div class="card-ph mesh-off">
+          <span class="lbl">[Photo slot — offsite workspace]</span>
+        </div>
+        <div class="card-b">
+          <h3>A company offsite for 40</h3>
+          <p>Venue, travel, food and facilitation booked around forty calendars and a budget you have to defend.</p>
+          <ul class="tags"><li>Venue</li><li>Lodging</li><li>Catering</li><li>Transport</li><li>+2</li></ul>
+        </div>
+      </article>
+
+      <aside class="art" style="grid-column:span 6" aria-label="Example drafted email">
+        <div class="top"><strong>Envoy writes it. You approve it.</strong><span class="exl">Example</span></div>
+        <div class="mail">
+          <div class="to"><b style="color:#EAF3FA">To:</b> Wildflower &amp; Fern Studio &nbsp;·&nbsp; <b style="color:#EAF3FA">From:</b> you@yourdomain.com &nbsp;·&nbsp; <b style="color:#EAF3FA">Subject:</b> Outdoor wedding florals — October 12, 150 guests</div>
+          Hi Sarah,<br><br>
+          We're getting married on October 12th just outside Austin — an outdoor ceremony and reception for about 150 guests. We're after garden-style arrangements in a muted autumn palette.<br><br>
+          Do you have availability that date, and could you share pricing for ceremony florals plus fifteen tables?<br><br>
+          Thanks so much,<br>Maya &amp; James
+          <span class="await"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.3"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg>Awaiting your approval</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn btn-primary" type="button" style="background:#fff;color:var(--ink)">Approve &amp; send</button>
+          <button class="btn btn-line" type="button" style="color:#fff;border-color:rgba(255,255,255,.32)">Edit draft</button>
+          <span style="font-size:12.5px;color:#BCD5E5">Sends from your address — vendors reply to you, not a marketplace relay.</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 3 · PRICING ==================== -->
+<section id="pricing" aria-labelledby="h-pricing">
+  <div class="wrap">
+    <div class="pricing">
+      <div class="sec-head" style="margin-bottom:0">
+        <div>
+          <span class="kick">Pricing</span>
+          <h2 id="h-pricing" style="margin-top:16px">Free to plan.<br>Pay only to automate.</h2>
+        </div>
+        <p class="lede" style="max-width:38ch">Planning a project? Envoy is free. Paid plans are for teams that want Envoy to handle the outreach for them.</p>
+      </div>
+
+      <div class="tiers">
+        <article class="tier">
+          <h3>Free</h3>
+          <div class="price">Free</div>
+          <p>Plan projects and reach out to vendors yourself.</p>
+          <ul>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>1 active project</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Envoy-built vendor lineups</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Reach out to vendors yourself</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Track every reply in one place</li>
+          </ul>
+          <a class="btn btn-line" href="#top">Get started free</a>
+        </article>
+
+        <article class="tier pop">
+          <span class="tag">Most popular</span>
+          <h3>Pro</h3>
+          <div class="price">$96<small> /yr</small></div>
+          <p>Unlock unlimited projects and Pro mode.</p>
+          <ul>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Free</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pro mode</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited projects</li>
+          </ul>
+          <a class="btn btn-primary" href="#top" style="background:#fff;color:var(--ink)">Choose Pro</a>
+        </article>
+
+        <article class="tier">
+          <h3>Agency</h3>
+          <div class="price">$200<small> /yr per user</small></div>
+          <p>Let Envoy draft and send outreach for your whole team.</p>
+          <ul>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Pro</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Automated Envoy outreach to vendors</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Envoy drafts replies &amp; follow-ups in your voice</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Multiple seats for your whole team</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority vendor responses</li>
+          </ul>
+          <a class="btn btn-line" href="#top">Choose Agency</a>
+        </article>
+      </div>
+      <p class="pricing-note">Not sure which fits? Start free and explore the full lineup first.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 4 · FOR BUSINESS ==================== -->
+<section id="biz" aria-labelledby="h-biz">
+  <div class="wrap">
+    <div class="biz">
+      <div class="biz-bg" aria-hidden="true"></div>
+      <div class="biz-grid">
+        <div>
+          <span class="kick" style="color:#A8C8DC">Envoy for Business</span>
+          <h2 id="h-biz" style="margin-top:16px">Win more work, without chasing leads.</h2>
+          <p class="lede">Envoy puts your business in front of people actively planning projects — then helps you respond faster than anyone else.</p>
+          <div class="biz-pills">
+            <div class="bp"><span class="d" aria-hidden="true"></span><div><b>Get discovered by ready buyers</b><span>Show up when someone describes a project that needs exactly what you offer.</span></div></div>
+            <div class="bp"><span class="d" aria-hidden="true"></span><div><b>Never miss a lead again</b><span>Every inquiry, follow-up and deal-in-progress in one dashboard, with reminders before things slip.</span></div></div>
+            <div class="bp"><span class="d" aria-hidden="true"></span><div><b>Let Envoy reply</b><span>Connect your inbox and Envoy drafts responses — you approve before anything sends.</span></div></div>
+          </div>
+          <div class="biz-cta">
+            <a class="btn btn-primary btn-lg" href="#">Join as a pro</a>
+            <a class="btn btn-line btn-lg" href="#pricing">See pricing</a>
+          </div>
+        </div>
+
+        <div class="inbox">
+          <div class="ib-h"><strong>Your leads</strong><span class="exl">Illustrative example</span></div>
+          <div class="ib-row"><div><span class="who">Garden wedding · 120 guests</span><span class="what">Asking about date flexibility and a rain plan. Envoy is qualifying.</span></div><span class="st">Envoy handling</span></div>
+          <div class="ib-row"><div><span class="who">Rooftop birthday · 60 people</span><span class="what">Asked for custom pricing — Envoy flagged it for you.</span></div><span class="st need">Needs you</span></div>
+          <div class="ib-row"><div><span class="who">Product launch dinner</span><span class="what">Quote sent. Awaiting reply.</span></div><span class="st">Quoted</span></div>
+          <div class="ib-row"><div><span class="who">Corporate offsite · 40 people</span><span class="what">Contract signed. Deposit received.</span></div><span class="st">Won</span></div>
+          <p class="ib-f"><span>Envoy drafts. You approve.</span><span>[Real figures — TBD]</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a class="brand" href="#top" style="padding-left:0">
+          <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 21.5 6.5 12 21 2.5 6.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 8.2c3.4 1.6 6.6 1.6 10 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Envoy
+        </a>
+        <p class="tagline">Your digital representative for outreach.</p>
+      </div>
+      <div>
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#cases">Projects</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#biz">For business</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="https://www.linkedin.com/company/hello-envoy/" rel="noopener noreferrer" target="_blank">LinkedIn</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot"><span>© 2026 Envoy</span><span>Free to plan. Pay only to automate.</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var proj=document.getElementById('proj');
+  document.querySelectorAll('.chip').forEach(function(c){
+    c.addEventListener('click',function(){proj.value=c.dataset.fill;proj.focus();});
+  });
+  document.getElementById('finder').addEventListener('submit',function(e){
+    e.preventDefault();
+    document.getElementById('cases').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  });
+})();
+</script>
+</body>
+</html>

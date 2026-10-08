@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Envoy — Meet your planning partner</title>
+<meta name="description" content="Describe your project. Get an instant vendor lineup. Envoy reaches out for you and keeps track of quotes and communication.">
+<meta name="theme-color" content="#EAECFA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>/* ==ENVOY-SYSTEM:START== */
+/* =============================================================================
+   ENVOY DESIGN SYSTEM — the single source of truth.
+
+   This file is injected verbatim into every page between the markers
+       /* ==ENVOY-SYSTEM:START== */ /*  and  */ /* ==ENVOY-SYSTEM:END== */ /*
+   by redesign/_system/apply.py. Do not edit the copy inside a page — it is
+   overwritten on every build, and check.mjs fails the build if it drifts.
+
+   Rules enforced by redesign/_system/check.mjs:
+     1. Every interactive control is at least 24x24 (WCAG 2.5.8), hit area included.
+     2. Every interactive control has a visible hover change and a focus ring.
+     3. Every .btn resolves to the token values for its variant — no local overrides.
+     4. No colour outside the palette below may appear on a system component.
+     5. Text contrast >= 4.5:1, boundaries and focus rings >= 3:1, on every surface.
+   ============================================================================= */
+
+:root{
+  /* ---- neutrals ---- */
+  --card:#FFFFFF;        /* cards, sheets, primary fill on dark   */
+  --wash:#F4F5FC;        /* quiet panels inside white             */
+  --ground:#EAECFA;      /* the page behind everything            */
+  --line:#E5E7F4;        /* dividers                              */
+  --line-2:#D2D5EA;      /* decorative borders                    */
+  --line-3:#7F849F;      /* control boundaries — the only one that clears 3:1 */
+
+  /* ---- text ---- */
+  --ink:#0C1024;
+  --muted:#484D6B;
+  --faint:#5A5F7D;
+
+  /* ---- indigo ramp — button states are positions on this ramp ---- */
+  --indigo-50:#E9E8FD;
+  --indigo-100:#C9C3FF;
+  --indigo-200:#A79BFF;
+  --indigo-300:#8F86FF;
+  --indigo-600:#3A34D6;
+  --indigo-700:#2B26AC;
+
+  /* ---- dark surface ---- */
+  --biz:#191735;
+  --on-dark:#FFFFFF;
+  --on-dark-muted:#C6C4DE;
+  --on-dark-eyebrow:#B3AEE8;
+
+  /* ---- roles ---- */
+  --focus:var(--indigo-600);        /* 6.77:1 on the ground, 7.95:1 on white */
+  --focus-dark:var(--indigo-200);   /* 7.22:1 on the business card — indigo-600 is only 2.17:1 there */
+  --error:#B3261E;                  /* semantic, not brand: 5.56:1 on the ground, holds under all CVD sims */
+  --shadow-ink:8,10,26;             /* one shadow ink for the whole site */
+
+  /* ---- aliases kept so existing rules keep resolving ---- */
+  --indigo:var(--indigo-600);
+  --indigo-hi:var(--indigo-700);
+  --indigo-soft:var(--indigo-50);
+  --tag:var(--indigo-100);
+  --tip-stroke:var(--muted);
+
+  --f:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  /* ---- type scale — rem so it follows the reader's own font size,
+          and the fluid steps use rem at both ends so the floor moves too ---- */
+  --t-display:clamp(2rem, 1.45rem + 1.4vw, 2.75rem);      /* 32 → 44 */
+  --t-h1:clamp(1.625rem, 1.1rem + 1.4vw, 2.375rem);       /* 26 → 38 */
+  --t-h2:clamp(1.25rem, 1.05rem + 0.6vw, 1.625rem);       /* 20 → 26 */
+  --t-lead:1.125rem;                                       /* 18 */
+  --t-body:1rem;                                           /* 16 */
+  --t-ui:0.875rem;                                         /* 14 */
+  --t-small:0.8125rem;                                     /* 13 */
+  --t-micro:0.6875rem;                                     /* 11 */
+  /* decorative outlined words — aria-hidden, clipped by design, fluid so they
+     don't swamp a small screen */
+  --t-ghost-xl:clamp(6rem, 14vw, 13.75rem);
+  --t-ghost-l:clamp(4.5rem, 9vw, 9.375rem);
+  --t-ghost-m:clamp(3.5rem, 6vw, 6.125rem);
+
+  /* ---- spacing scale, 4px grid ---- */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px;
+  --sp-6:32px; --sp-7:40px; --sp-8:56px; --sp-9:80px;
+
+  /* ---- comfortable measure for body copy ---- */
+  --measure:65ch;
+}
+
+/* =============================== BUTTONS ================================== */
+.btn{
+  font-family:var(--f);font-weight:600;border-radius:999px;
+  border:1px solid transparent;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  white-space:nowrap;text-decoration:none;cursor:pointer;
+  transition:background-color .15s ease,border-color .15s ease,color .15s ease,transform .06s ease;
+}
+.btn-sm{font-size:var(--t-small);line-height:16px;padding:var(--sp-2) var(--sp-4);min-height:34px}
+.btn-md{font-size:var(--t-ui);line-height:17px;padding:var(--sp-3) var(--sp-5);min-height:44px}
+.btn-lg{font-size:var(--t-body);line-height:18px;padding:var(--sp-4) var(--sp-5);min-height:50px}
+
+.btn:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+/* pressed never rests on colour: fill steps down the ramp, the button shifts, and it gains a lip */
+.btn:active{transform:translateY(1px);box-shadow:inset 0 1px 2px rgba(var(--shadow-ink),.22)}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.42;cursor:not-allowed;transform:none}
+
+/* ---- primary: the one action that matters ---- */
+.btn-primary{background:var(--ink);color:var(--card)}
+.btn-primary:hover{background:var(--indigo-600)}
+.btn-primary:active{background:var(--indigo-700)}
+
+/* ---- secondary: a real but lesser choice ---- */
+.btn-secondary{background:transparent;color:var(--ink);border-color:var(--line-3)}
+.btn-secondary:hover{background:rgba(12,16,36,.06);border-color:var(--ink)}
+.btn-secondary:active{background:rgba(12,16,36,.12);border-color:var(--ink)}
+
+/* ---- ghost: recedes ---- */
+.btn-ghost{background:transparent;color:var(--muted)}
+.btn-ghost:hover{background:rgba(12,16,36,.06);color:var(--ink)}
+.btn-ghost:active{background:rgba(12,16,36,.12);color:var(--ink)}
+
+/* ---- chip: a white pill on photography or a tinted ground ---- */
+.btn-chip{background:var(--card);color:var(--ink)}
+.btn-chip:hover{background:var(--indigo-100)}
+.btn-chip:active{background:var(--indigo-200)}
+
+/* ---- on dark: same ramp, mirrored from the pale end ---- */
+/* on a dark surface every control uses the dark ring, not just buttons */
+.on-dark :focus-visible{outline-color:var(--focus-dark)}
+.on-dark .btn:focus-visible{outline-color:var(--focus-dark)}
+.on-dark .btn-primary{background:var(--card);color:var(--ink)}
+.on-dark .btn-primary:hover{background:var(--indigo-200)}
+.on-dark .btn-primary:active{background:var(--indigo-300)}
+.on-dark .btn-secondary{background:transparent;color:var(--on-dark);border-color:rgba(255,255,255,.48)}
+.on-dark .btn-secondary:hover{background:rgba(255,255,255,.06);border-color:var(--on-dark)}
+.on-dark .btn-secondary:active{background:rgba(255,255,255,.12);border-color:var(--on-dark)}
+.on-dark .btn-ghost{background:transparent;color:var(--on-dark-muted)}
+.on-dark .btn-ghost:hover{background:rgba(255,255,255,.06);color:var(--on-dark)}
+.on-dark .btn-ghost:active{background:rgba(255,255,255,.12);color:var(--on-dark)}
+
+/* ---- icon button ---- */
+.btn-icon{
+  width:40px;height:40px;padding:0;border-radius:999px;border:1px solid transparent;
+  background:rgba(255,255,255,.94);color:var(--ink);
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:background-color .15s ease,transform .06s ease;
+}
+.btn-icon:hover{background:var(--card)}
+.btn-icon:active{transform:translateY(1px);box-shadow:inset 0 1px 2px rgba(var(--shadow-ink),.22)}
+.btn-icon:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.on-dark .btn-icon:focus-visible{outline-color:var(--focus-dark)}
+
+/* ---- any control that is smaller than 24px gets its hit area extended here,
+        never by changing layout ---- */
+.hit-extend{position:relative}
+.hit-extend::after{content:"";position:absolute;inset:-9px -6px}
+
+@media (prefers-reduced-motion:reduce){
+  .btn,.btn-icon{transition:none}
+}
+
+/* ==ENVOY-SYSTEM:END== */
+
+/* Source: Claude Design · "Envoy Mobile" · screen 1c (402 × 874 iPhone frame).
+   Every value below is transcribed from that file. */
+:root{
+  --inset-top:calc(env(safe-area-inset-top,0px) + 18px);
+  --inset-bottom:max(12px, calc(env(safe-area-inset-bottom,0px) + 6px));
+}
+:root.framed{ --inset-top:62px; --inset-bottom:40px }
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f);-webkit-font-smoothing:antialiased}
+:root.framed{scrollbar-width:none} :root.framed::-webkit-scrollbar{display:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer}
+textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--indigo);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.page{position:relative;min-height:100vh;max-width:520px;margin:0 auto;background:var(--ground)}
+
+/* ---------- top ---------- */
+.top{padding:var(--inset-top) 22px 0;overflow:hidden;position:relative}
+.nav{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.menu-btn{width:38px;height:32px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px var(--line-2);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px}
+.menu-btn:hover{background:var(--indigo-50)}
+.menu-btn i{display:block;width:14px;height:1.5px;background:var(--ink)}
+
+.marquee{margin:26px -22px 0;overflow:hidden}
+.marquee-track{display:flex;width:max-content;animation:marquee 22s linear infinite}
+.marquee-track span{font-weight:700;font-size:var(--t-ghost-m);line-height:.9;letter-spacing:-.06em;white-space:nowrap;padding-right:40px}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+h1{margin:var(--sp-6) 0 0;font-weight:500;font-size:var(--t-display);line-height:1.02;letter-spacing:-.04em;text-wrap:pretty}
+.lede{margin:var(--sp-4) 0 0;font-size:var(--t-body);line-height:1.55;color:var(--muted);max-width:min(320px,var(--measure))}
+.micro{margin:var(--sp-3) 0 0;font-size:var(--t-small);color:var(--muted)}
+
+/* ---------- menu ---------- */
+.menu{position:fixed;inset:0;z-index:40;background:rgba(234,236,250,.97);
+  padding:calc(var(--inset-top) + 58px) 34px calc(var(--inset-top) + 58px);
+  display:none;flex-direction:column;gap:var(--sp-5);
+  font-weight:500;font-size:var(--t-h1);letter-spacing:-.035em;line-height:1.06}
+.menu.open{display:flex}
+@media (min-width:521px){ .menu{left:calc(50% - 260px);right:calc(50% - 260px)} }
+.menu a{align-self:flex-start}
+.menu a:hover{color:var(--indigo)}
+.menu .dim{color:var(--muted)}
+.menu .hint{margin-top:auto;font-size:var(--t-small);letter-spacing:0;font-weight:400;line-height:normal;color:var(--faint)}
+
+/* ---------- white shell ---------- */
+.shell{margin-top:56px;background:var(--card);border-radius:38px 38px 0 0;padding:var(--sp-7) var(--sp-5) 0}
+.stmt{margin:0;font-weight:500;font-size:var(--t-h1);line-height:1.2;letter-spacing:-.035em;text-wrap:pretty}
+.feat-head{display:flex;justify-content:space-between;align-items:flex-end;margin-top:64px}
+.h-36{margin:0;font-weight:500;font-size:var(--t-h1);line-height:1.06;letter-spacing:-.035em}
+.feat-head .h-36{max-width:200px}
+.step{font-weight:700;font-size:var(--t-micro);letter-spacing:.19em;color:var(--faint)}
+
+/* ---------- stacked decks ---------- */
+.deck:hover{filter:brightness(1.06)}
+.deck{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:22px}
+.deck-f{min-height:470px;margin-top:20px}
+.deck-b{min-height:340px;margin-top:30px}
+.card{position:absolute;left:0;right:0;border-radius:22px;overflow:hidden;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.deck-f .card{top:40px;min-height:420px;box-shadow:0 24px 44px -28px rgba(var(--shadow-ink),.5)}
+.deck-b .card{top:30px;min-height:300px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6)}
+.ghost{position:absolute;font-weight:700;line-height:.8;letter-spacing:-.06em;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1px rgba(12,16,36,.25)}
+.deck-f .ghost{left:-6px;top:-22px;font-size:var(--t-ghost-l)}
+.deck-b .ghost{left:-4px;top:-18px;font-size:var(--t-ghost-l)}
+.cap{position:absolute;margin:0;font-weight:600}
+.deck-f .cap{left:28px;bottom:28px;width:220px;font-size:var(--t-h2);line-height:1.14;letter-spacing:-.025em}
+.deck-b .cap{left:24px;bottom:24px;width:200px;font-size:var(--t-h2);line-height:1.18;letter-spacing:-.02em}
+.go{position:absolute;right:13px;bottom:13px;width:34px;height:34px;border-radius:999px;background:rgba(255,255,255,.94);
+  display:flex;align-items:center;justify-content:center}
+.go i{display:block;width:7px;height:7px;border-top:1.5px solid var(--ink);border-right:1.5px solid var(--ink);transform:rotate(45deg)}
+
+/* ---------- pricing ---------- */
+#pricing{margin-top:80px;scroll-margin-top:24px}
+.pr-sub{margin:var(--sp-3) 0 0;font-size:var(--t-body);line-height:1.6;color:var(--muted)}
+.tiers{margin-top:24px;display:flex;flex-direction:column;gap:var(--sp-2)}
+.tier{border-radius:26px;overflow:hidden;cursor:pointer;transition:background .3s;
+  background:var(--wash);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);
+  --sub:var(--muted);--dot:var(--line-2)}
+.tier.open{background:linear-gradient(159deg,var(--biz) 0%,var(--ink) 77%);color:var(--on-dark);box-shadow:none;
+  --sub:var(--on-dark-muted);--dot:var(--tag)}
+.tier-head:hover{background:rgba(12,16,36,.06)}
+.tier.on-dark .tier-head:hover{background:rgba(255,255,255,.06)}
+.tier-head{width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 24px;text-align:left}
+.tier-name{display:flex;align-items:center;gap:12px}
+.tier-name b{font-weight:600;font-size:var(--t-h2);letter-spacing:-.02em}
+.badge{border-radius:999px;background:var(--tag);color:var(--ink);padding:5px 10px;font-weight:700;font-size:var(--t-micro);letter-spacing:.13em}
+.tier-price{display:flex;gap:4px;align-items:baseline;white-space:nowrap}
+.tier-price b{font-weight:500;font-size:var(--t-h2);letter-spacing:-.04em}
+.tier-price small{font-weight:500;font-size:var(--t-small);color:var(--sub)}
+.tier-body{padding:0 24px 24px;display:none;flex-direction:column;gap:13px}
+.tier.open .tier-body{display:flex}
+.tier-desc{margin:0;font-size:var(--t-ui);line-height:1.5;color:var(--sub)}
+.tier ul{list-style:none;margin:0;padding:var(--sp-1) 0;display:flex;flex-direction:column;gap:var(--sp-2)}
+.tier li{display:flex;gap:var(--sp-2);align-items:center;font-size:var(--t-ui);color:var(--sub)}
+.tier li::before{content:"";flex:none;width:5px;height:5px;border-radius:50%;background:var(--dot)}
+
+/* ---------- business ---------- */
+.biz{margin:var(--sp-9) -22px 0;padding:var(--sp-7) var(--sp-5) 140px;border-radius:38px 38px 0 0;color:#fff;scroll-margin-top:0;
+  background:linear-gradient(115deg,var(--biz) 6%,var(--ink) 70%)}
+.eyebrow{display:flex;align-items:center;gap:var(--sp-3)}
+.eyebrow span{font-weight:700;font-size:var(--t-micro);letter-spacing:.19em;color:var(--on-dark-eyebrow)}
+.eyebrow i{display:block;width:40px;height:1px;background:rgba(255,255,255,.32)}
+.biz h2{margin:var(--sp-4) 0 0;font-weight:500;font-size:var(--t-h1);line-height:1.04;letter-spacing:-.035em;text-wrap:pretty}
+.biz-p{margin:var(--sp-3) 0 0;font-size:var(--t-body);line-height:1.6;color:var(--on-dark-muted)}
+.biz-ctas{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+footer{margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);
+  display:flex;flex-direction:column;gap:var(--sp-3);font-size:var(--t-small);color:var(--on-dark-muted)}
+footer nav{display:flex;gap:var(--sp-4);flex-wrap:wrap;color:#fff}
+footer nav a{position:relative}
+/* 16px of text is below the 24px minimum; extend the hit area only — no layout shift */
+footer nav a::after{content:"";position:absolute;inset:-9px -6px}
+footer nav a:hover{color:var(--tag)}
+
+/* ---------- sticky composer ---------- */
+.dock{position:sticky;bottom:0;z-index:30;padding:12px 12px var(--inset-bottom);pointer-events:none;
+  background:linear-gradient(180deg,rgba(234,236,250,0) 0%,rgba(234,236,250,.9) 40%)}
+.composer{pointer-events:auto;border-radius:22px;background:#fff;
+  box-shadow:inset 0 0 0 1px var(--line-2),0 26px 60px -30px rgba(var(--shadow-ink),.5);
+  display:flex;align-items:center;gap:8px;padding:14px 10px 14px 18px;width:100%;min-height:75px}
+.composer:focus-within{box-shadow:inset 0 0 0 1.5px var(--indigo),0 26px 60px -30px rgba(var(--shadow-ink),.5)}
+.composer textarea{flex:1;min-width:0;border:0;resize:none;overflow:hidden;padding:10px 0;margin:0;
+  font-size:var(--t-body);line-height:1.4;color:var(--ink);background:transparent;min-height:52px}
+.composer textarea::placeholder{color:var(--faint)}
+.composer textarea:focus{outline:none}
+
+@media (prefers-reduced-motion:reduce){
+  .marquee-track{animation:none}
+  .card,.tier{transition:none}
+}
+
+/* Under 400px the button goes full width beneath the field: the label survives
+   and the target becomes a comfortable 44px across. */
+@media(max-width:399px){
+  .composer{flex-direction:column;align-items:stretch;height:auto;min-height:0;min-height:0;gap:10px;padding:14px}
+  .composer textarea{height:auto;min-height:0;min-height:44px}
+  .composer .start{width:100%}
+}
+/* A reader's own text-spacing settings must never cost content (WCAG 1.4.12). */
+.composer textarea{min-height:52px;height:auto;min-height:0;overflow:auto}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div class="nav">
+      <button class="menu-btn" id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+      <a class="btn btn-chip btn-sm login" href="#">Log in</a>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track"><span>Envoy, bringing the joy back to planning.</span><span>Envoy, bringing the joy back to planning.</span></div>
+    </div>
+    <p class="sr">Envoy, bringing the joy back to planning.</p>
+    <h1>Meet your planning partner, Envoy.</h1>
+    <p class="lede">Describe your project. Get an instant vendor lineup. Envoy reaches out for you and keeps track of quotes and communication.</p>
+    <p class="micro">Free to plan, no card required.</p>
+  </header>
+
+  <nav class="menu" id="menu" aria-label="Menu" hidden>
+    <a href="#start" data-close>Start a project</a>
+    <a href="#pricing" data-close>Pricing</a>
+    <a href="#business" data-close>For business</a>
+    <a class="dim" href="#" data-close>Log in</a>
+    <span class="hint">Tap anywhere to close</span>
+  </nav>
+
+  <main class="shell">
+    <p class="stmt">Envoy finds the vendors and handles the communication, so you can focus on the big decisions.</p>
+
+    <div class="feat-head">
+      <h2 class="h-36">Big plans made easy.</h2>
+      <span class="step" id="feat-step" aria-hidden="true">01 / 04</span>
+    </div>
+    <div class="deck deck-f" id="deck-f" role="button" tabindex="0" aria-describedby="feat-live"></div>
+    <p class="sr" id="feat-live" aria-live="polite"></p>
+
+    <h2 class="h-36" id="pricing">Plan with Envoy</h2>
+    <p class="pr-sub">Envoy is free. Paid plans enjoy automated outreach.</p>
+    <div class="tiers" id="tiers"></div>
+
+    <section class="biz on-dark" id="business" aria-labelledby="h-biz">
+      <div class="eyebrow"><span>ENVOY FOR BUSINESS</span><i></i></div>
+      <h2 id="h-biz">Do you want to win more work, without chasing leads?</h2>
+      <p class="biz-p">Envoy puts your business in front of potential customers and helps you respond faster than the competition.</p>
+      <div class="deck deck-b" id="deck-b" role="button" tabindex="0" aria-describedby="biz-live"></div>
+      <p class="sr" id="biz-live" aria-live="polite"></p>
+      <div class="biz-ctas"><a class="btn btn-primary btn-lg" href="#">Join Envoy for Business</a><a class="btn btn-secondary btn-lg" href="#pricing">See pricing</a></div>
+      <footer>
+        <nav aria-label="Footer"><a class="hit-extend" href="#start">Start a project</a><a class="hit-extend" href="#pricing">Pricing</a><a class="hit-extend" href="#business">For business</a><a class="hit-extend" href="#">Privacy</a></nav>
+        <span>© 2026 Envoy · Your digital representative for outreach.</span>
+        <span>this site was designed by a human.</span>
+      </footer>
+    </section>
+  </main>
+
+  <div class="dock">
+    <form class="composer" id="start" role="search" aria-label="Start a project">
+      <label class="sr" for="proj">Describe your project</label>
+      <textarea id="proj" rows="1" placeholder="An outdoor wedding for 150 guests this fall…"></textarea>
+      <button class="btn btn-primary btn-md start" type="submit">Start project</button>
+    </form>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var FEAT=[
+    {word:'search', cap:'Envoy does the research',        bg:'radial-gradient(175px 201px at 26% 47%, rgb(122,102,232) 0%, rgb(51,42,142) 100%)', fg:'#FFFFFF'},
+    {word:'draft',  cap:'Envoy drafts each message',      bg:'radial-gradient(175px 181px at 28% 58%, rgb(76,143,200) 0%, rgb(27,63,99) 100%)',   fg:'#FFFFFF'},
+    {word:'approve',cap:'You approve the responses',      bg:'radial-gradient(225px 251px at 28% 75%, rgb(63,169,143) 0%, rgb(20,70,79) 100%)',   fg:'#FFFFFF'},
+    {word:'track',  cap:'Envoy keeps it all in one place',bg:'radial-gradient(405px 356px at 29% 86%, rgb(110,124,230) 0%, rgb(38,48,111) 100%)', fg:'#FFFFFF'}
+  ];
+  var BIZ=[
+    {word:'48hrs',cap:'48 hours average time to first reply',bg:'radial-gradient(175px 181px at 28% 58%, rgb(76,143,200) 0%, rgb(27,63,99) 100%)',   fg:'#FFFFFF'},
+    {word:'4x',   cap:'4x more qualified leads',             bg:'radial-gradient(225px 251px at 28% 75%, rgb(63,169,143) 0%, rgb(20,70,79) 100%)',   fg:'#FFFFFF'},
+    {word:'250',  cap:'250 credits to start',                bg:'radial-gradient(405px 356px at 29% 86%, rgb(110,124,230) 0%, rgb(38,48,111) 100%)', fg:'#FFFFFF'}
+  ];
+  var TIERS=[
+    {id:'pro',   name:'Pro',   price:'$96', per:'/yr',          desc:'Unlock unlimited projects and Pro mode.',
+     feat:['Everything in Free','Pro mode','Unlimited projects'], cta:'Choose Pro', badge:true},
+    {id:'free',  name:'Free',  price:'Free',per:'',             desc:'Plan projects and reach out to vendors yourself.',
+     feat:['1 active project','Envoy-built vendor lineups','Reach out to vendors yourself','Track every reply in one place'], cta:'Get started free'},
+    {id:'agency',name:'Agency',price:'$200',per:'/yr per user', desc:'Let Envoy draft and send outreach for your whole team.',
+     feat:['Everything in Pro','Automated Envoy outreach to vendors','Envoy drafts replies & follow-ups in your voice','Multiple seats for your whole team','Priority vendor responses'], cta:'Choose Agency'}
+  ];
+  var SPREAD=14; // the design's deckSpread default
+
+  function el(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+
+  /* ---- stacked decks: tap to send the top card to the back ---- */
+  function makeDeck(root, list, withArrow, onChange){
+    var n=list.length, off=0;
+    var cards=list.map(function(c){
+      var d=el('div','card'); d.style.background=c.bg;
+      d.appendChild(el('span','ghost',c.word)).setAttribute('aria-hidden','true');
+      var cap=el('p','cap',c.cap); cap.style.color=c.fg; d.appendChild(cap);
+      if(withArrow){ var g=el('span','go'); g.setAttribute('aria-hidden','true'); g.appendChild(el('i')); d.appendChild(g); }
+      root.appendChild(d); return d;
+    });
+    function paint(){
+      cards.forEach(function(d,i){
+        var p=(i-off+n)%n;
+        d.style.zIndex=n-p;
+        d.style.opacity=p>2?0:1;
+        d.style.transform='translateY('+(-SPREAD*p)+'px) scale('+(1-0.05*p)+')';
+        d.setAttribute('aria-hidden', p===0?'false':'true');
+      });
+      onChange(off%n, n, list[off%n]);
+    }
+    function next(){ off++; paint(); }
+    root.addEventListener('click',next);
+    root.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); next(); } });
+    paint();
+  }
+
+  var step=document.getElementById('feat-step'), featLive=document.getElementById('feat-live'), deckF=document.getElementById('deck-f');
+  makeDeck(deckF, FEAT, true, function(i,n,c){
+    step.textContent=String(i+1).padStart(2,'0')+' / '+String(n).padStart(2,'0');
+    deckF.setAttribute('aria-label','Feature '+(i+1)+' of '+n+'. Show next feature');
+    featLive.textContent=c.cap;
+  });
+  var bizLive=document.getElementById('biz-live'), deckB=document.getElementById('deck-b');
+  makeDeck(deckB, BIZ, false, function(i,n,c){
+    deckB.setAttribute('aria-label','Stat '+(i+1)+' of '+n+'. Show next');
+    bizLive.textContent=c.cap;
+  });
+
+  /* ---- pricing: one tier open at a time, Pro by default ---- */
+  var tiersEl=document.getElementById('tiers'), open='pro', rows=[];
+  TIERS.forEach(function(t){
+    var row=el('div','tier');
+    var head=el('button','tier-head'); head.type='button'; head.setAttribute('aria-controls','tier-'+t.id);
+    var nm=el('span','tier-name'); nm.appendChild(el('b',null,t.name));
+    if(t.badge) nm.appendChild(el('span','badge','MOST POPULAR'));
+    var pr=el('span','tier-price'); pr.appendChild(el('b',null,t.price)); if(t.per) pr.appendChild(el('small',null,t.per));
+    head.appendChild(nm); head.appendChild(pr);
+    var body=el('div','tier-body'); body.id='tier-'+t.id;
+    body.appendChild(el('p','tier-desc',t.desc));
+    var ul=el('ul'); t.feat.forEach(function(f){ ul.appendChild(el('li',null,f)); }); body.appendChild(ul);
+    var cta=el('a','btn btn-md tier-cta',t.cta); cta.href='#start'; body.appendChild(cta);
+    row.appendChild(head); row.appendChild(body);
+    row.addEventListener('click',function(){ if(open!==t.id){ open=t.id; paintTiers(); } });
+    tiersEl.appendChild(row); rows.push({t:t,row:row,head:head,cta:cta});
+  });
+  function paintTiers(){ rows.forEach(function(r){ var o=r.t.id===open;
+    r.row.classList.toggle('open',o); r.row.classList.toggle('on-dark',o);
+    r.cta.classList.toggle('btn-primary',o); r.cta.classList.toggle('btn-secondary',!o);
+    r.head.setAttribute('aria-expanded',o); }); }
+  paintTiers();
+
+  /* ---- menu ---- */
+  var menu=document.getElementById('menu'), mb=document.getElementById('menu-btn');
+  function setMenu(on){
+    menu.hidden=!on; menu.classList.toggle('open',on);
+    mb.setAttribute('aria-expanded',on); mb.setAttribute('aria-label',on?'Close menu':'Open menu');
+    document.documentElement.style.overflow=on?'hidden':'';
+    if(on){ menu.querySelector('a').focus(); } else { mb.focus({preventScroll:true}); }
+  }
+  mb.addEventListener('click',function(){ setMenu(menu.hidden); });
+  menu.addEventListener('click',function(){ setMenu(false); }); // "Tap anywhere to close"
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!menu.hidden) setMenu(false); });
+
+  /* ---- composer (prototype: no backend yet) ---- */
+  var proj=document.getElementById('proj');
+  document.querySelectorAll('a[href="#start"]').forEach(function(a){
+    a.addEventListener('click',function(e){ e.preventDefault(); setTimeout(function(){ proj.focus(); },0); });
+  });
+  document.getElementById('start').addEventListener('submit',function(e){ e.preventDefault(); proj.focus(); });
+  proj.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); document.getElementById('start').requestSubmit(); } });
+
+  if(new URLSearchParams(location.search).has('frame')) document.documentElement.classList.add('framed');
+})();
+</script>
+</body>
+</html>

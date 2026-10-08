@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy Button System</title>
+<meta name="description" content="Every button in the Envoy build today, and a proposed primary / secondary / ghost system with hover, focus and pressed states.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Envoy tokens, unchanged */
+  --ink:#0C1024; --muted:#484D6B; --faint:#5A5F7D;
+  --ground:#EAECFA; --wash:#F4F5FC; --card:#FFFFFF;
+  --line:#E5E7F4; --line-2:#D2D5EA;
+  --indigo:#3A34D6; --indigo-hi:#2B26AC; --indigo-soft:#E9E8FD;
+  --indigo-50:#E9E8FD; --indigo-100:#C9C3FF; --indigo-200:#A79BFF; --indigo-300:#8F86FF;
+  --tag:var(--indigo-100); --lilac:var(--indigo-200); --biz:#191735;
+  /* proposed additions */
+  --line-3:#7F849F;            /* 3:1 border for bounded controls on light */
+  --focus:var(--indigo);       /* focus ring on light */
+  --focus-dark:var(--lilac);   /* focus ring on dark — indigo is only 2.37:1 there */
+  --f:"Instrument Sans",system-ui,-apple-system,sans-serif;
+  --m:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --paper:#F7F8FD; --rule:#DFE2F2; --rule-soft:#ECEEF9; --paper-ink:#0C1024; --paper-muted:#484D6B; --paper-faint:#6B7091;
+  --ok:#126B51; --ok-bg:#E4F2EC; --warn:#9C4715; --warn-bg:#F8EBE1;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0A0D1E; --rule:#2A2F4E; --rule-soft:#1E2340; --paper-ink:#EDECF7; --paper-muted:#A9AEC9; --paper-faint:#878CAB;
+    --ok:#5FD3AC; --ok-bg:#12332A; --warn:#E9A473; --warn-bg:#38220F;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0A0D1E; --rule:#2A2F4E; --rule-soft:#1E2340; --paper-ink:#EDECF7; --paper-muted:#A9AEC9; --paper-faint:#878CAB;
+  --ok:#5FD3AC; --ok-bg:#12332A; --warn:#E9A473; --warn-bg:#38220F;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--paper-ink);font-family:var(--f);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:60px 28px 120px}
+
+.mast{border-bottom:2px solid var(--paper-ink);padding-bottom:20px;margin-bottom:14px}
+.eyebrow{font-family:var(--m);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--indigo);margin:0 0 14px}
+h1{font-size:clamp(2.1rem,5.5vw,3rem);line-height:1.02;letter-spacing:-.04em;font-weight:600;margin:0;text-wrap:balance}
+.sub{color:var(--paper-muted);max-width:64ch;margin:16px 0 0;font-size:17px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin:0 0 56px;padding-top:12px;font-family:var(--m);font-size:11.5px;color:var(--paper-faint)}
+.meta b{color:var(--paper-muted);font-weight:500}
+h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.13em;margin:0 0 4px;font-family:var(--m)}
+.h2rule{height:1px;background:var(--paper-ink);margin:0 0 26px;opacity:.85}
+h3{font-size:18px;font-weight:600;letter-spacing:-.02em;margin:0 0 6px;line-height:1.3}
+h4{font-size:13px;font-weight:600;margin:0 0 12px;font-family:var(--m);text-transform:uppercase;letter-spacing:.08em;color:var(--paper-faint)}
+p{margin:0 0 14px;color:var(--paper-muted);max-width:72ch}
+section{margin:0 0 64px}
+code{font-family:var(--m);font-size:.84em;background:var(--rule-soft);padding:1.5px 5px;border-radius:3px;color:var(--paper-ink)}
+.mono{font-family:var(--m);font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-family:var(--m);font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;padding:3px 7px;border-radius:3px}
+.t-warn{background:var(--warn-bg);color:var(--warn)} .t-ok{background:var(--ok-bg);color:var(--ok)}
+
+/* ---------- stage: the surfaces buttons live on ---------- */
+.stage{border:1px solid var(--rule);border-radius:4px;padding:26px;margin:0 0 14px}
+.stage.light{background:var(--card)}
+.stage.wash{background:var(--ground)}
+.stage.dark{background:linear-gradient(115deg,var(--biz) 6%,var(--ink) 70%)}
+.stage .lbl{font-family:var(--m);font-size:10px;letter-spacing:.11em;text-transform:uppercase;margin:0 0 16px;color:#6B7091}
+.stage.dark .lbl{color:#9D9AC0}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-family:var(--m);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#6B7091}
+.stage.dark .cap{color:#9D9AC0}
+
+/* ================= TODAY: the buttons as they are built ================= */
+.now{font-family:var(--f);border-radius:999px;font-weight:600;cursor:pointer;display:inline-flex;
+  align-items:center;justify-content:center;text-decoration:none;border:0;white-space:nowrap}
+.now-start{font-size:14px;color:#fff;background:var(--ink);padding:12px 22px;line-height:17px}
+.now-start:hover{background:var(--indigo)}
+.now-start-m{font-size:14px;color:#fff;background:var(--ink);padding:12px 18px;line-height:normal}
+.now-start-m:hover{background:#1d2244}
+.now-cta{font-size:14px;padding:12px 22px;line-height:17px;border:1px solid var(--line-2);color:var(--ink);background:var(--card)}
+.now-tiercta{font-size:14px;padding:13px;line-height:normal;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2);min-width:160px}
+.now-solid{font-size:14px;padding:15px 24px;line-height:18px;background:#fff;color:var(--ink);border:1px solid transparent}
+.now-solid:hover{background:#C9C3FF}
+.now-solid-m{font-size:15px;padding:15px 24px;line-height:normal;background:#fff;color:var(--ink)}
+.now-outline{font-size:14px;padding:15px 24px;line-height:18px;color:#fff;border:1px solid rgba(255,255,255,.34);background:transparent}
+.now-outline:hover{border-color:#fff}
+.now-login{font-size:13px;padding:8px 15px 8px 11px;background:rgba(255,255,255,.94);color:var(--ink);line-height:16px;gap:8px}
+.now-login:hover{background:#fff}
+.now-login-m{font-size:13px;padding:8px 15px;background:#fff;color:var(--ink);line-height:16px}
+.now-login-m:hover{color:var(--indigo)}
+.now-go{width:34px;height:34px;padding:0;background:rgba(255,255,255,.94);color:var(--ink)}
+.now-menu{width:38px;height:32px;padding:0;background:#fff;box-shadow:inset 0 0 0 1px var(--line-2);flex-direction:column;gap:4px}
+.now-menu i{display:block;width:14px;height:1.5px;background:var(--ink)}
+.now-dot{width:24px;height:24px;padding:0;background:transparent}
+.now-dot::before{content:"";width:9px;height:9px;border-radius:99px;background:rgba(255,255,255,.42)}
+.now-dot.on::before{width:22px;background:#fff}
+
+/* ================= PROPOSED SYSTEM ================= */
+.btn{
+  font-family:var(--f);font-weight:600;border-radius:999px;border:1px solid transparent;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;
+  text-decoration:none;cursor:pointer;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease, transform .06s ease;
+}
+.btn-sm{font-size:13px;line-height:16px;padding:8px 16px;min-height:34px}
+.btn-md{font-size:14px;line-height:17px;padding:12px 22px;min-height:44px}
+.btn-lg{font-size:15px;line-height:18px;padding:15px 24px;min-height:50px}
+.btn:focus-visible,.btn.is-focus{outline:2px solid var(--focus);outline-offset:3px}
+.btn:active,.btn.is-press{transform:translateY(1px);box-shadow:inset 0 1px 2px rgba(8,10,26,.22)}
+.btn[disabled],.btn.is-disabled{opacity:.42;cursor:not-allowed;transform:none}
+
+/* primary */
+.btn-primary{background:var(--ink);color:#fff}
+.btn-primary:hover,.btn-primary.is-hover{background:var(--indigo)}
+.btn-primary:active,.btn-primary.is-press{background:var(--indigo-hi)}
+/* secondary */
+.btn-secondary{background:transparent;color:var(--ink);border-color:var(--line-3)}
+.btn-secondary:hover,.btn-secondary.is-hover{background:rgba(12,16,36,.06);border-color:var(--ink)}
+.btn-secondary:active,.btn-secondary.is-press{background:rgba(12,16,36,.12);border-color:var(--ink)}
+/* ghost */
+.btn-ghost{background:transparent;color:var(--muted)}
+.btn-ghost:hover,.btn-ghost.is-hover{background:rgba(12,16,36,.06);color:var(--ink)}
+.btn-ghost:active,.btn-ghost.is-press{background:rgba(12,16,36,.12);color:var(--ink)}
+
+/* on dark */
+.on-dark .btn:focus-visible,.on-dark .btn.is-focus{outline-color:var(--focus-dark)}
+.on-dark .btn-primary{background:#fff;color:var(--ink)}
+.on-dark .btn-primary:hover,.on-dark .btn-primary.is-hover{background:var(--indigo-200)}
+.on-dark .btn-primary:active,.on-dark .btn-primary.is-press{background:var(--indigo-300)}
+.on-dark .btn-secondary{color:#fff;border-color:rgba(255,255,255,.48)}
+.on-dark .btn-secondary:hover,.on-dark .btn-secondary.is-hover{background:rgba(255,255,255,.06);border-color:#fff}
+.on-dark .btn-secondary:active,.on-dark .btn-secondary.is-press{background:rgba(255,255,255,.12);border-color:#fff}
+.on-dark .btn-ghost{color:#CBC9E2}
+.on-dark .btn-ghost:hover,.on-dark .btn-ghost.is-hover{background:rgba(255,255,255,.06);color:#fff}
+.on-dark .btn-ghost:active,.on-dark .btn-ghost.is-press{background:rgba(255,255,255,.12);color:#fff}
+
+/* icon button */
+.btn-icon{width:40px;height:40px;padding:0;border-radius:999px;background:rgba(255,255,255,.94);color:var(--ink);
+  border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:background-color .15s ease,transform .06s ease}
+.btn-icon:hover,.btn-icon.is-hover{background:#fff}
+.btn-icon:active,.btn-icon.is-press{background:var(--tag);transform:translateY(1px);box-shadow:inset 0 1px 2px rgba(8,10,26,.22)}
+.btn-icon:focus-visible,.btn-icon.is-focus{outline:2px solid var(--focus);outline-offset:3px}
+.btn-icon svg{width:14px;height:14px}
+
+/* ramp diagram */
+.ramp{display:flex;gap:0;border-radius:4px;overflow:hidden;border:1px solid var(--rule)}
+.ramp div{flex:1;height:62px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;
+  font-family:var(--m);font-size:10px;letter-spacing:.04em}
+.track{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center;margin-top:14px;font-size:13px}
+.track .who{font-family:var(--m);font-size:11px;color:var(--paper-faint);text-transform:uppercase;letter-spacing:.08em}
+.steps{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:8px;font-family:var(--m);font-size:11px;color:var(--paper-muted)}
+.chip{width:30px;height:30px;border-radius:999px;border:1px solid rgba(12,16,36,.14);flex:none}
+.arrow{color:var(--paper-faint);font-family:var(--m)}
+
+/* tables */
+.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:4px;background:var(--card);margin:0 0 24px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:620px;background:var(--paper)}
+th{text-align:left;font-family:var(--m);font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--paper-faint);padding:11px 14px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid var(--rule-soft);vertical-align:top;color:var(--paper-ink)}
+tr:last-child td{border-bottom:0}
+td.n{font-family:var(--m);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.note{color:var(--paper-muted);font-size:12.5px}
+.hit{color:var(--ok);font-weight:600} .miss{color:var(--warn);font-weight:600}
+.sw{display:inline-block;width:12px;height:12px;border-radius:2px;border:1px solid rgba(12,16,36,.2);vertical-align:-2px;margin-right:7px}
+.callout{border:1px solid var(--rule);border-left:3px solid var(--indigo);background:var(--card);padding:16px 18px;border-radius:4px;margin:0 0 18px;color:var(--paper-muted)}
+.callout h3{font-size:15px;margin-bottom:5px;color:var(--paper-ink)}
+.callout p:last-child{margin:0}
+ul{margin:0 0 14px;padding-left:20px;color:var(--paper-muted);max-width:72ch}
+li{margin-bottom:6px}
+footer{margin-top:20px;padding-top:20px;border-top:1px solid var(--rule);font-family:var(--m);font-size:11px;color:var(--paper-faint)}
+@media (max-width:620px){.wrap{padding:40px 18px 80px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Design system · buttons</p>
+    <h1>Envoy Button System</h1>
+    <p class="sub">Every button in the build today, side by side, and a proposed system of three variants with the states none of them currently have. Hover anything on this page — the live examples really respond.</p>
+  </header>
+  <p class="meta">
+    <span><b>Today</b> 12 treatments</span>
+    <span><b>Proposed</b> 3 variants × 3 sizes</span>
+    <span><b>States</b> default · hover · focus · pressed</span>
+    <span><b>Pressed states today</b> 0</span>
+  </p>
+
+  <!-- ============== TODAY ============== -->
+  <section>
+    <h2>What exists today</h2>
+    <div class="h2rule"></div>
+    <p>Twelve distinct button treatments across the two views. Several are the same button rendered two different ways, because each view was built from its own design file.</p>
+
+    <div class="stage light">
+      <p class="lbl">On white — hero card and pricing</p>
+      <div class="row">
+        <div class="col"><button class="now now-start">Start project</button><span class="cap">desktop · hover → indigo</span></div>
+        <div class="col"><button class="now now-start-m">Start project</button><span class="cap">mobile · hover → #1D2244</span></div>
+        <div class="col"><a class="now now-cta" href="#">Choose Pro</a><span class="cap">desktop tier · no hover</span></div>
+        <div class="col"><a class="now now-tiercta" href="#">Choose Pro</a><span class="cap">mobile tier · no hover</span></div>
+        <div class="col"><button class="now now-menu"><i></i><i></i></button><span class="cap">mobile menu · no hover</span></div>
+      </div>
+    </div>
+
+    <div class="stage wash">
+      <p class="lbl">On the ground / over photography</p>
+      <div class="row">
+        <div class="col"><a class="now now-login" href="#">Log in</a><span class="cap">desktop · 94% white</span></div>
+        <div class="col"><a class="now now-login-m" href="#">Log in</a><span class="cap">mobile · 100% white</span></div>
+        <div class="col"><button class="now now-go" aria-label="More"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="cap">panel arrow · no hover</span></div>
+        <div class="col" style="background:#444a63;padding:8px 10px;border-radius:999px;flex-direction:row;gap:2px">
+          <button class="now now-dot on" aria-label="1"></button><button class="now now-dot" aria-label="2"></button><button class="now now-dot" aria-label="3"></button>
+        </div>
+      </div>
+      <p class="cap" style="margin-top:10px">carousel dots · 24×24 · no hover</p>
+    </div>
+
+    <div class="stage dark">
+      <p class="lbl">On the business card</p>
+      <div class="row">
+        <div class="col"><a class="now now-solid" href="#">Join Envoy for Business</a><span class="cap">desktop · 14px · hover → #C9C3FF</span></div>
+        <div class="col"><a class="now now-solid-m" href="#">Join Envoy for Business</a><span class="cap">mobile · 15px · no hover</span></div>
+        <div class="col"><a class="now now-outline" href="#">See pricing</a><span class="cap">hover → white border</span></div>
+      </div>
+    </div>
+
+    <h4 style="margin-top:34px">Where they disagree</h4>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Same button, two builds</th><th>Desktop</th><th>Mobile</th></tr></thead>
+        <tbody>
+          <tr><td>Start project — hover</td><td class="n">→ #3A34D6 indigo</td><td class="n miss">→ #1D2244 dark ink</td></tr>
+          <tr><td>Start project — padding</td><td class="n">12 × 22</td><td class="n miss">12 × 18</td></tr>
+          <tr><td>Tier CTA — boundary</td><td class="n">1px border, white fill</td><td class="n miss">inset ring, transparent fill</td></tr>
+          <tr><td>Tier CTA — padding</td><td class="n">12 × 22</td><td class="n miss">13 all round</td></tr>
+          <tr><td>Join Envoy for Business — size</td><td class="n">14px</td><td class="n miss">15px</td></tr>
+          <tr><td>Join Envoy for Business — hover</td><td class="n">background → #C9C3FF</td><td class="n miss">none</td></tr>
+          <tr><td>Log in — fill</td><td class="n">rgba(255,255,255,.94)</td><td class="n miss">#FFFFFF</td></tr>
+          <tr><td>Log in — hover</td><td class="n">fill → 100% white <em>(invisible)</em></td><td class="n miss">text → indigo</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><span class="tag t-warn">Before the rollout</span> &nbsp;0 of 42 controls had a pressed state and 23 had no hover at all, including every pricing button. <span class="tag t-ok">Now</span> &nbsp;all 43 controls carry hover, focus and pressed, and the build refuses to publish a page where that stops being true.</p>
+  </section>
+
+  <!-- ============== PROPOSED ============== -->
+  <section>
+    <h2>Proposed — three variants</h2>
+    <div class="h2rule"></div>
+    <h4>One ramp, two themes</h4>
+    <p>The dark buttons used to pick their own colours, which is why they felt unrelated. Both themes now walk the <strong>same indigo ramp</strong>, by the same rule: the default is the theme's maximum-contrast fill, hover steps onto the ramp, pressed goes one step further. Six of these eight steps already exist in the build — only <code>#8F86FF</code> and <code>#6E66FF</code> are new, and they get names rather than being invented per button.</p>
+    <div class="ramp">
+      <div style="background:#E9E8FD;color:#0C1024">50</div>
+      <div style="background:#C9C3FF;color:#0C1024">100</div>
+      <div style="background:#A79BFF;color:#0C1024">200</div>
+      <div style="background:#8F86FF;color:#0C1024">300</div>
+      <div style="background:#6E66FF;color:#fff">400</div>
+      <div style="background:#3A34D6;color:#fff">600</div>
+      <div style="background:#2B26AC;color:#fff">700</div>
+      <div style="background:#1B1836;color:#fff">900</div>
+    </div>
+    <div class="track"><span class="who">On light</span><span class="steps">
+      <span class="step"><span class="chip" style="background:#0C1024"></span>ink</span><span class="arrow">&rarr;</span>
+      <span class="step"><span class="chip" style="background:#3A34D6"></span>600 hover</span><span class="arrow">&rarr;</span>
+      <span class="step"><span class="chip" style="background:#2B26AC"></span>700 pressed</span>
+    </span></div>
+    <div class="track"><span class="who">On dark</span><span class="steps">
+      <span class="step"><span class="chip" style="background:#FFFFFF"></span>white</span><span class="arrow">&rarr;</span>
+      <span class="step"><span class="chip" style="background:#A79BFF"></span>200 hover</span><span class="arrow">&rarr;</span>
+      <span class="step"><span class="chip" style="background:#8F86FF"></span>300 pressed</span>
+    </span></div>
+    <p style="margin-top:16px">Secondary and ghost follow one rule in both themes too: a wash of the theme's own foreground at <strong>6% on hover, 12% pressed</strong> — ink on light, white on dark. Previously light used 4/9% and dark used 8/14%, which is the kind of mismatch you feel without being able to name it.</p>
+
+    <p><strong>Primary</strong> for the one action that matters on a screen. <strong>Secondary</strong> for a real but lesser choice next to it. <strong>Ghost</strong> for navigation and anything that should recede. Each row below shows all four states rendered at once; the last one in each row is live, so you can hover and click it.</p>
+
+    <div class="stage light">
+      <p class="lbl">On light</p>
+
+      <h4 style="margin-top:4px">Primary</h4>
+      <div class="row" style="margin-bottom:24px">
+        <div class="col"><button class="btn btn-md btn-primary">Start project</button><span class="cap">default</span></div>
+        <div class="col"><button class="btn btn-md btn-primary is-hover">Start project</button><span class="cap">hover</span></div>
+        <div class="col"><button class="btn btn-md btn-primary is-focus">Start project</button><span class="cap">focus</span></div>
+        <div class="col"><button class="btn btn-md btn-primary is-press">Start project</button><span class="cap">pressed</span></div>
+        <div class="col"><button class="btn btn-md btn-primary">Try me</button><span class="cap">live</span></div>
+      </div>
+
+      <h4>Secondary</h4>
+      <div class="row" style="margin-bottom:24px">
+        <div class="col"><button class="btn btn-md btn-secondary">Choose Pro</button><span class="cap">default</span></div>
+        <div class="col"><button class="btn btn-md btn-secondary is-hover">Choose Pro</button><span class="cap">hover</span></div>
+        <div class="col"><button class="btn btn-md btn-secondary is-focus">Choose Pro</button><span class="cap">focus</span></div>
+        <div class="col"><button class="btn btn-md btn-secondary is-press">Choose Pro</button><span class="cap">pressed</span></div>
+        <div class="col"><button class="btn btn-md btn-secondary">Try me</button><span class="cap">live</span></div>
+      </div>
+
+      <h4>Ghost</h4>
+      <div class="row">
+        <div class="col"><button class="btn btn-md btn-ghost">See pricing</button><span class="cap">default</span></div>
+        <div class="col"><button class="btn btn-md btn-ghost is-hover">See pricing</button><span class="cap">hover</span></div>
+        <div class="col"><button class="btn btn-md btn-ghost is-focus">See pricing</button><span class="cap">focus</span></div>
+        <div class="col"><button class="btn btn-md btn-ghost is-press">See pricing</button><span class="cap">pressed</span></div>
+        <div class="col"><button class="btn btn-md btn-ghost">Try me</button><span class="cap">live</span></div>
+      </div>
+    </div>
+
+    <div class="stage dark on-dark">
+      <p class="lbl">On dark — the business card</p>
+
+      <h4 style="margin-top:4px;color:#9D9AC0">Primary</h4>
+      <div class="row" style="margin-bottom:24px">
+        <div class="col"><a class="btn btn-lg btn-primary" href="#">Join Envoy for Business</a><span class="cap">default</span></div>
+        <div class="col"><a class="btn btn-lg btn-primary is-hover" href="#">Join Envoy for Business</a><span class="cap">hover</span></div>
+        <div class="col"><a class="btn btn-lg btn-primary is-focus" href="#">Join</a><span class="cap">focus</span></div>
+        <div class="col"><a class="btn btn-lg btn-primary is-press" href="#">Join</a><span class="cap">pressed</span></div>
+        <div class="col"><a class="btn btn-lg btn-primary" href="#">Try me</a><span class="cap">live</span></div>
+      </div>
+
+      <h4 style="color:#9D9AC0">Secondary</h4>
+      <div class="row" style="margin-bottom:24px">
+        <div class="col"><a class="btn btn-lg btn-secondary" href="#">See pricing</a><span class="cap">default</span></div>
+        <div class="col"><a class="btn btn-lg btn-secondary is-hover" href="#">See pricing</a><span class="cap">hover</span></div>
+        <div class="col"><a class="btn btn-lg btn-secondary is-focus" href="#">See pricing</a><span class="cap">focus</span></div>
+        <div class="col"><a class="btn btn-lg btn-secondary is-press" href="#">See pricing</a><span class="cap">pressed</span></div>
+        <div class="col"><a class="btn btn-lg btn-secondary" href="#">Try me</a><span class="cap">live</span></div>
+      </div>
+
+      <h4 style="color:#9D9AC0">Ghost</h4>
+      <div class="row">
+        <div class="col"><a class="btn btn-md btn-ghost" href="#">Privacy</a><span class="cap">default</span></div>
+        <div class="col"><a class="btn btn-md btn-ghost is-hover" href="#">Privacy</a><span class="cap">hover</span></div>
+        <div class="col"><a class="btn btn-md btn-ghost is-focus" href="#">Privacy</a><span class="cap">focus</span></div>
+        <div class="col"><a class="btn btn-md btn-ghost is-press" href="#">Privacy</a><span class="cap">pressed</span></div>
+        <div class="col"><a class="btn btn-md btn-ghost" href="#">Try me</a><span class="cap">live</span></div>
+      </div>
+    </div>
+
+    <h4 style="margin-top:34px">Three sizes</h4>
+    <div class="stage light">
+      <div class="row">
+        <div class="col"><button class="btn btn-sm btn-primary">Log in</button><span class="cap">sm · 13px · 34px tall</span></div>
+        <div class="col"><button class="btn btn-md btn-primary">Start project</button><span class="cap">md · 14px · 44px tall</span></div>
+        <div class="col"><button class="btn btn-lg btn-primary">Join Envoy for Business</button><span class="cap">lg · 15px · 50px tall</span></div>
+        <div class="col"><button class="btn btn-md btn-primary is-disabled" disabled>Unavailable</button><span class="cap">disabled</span></div>
+      </div>
+    </div>
+
+    <h4 style="margin-top:28px">Icon buttons</h4>
+    <div class="stage wash">
+      <div class="row">
+        <div class="col"><button class="btn-icon" aria-label="More"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="cap">default · 40×40</span></div>
+        <div class="col"><button class="btn-icon is-hover" aria-label="More"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="cap">hover</span></div>
+        <div class="col"><button class="btn-icon is-focus" aria-label="More"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="cap">focus</span></div>
+        <div class="col"><button class="btn-icon is-press" aria-label="More"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="cap">pressed</span></div>
+        <div class="col"><button class="btn-icon" aria-label="More"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="cap">live</span></div>
+      </div>
+      <p style="margin:14px 0 0;font-size:13px;color:#484D6B">Grown from 34×34 to 40×40. The current panel arrow clears the 24px minimum but has no hover, so it looks pressable and never answers.</p>
+    </div>
+  </section>
+
+  <!-- ============== SPEC ============== -->
+  <section>
+    <h2>The spec</h2>
+    <div class="h2rule"></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Variant</th><th>Default</th><th>Hover</th><th>Pressed</th><th>Focus</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Primary</strong> / light</td><td class="n"><span class="sw" style="background:#0C1024"></span>#0C1024 · white text</td><td class="n"><span class="sw" style="background:#3A34D6"></span>#3A34D6 <em>indigo-600</em></td><td class="n"><span class="sw" style="background:#2B26AC"></span>#2B26AC <em>700</em> + 1px down</td><td class="n">2px #3A34D6, 3px offset</td></tr>
+          <tr><td><strong>Secondary</strong> / light</td><td class="n">transparent · 1px <span class="sw" style="background:#7F849F"></span>#7F849F</td><td class="n">6% ink fill · ink border</td><td class="n">12% ink fill + 1px down</td><td class="n">2px #3A34D6, 3px offset</td></tr>
+          <tr><td><strong>Ghost</strong> / light</td><td class="n">transparent · <span class="sw" style="background:#484D6B"></span>#484D6B text</td><td class="n">6% ink fill · ink text</td><td class="n">12% ink fill + 1px down</td><td class="n">2px #3A34D6, 3px offset</td></tr>
+          <tr><td><strong>Primary</strong> / dark</td><td class="n"><span class="sw" style="background:#FFFFFF"></span>#FFFFFF · ink text</td><td class="n"><span class="sw" style="background:#A79BFF"></span>#A79BFF <em>indigo-200</em></td><td class="n"><span class="sw" style="background:#8F86FF"></span>#8F86FF <em>300</em> + 1px down</td><td class="n">2px #A79BFF, 3px offset</td></tr>
+          <tr><td><strong>Secondary</strong> / dark</td><td class="n">transparent · 1px white 48%</td><td class="n">6% white fill · white border</td><td class="n">12% white fill + 1px down</td><td class="n">2px #A79BFF, 3px offset</td></tr>
+          <tr><td><strong>Ghost</strong> / dark</td><td class="n">transparent · <span class="sw" style="background:#CBC9E2"></span>#CBC9E2 text</td><td class="n">6% white fill · white text</td><td class="n">12% white fill + 1px down</td><td class="n">2px #A79BFF, 3px offset</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Measured contrast for every state</h4>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Pair</th><th>Ratio</th><th>Needs</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="n">white on #0C1024 — primary default</td><td class="n">18.83:1</td><td class="n">4.5</td><td class="n hit">pass</td></tr>
+          <tr><td class="n">white on #3A34D6 — primary hover</td><td class="n">7.95:1</td><td class="n">4.5</td><td class="n hit">pass</td></tr>
+          <tr><td class="n">white on #2B26AC — primary pressed</td><td class="n">10.63:1</td><td class="n">4.5</td><td class="n hit">pass</td></tr>
+          <tr><td class="n">#3A34D6 focus ring on the ground</td><td class="n">6.77:1</td><td class="n">3.0</td><td class="n hit">pass</td></tr>
+          <tr><td class="n">ink on #A79BFF — dark primary hover</td><td class="n">7.87:1</td><td class="n">4.5</td><td class="n hit">pass</td></tr>
+          <tr><td class="n">ink on #8F86FF — dark primary pressed</td><td class="n">6.30:1</td><td class="n">4.5</td><td class="n hit">pass</td></tr>
+          <tr><td class="n">#A79BFF focus ring on the business card #191735</td><td class="n">7.22:1</td><td class="n">3.0</td><td class="n hit">pass</td></tr>
+          <tr><td class="n">#3A34D6 focus ring on the business card <em>(today)</em></td><td class="n">2.17:1</td><td class="n">3.0</td><td class="n miss">fails</td></tr>
+          <tr><td class="n">#A79BFF focus ring on #0C1024</td><td class="n">7.87:1</td><td class="n">3.0</td><td class="n hit">pass</td></tr>
+          <tr><td class="n">#3A34D6 focus ring on #0C1024 <em>(today)</em></td><td class="n">2.37:1</td><td class="n">3.0</td><td class="n miss">fails</td></tr>
+          <tr><td class="n">#D2D5EA secondary border on white <em>(today)</em></td><td class="n">1.45:1</td><td class="n">3.0</td><td class="n miss">fails</td></tr>
+          <tr><td class="n">#7F849F secondary border on white / wash / ground</td><td class="n">3.68 / 3.39 / 3.13:1</td><td class="n">3.0</td><td class="n hit">pass</td></tr>
+          <tr><td class="n">white 48% secondary border on the business card</td><td class="n">4.84:1</td><td class="n">3.0</td><td class="n hit">pass</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout" style="border-left-color:#126B51">
+      <h3>Decided and shipped</h3>
+      <p><code>#7F849F</code> is the secondary border, and the whole system is live in both builds. The two notes below record why.</p>
+    </div>
+    <div class="callout">
+      <h3>Two changes you'll see immediately</h3>
+      <p><strong>The secondary border gets darker.</strong> Today's <code>#D2D5EA</code> is 1.45:1 against white — decorative weight. WCAG 1.4.11 asks for 3:1 on the boundary that identifies a control, and <code>#7F849F</code> is the lightest value that clears it on all three light surfaces. It is a visible change in character; if you'd rather keep the hairline, the counter-argument is that these buttons also have a text label and a filled shape, so the border isn't the only affordance. Your call.</p>
+      <p style="margin-top:10px"><strong>The focus ring changes colour on dark.</strong> Indigo on the business card is 2.37:1 — effectively invisible. Lilac <code>#A79BFF</code> takes it to 7.87:1.</p>
+    </div>
+  </section>
+
+  <!-- ============== A11Y ============== -->
+  <section>
+    <h2>Colour vision &amp; tap targets</h2>
+    <div class="h2rule"></div>
+    <p>Checked before rollout. Every colour pair was re-measured through simulations of the three dichromacies and full achromatopsia, and every control on both views was measured for target size.</p>
+
+    <h4>Contrast under simulation</h4>
+    <p>All <strong>19 pairs</strong> in the proposed system hold their requirement under every simulation. Protanopia is the harshest case, and nothing comes close to the line.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Pair</th><th>Normal</th><th>Protan</th><th>Deuter</th><th>Tritan</th><th>Achroma</th><th>Needs</th></tr></thead>
+        <tbody>
+          <tr><td>Primary hover — white on indigo-600</td><td class="n">7.95</td><td class="n">6.12</td><td class="n">7.25</td><td class="n">6.65</td><td class="n">7.95</td><td class="n hit">4.5</td></tr>
+          <tr><td>Primary pressed — white on indigo-700</td><td class="n">10.63</td><td class="n">8.51</td><td class="n">9.81</td><td class="n">9.12</td><td class="n">10.63</td><td class="n hit">4.5</td></tr>
+          <tr><td>Primary hover on dark — ink on indigo-200</td><td class="n">7.87</td><td class="n">8.02</td><td class="n">7.78</td><td class="n">8.04</td><td class="n">7.87</td><td class="n hit">4.5</td></tr>
+          <tr><td>Primary pressed on dark — ink on indigo-300</td><td class="n">6.30</td><td class="n">6.54</td><td class="n">6.14</td><td class="n">6.51</td><td class="n">6.30</td><td class="n hit">4.5</td></tr>
+          <tr><td>Focus ring on the ground</td><td class="n">6.77</td><td class="n">5.24</td><td class="n">6.15</td><td class="n">5.67</td><td class="n">6.77</td><td class="n hit">3.0</td></tr>
+          <tr><td>Focus ring on the business card</td><td class="n">7.22</td><td class="n">7.34</td><td class="n">7.14</td><td class="n">7.35</td><td class="n">7.22</td><td class="n hit">3.0</td></tr>
+          <tr><td>Secondary border #7F849F on white</td><td class="n">3.68</td><td class="n">3.61</td><td class="n">3.72</td><td class="n">3.66</td><td class="n">3.68</td><td class="n hit">3.0</td></tr>
+          <tr><td>Secondary border 48% white on dark</td><td class="n">4.86</td><td class="n">4.83</td><td class="n">4.88</td><td class="n">4.84</td><td class="n">4.86</td><td class="n hit">3.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Can the states still be told apart?</h4>
+    <p>Contrast passing isn't the same as the states being distinguishable <em>from each other</em>. Measured as CIELAB &Delta;E between consecutive states, below about 10 is hard to see:</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Transition</th><th>Normal</th><th>Protan</th><th>Deuter</th><th>Tritan</th><th>Achroma</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>Primary light — default &rarr; hover</td><td class="n">88.1</td><td class="n">73.9</td><td class="n">77.3</td><td class="n">40.3</td><td class="n">29.2</td><td class="n hit">strong</td></tr>
+          <tr><td>Primary light — hover &rarr; pressed</td><td class="n">15.7</td><td class="n">14.2</td><td class="n">14.4</td><td class="n">9.5</td><td class="n">8.0</td><td class="n miss">fill alone is weak</td></tr>
+          <tr><td>Primary dark — default &rarr; hover</td><td class="n">63.5</td><td class="n">56.5</td><td class="n">58.4</td><td class="n">33.6</td><td class="n">31.3</td><td class="n hit">strong</td></tr>
+          <tr><td>Primary dark — hover &rarr; pressed</td><td class="n">14.4</td><td class="n">12.3</td><td class="n">14.0</td><td class="n">9.6</td><td class="n">6.9</td><td class="n miss">fill alone is weak</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>So pressed no longer leans on its fill.</strong> It now carries three cues at once: the fill steps down the ramp, the button shifts 1px down, and it gains an inset top shadow — a shading cue that survives greyscale completely. Rendered with all colour stripped out, the pressed button's top edge measures <strong>44.8</strong> against hover's <strong>65.0</strong> on a 0&ndash;255 scale &mdash; a visible lip that has nothing to do with hue. Try the live buttons above.</p>
+
+    <h4>No state rests on colour alone</h4>
+    <p>Secondary and ghost change their boundary or their text at the same time as the fill, and those signals stay large under every simulation:</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Second signal on hover</th><th>Normal</th><th>Protan</th><th>Deuter</th><th>Tritan</th><th>Achroma</th></tr></thead>
+        <tbody>
+          <tr><td>Secondary light — border &rarr; ink</td><td class="n">50.4</td><td class="n">50.5</td><td class="n">50.4</td><td class="n">50.4</td><td class="n">50.4</td></tr>
+          <tr><td>Ghost light — text &rarr; ink</td><td class="n">28.6</td><td class="n">28.7</td><td class="n">28.5</td><td class="n">28.4</td><td class="n">28.2</td></tr>
+          <tr><td>Secondary dark — border 48% &rarr; 100%</td><td class="n">44.3</td><td class="n">44.0</td><td class="n">44.2</td><td class="n">43.3</td><td class="n">43.4</td></tr>
+          <tr><td>Ghost dark — text &rarr; white</td><td class="n">24.3</td><td class="n">23.7</td><td class="n">23.7</td><td class="n">20.1</td><td class="n">20.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>The <strong>carousel dots</strong> mark the active slide by width &mdash; 22px versus 9px &mdash; not by colour, plus <code>aria-selected</code>.</li>
+      <li>The <strong>open pricing tier</strong> expands to reveal its content, so the dark fill is a reinforcement rather than the signal, plus <code>aria-expanded</code>.</li>
+      <li>There are <strong>no inline links inside body copy</strong>, so nothing depends on link colour to be recognised as a link.</li>
+      <li>The <strong>four feature panels</strong> do collapse under achromatopsia &mdash; &Delta;E between them drops to 1&ndash;9, so they read as four near-identical greys. Nothing is lost, because each panel is labelled in words and the running order is the sequence. Worth knowing if you ever plan to carry meaning in those hues.</li>
+    </ul>
+
+    <h4>Tap targets</h4>
+    <p>Two controls were below the 24&times;24 minimum. Both are fixed, and <strong>both pages still measure exactly the same height</strong> &mdash; 3407px desktop, 3135px mobile &mdash; because the hit areas grew without moving any layout.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Control</th><th>Was</th><th>Now</th><th>How</th></tr></thead>
+        <tbody>
+          <tr><td>Mobile footer links &times;4</td><td class="n miss">84 &times; 16</td><td class="n hit">96 &times; 34</td><td class="note">A pseudo-element extends the hit area 9px vertically and 6px horizontally. The 18px gap between links means no two targets overlap.</td></tr>
+          <tr><td>Desktop location field</td><td class="n miss">340 &times; 22</td><td class="n hit">340 &times; 30</td><td class="note">Vertical padding with a compensating negative margin, so the composer bar stays 64px.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>View</th><th>Controls</th><th>Under 24&times;24</th><th>24&ndash;43px</th><th>44px and over</th></tr></thead>
+        <tbody>
+          <tr><td class="n">Desktop</td><td class="n">23</td><td class="n hit">0</td><td class="n">19</td><td class="n">4</td></tr>
+          <tr><td class="n">Mobile</td><td class="n">20</td><td class="n hit">0</td><td class="n">11</td><td class="n">9</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Everything clears the AA minimum. The 24&ndash;43px column is not a failure &mdash; it is the gap to the 44px comfort target used by the mobile platform guidelines. The tightest are the three carousel dots at exactly 24&times;24: passing, with nothing to spare. The proposed system lifts the panel arrows from 34 to 40 and puts every labelled button at 34, 44 or 50.</p>
+    <div class="callout">
+      <h3>Verdict</h3>
+      <p>Colour vision: clear. Tap targets: clear, with the two fixes applied to the live builds. The one thing I changed in the proposal as a result is the pressed state, which now has a shading cue so it never depends on hue.</p>
+    </div>
+  </section>
+
+  <!-- ============== COLOUR SWEEP ============== -->
+  <section>
+    <h2>Colour sweep</h2>
+    <div class="h2rule"></div>
+    <p>Every colour literal in both builds, pulled from the stylesheets and the scripts. <strong>33 distinct values</strong> across the two views, 12 of them declared as tokens. The count isn't the problem &mdash; it's that several colours sit a hair apart from each other doing the same job under different names.</p>
+
+    <h4>Values a hair apart</h4>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Role</th><th>Values in use</th><th>Apart by</th><th>Proposal</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Shadow / scrim ink</td>
+            <td class="n"><span class="sw" style="background:#080A1A"></span>rgba(8,10,26) &times;4 &nbsp; <span class="sw" style="background:#080A16"></span>rgba(8,10,22) &times;4 &nbsp; <span class="sw" style="background:#0A0D20"></span>rgba(10,13,32) &times;1</td>
+            <td class="n">4&ndash;10</td>
+            <td class="n">One shadow ink: <strong>rgba(8,10,26)</strong></td>
+          </tr>
+          <tr>
+            <td>Dark card gradient &mdash; <em>two components, two purples</em></td>
+            <td class="n"><span class="sw" style="background:#1B1836"></span>#1B1836 pricing tier &nbsp; <span class="sw" style="background:#191735"></span>#191735 business card</td>
+            <td class="n miss">2.4</td>
+            <td class="n hit">Now <strong>--biz #191735</strong> for both</td>
+          </tr>
+          <tr>
+            <td>Muted text on dark</td>
+            <td class="n"><span class="sw" style="background:#C6C4DE"></span>#C6C4DE tiers &nbsp; <span class="sw" style="background:#CBC9E2"></span>#CBC9E2 business copy</td>
+            <td class="n miss">8.1</td>
+            <td class="n">One: <strong>#C6C4DE</strong></td>
+          </tr>
+          <tr>
+            <td>Pale lavenders</td>
+            <td class="n"><span class="sw" style="background:#EAECFA"></span>#EAECFA ground &nbsp; <span class="sw" style="background:#F4F5FC"></span>#F4F5FC wash &nbsp; <span class="sw" style="background:#E9E8FD"></span>#E9E8FD indigo-50 &nbsp; <span class="sw" style="background:#E5E7F4"></span>#E5E7F4 line &nbsp; <span class="sw" style="background:#EDECF7"></span>#EDECF7 heading-on-dark</td>
+            <td class="n">4&ndash;17</td>
+            <td class="n">Five values, four real roles &mdash; fold <strong>#EDECF7</strong> into white</td>
+          </tr>
+          <tr>
+            <td>Hairline border</td>
+            <td class="n"><span class="sw" style="background:#D2D5EA"></span>#D2D5EA &nbsp; <span class="sw" style="background:#DAD8FB"></span>#DAD8FB business</td>
+            <td class="n">19</td>
+            <td class="n">One: <strong>#D2D5EA</strong>, or white at 12% on dark</td>
+          </tr>
+          <tr>
+            <td>Primary hover &mdash; <em>resolved by the ramp above</em></td>
+            <td class="n"><span class="sw" style="background:#3A34D6"></span>#3A34D6 desktop &nbsp; <span class="sw" style="background:#1D2244"></span>#1D2244 mobile</td>
+            <td class="n miss">&mdash;</td>
+            <td class="n">indigo-600; <strong>#1D2244</strong> disappears</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Token problems</h4>
+    <ul>
+      <li><code>--tip-stroke: #484D6B</code> is an <strong>exact duplicate</strong> of <code>--muted</code>. Two names, one colour, so changing one silently desyncs the other.</li>
+      <li><code>--ground</code> meant two different colours until this pass &mdash; now one, <code>#EAECFA</code>, with <code>--wash</code> <code>#F4F5FC</code> beneath it.</li>
+      <li>Twelve UI colours are written as literals with no token at all: the panel captions, the business text colours, the pricing tag and the card gradients.</li>
+      <li>Desktop declares <code>--wash</code>, <code>--indigo-hi</code>, <code>--indigo-soft</code>, <code>--tip-stroke</code>; mobile declares <code>--tag</code> and three <code>--biz-*</code> tokens. Neither set is complete.</li>
+    </ul>
+
+    <h4>Proposed palette</h4>
+    <p>Three families plus the dark surface, each with a stated job. Everything in the build maps onto one of these.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Family</th><th>Token</th><th>Value</th><th>Job</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="6"><strong>Neutral</strong></td><td class="n">--card</td><td class="n"><span class="sw" style="background:#FFFFFF"></span>#FFFFFF</td><td class="note">Cards, sheets, primary fill on dark</td></tr>
+          <tr><td class="n">--wash</td><td class="n"><span class="sw" style="background:#F4F5FC"></span>#F4F5FC</td><td class="note">Quiet panels inside white</td></tr>
+          <tr><td class="n">--ground</td><td class="n"><span class="sw" style="background:#EAECFA"></span>#EAECFA</td><td class="note">The page behind everything</td></tr>
+          <tr><td class="n">--line</td><td class="n"><span class="sw" style="background:#E5E7F4"></span>#E5E7F4</td><td class="note">Dividers</td></tr>
+          <tr><td class="n">--line-2</td><td class="n"><span class="sw" style="background:#D2D5EA"></span>#D2D5EA</td><td class="note">Decorative borders</td></tr>
+          <tr><td class="n">--line-3 <span class="tag t-ok">new</span></td><td class="n"><span class="sw" style="background:#7F849F"></span>#7F849F</td><td class="note">Control boundaries &mdash; the only one clearing 3:1</td></tr>
+          <tr><td rowspan="3"><strong>Text</strong></td><td class="n">--ink</td><td class="n"><span class="sw" style="background:#0C1024"></span>#0C1024</td><td class="note">Headings, primary fill on light</td></tr>
+          <tr><td class="n">--muted</td><td class="n"><span class="sw" style="background:#484D6B"></span>#484D6B</td><td class="note">Body copy, ghost label &mdash; <em>absorbs --tip-stroke</em></td></tr>
+          <tr><td class="n">--faint</td><td class="n"><span class="sw" style="background:#5A5F7D"></span>#5A5F7D</td><td class="note">Eyebrows, captions</td></tr>
+          <tr><td rowspan="6"><strong>Indigo</strong></td><td class="n">--indigo-50</td><td class="n"><span class="sw" style="background:#E9E8FD"></span>#E9E8FD</td><td class="note">Soft chips</td></tr>
+          <tr><td class="n">--indigo-100</td><td class="n"><span class="sw" style="background:#C9C3FF"></span>#C9C3FF</td><td class="note">Pricing tag, bullet dots</td></tr>
+          <tr><td class="n">--indigo-200</td><td class="n"><span class="sw" style="background:#A79BFF"></span>#A79BFF</td><td class="note">Primary hover on dark &middot; focus ring on dark</td></tr>
+          <tr><td class="n">--indigo-300 <span class="tag t-ok">new</span></td><td class="n"><span class="sw" style="background:#8F86FF"></span>#8F86FF</td><td class="note">Primary pressed on dark</td></tr>
+          <tr><td class="n">--indigo-600</td><td class="n"><span class="sw" style="background:#3A34D6"></span>#3A34D6</td><td class="note">Primary hover on light &middot; focus ring on light &middot; links</td></tr>
+          <tr><td class="n">--indigo-700</td><td class="n"><span class="sw" style="background:#2B26AC"></span>#2B26AC</td><td class="note">Primary pressed on light</td></tr>
+          <tr><td rowspan="3"><strong>On dark</strong></td><td class="n">--biz</td><td class="n"><span class="sw" style="background:#191735"></span>#191735</td><td class="note">Business card gradient start &mdash; <em>absorbs #1B1836</em></td></tr>
+          <tr><td class="n">--on-dark</td><td class="n"><span class="sw" style="background:#FFFFFF"></span>#FFFFFF</td><td class="note">Headings on dark &mdash; <em>absorbs #EDECF7</em></td></tr>
+          <tr><td class="n">--on-dark-muted</td><td class="n"><span class="sw" style="background:#C6C4DE"></span>#C6C4DE</td><td class="note">Body on dark &mdash; <em>absorbs #CBC9E2</em></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Net effect:</strong> 33 values become 21. Six disappear &mdash; <span class="mono">#080A16 &middot; #0A0D20 &middot; #1D2244 &middot; #1B1836 &middot; #CBC9E2 &middot; #DAD8FB</span>. Two are added and named: <span class="mono">#7F849F</span> for control boundaries and <span class="mono">#8F86FF</span> for the dark pressed state. The eight feature-panel gradient stops stay as they are &mdash; artwork, not interface.</p>
+    <div class="callout">
+      <h3>Scope</h3>
+      <p>This is the colour half. Typography, spacing and radius are the next sweep, along with the 14px / 15px business CTA question.</p>
+    </div>
+  </section>
+
+  <!-- ============== ENFORCEMENT ============== -->
+  <section>
+    <h2>How this stays true</h2>
+    <div class="h2rule"></div>
+    <p>The system is not a document that pages are asked to follow &mdash; it is a file they are built from, and a check that rejects them if they drift.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>File</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td class="n">_system/system.css</td><td class="note">The law. Tokens, the indigo ramp, and every button variant and state. The only place these values exist.</td></tr>
+          <tr><td class="n">_system/apply.py</td><td class="note">Injects the law into each page between markers, deletes the local button rules it supersedes, rewires markup onto the system classes, and folds duplicate colours onto their canonical token.</td></tr>
+          <tr><td class="n">_system/check.mjs</td><td class="note">Drives headless Chrome over both views, forcing hover, focus and active on all 43 controls, and reports every violation.</td></tr>
+          <tr><td class="n">06-responsive/build.py</td><td class="note">Runs the check on every build and <strong>exits non-zero</strong> if anything fails. A page that breaks the system does not ship.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>The five laws</h4>
+    <ol style="color:var(--paper-muted);max-width:72ch;padding-left:20px">
+      <li>Every interactive control is at least 24&times;24, hit area included.</li>
+      <li>Every interactive control has a visible hover change.</li>
+      <li>Every interactive control has a focus ring &mdash; indigo-600 on light, indigo-200 on dark.</li>
+      <li>Every <code>.btn</code> resolves to its variant's token values. No local overrides.</li>
+      <li>No colour outside the palette may appear on a system component.</li>
+    </ol>
+    <h4>Proof it bites</h4>
+    <p>I added <code>style="background:#B22222"</code> to one button and rebuilt. The build stopped:</p>
+    <div class="scroll"><table><tbody>
+      <tr><td class="n miss">HOVER &nbsp; desktop · "Start project" has no hover change</td></tr>
+      <tr><td class="n miss">TOKEN &nbsp; btn-primary backgroundColor is rgb(178, 34, 34), law says rgb(12, 16, 36)</td></tr>
+      <tr><td class="n miss">TOKEN &nbsp; btn-primary hover backgroundColor is rgb(178, 34, 34), law says rgb(58, 52, 214)</td></tr>
+      <tr><td class="n miss">PALETTE &nbsp; backgroundColor rgb(178, 34, 34) is not in the palette</td></tr>
+      <tr><td class="n">BUILD REJECTED &mdash; exit 1</td></tr>
+    </tbody></table></div>
+    <p>Changing the law is still possible, and that is the point: you edit <code>system.css</code>, and every page picks it up on the next build. What you cannot do is change one button in one page and have it survive.</p>
+    <div class="callout">
+      <h3>Where the rollout deviates from the old pixels</h3>
+      <p>Buttons settled on the system's sizes, so a few grew: the composer's <em>Start project</em> went 41 &rarr; 44px tall, the panel arrows 34 &rarr; 40px, and the mobile <em>Join Envoy for Business</em> 14 &rarr; 15px. The pricing tier's dark fill and the business card now share one purple, and text on dark is pure white rather than <code>#EDECF7</code>. Page heights are unchanged: 3407px desktop, 3135px mobile.</p>
+    </div>
+  </section>
+
+  <!-- ============== MAPPING ============== -->
+  <section>
+    <h2>How today maps onto the system</h2>
+    <div class="h2rule"></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Today</th><th>Where</th><th>Becomes</th><th>What changes</th></tr></thead>
+        <tbody>
+          <tr><td class="n">.btn-start / .start</td><td class="note">Hero composer, both views</td><td class="n">Primary · md</td><td class="note">One hover for both; gains pressed; padding settles at 12×22</td></tr>
+          <tr><td class="n">.cta / .tier-cta</td><td class="note">Pricing tiers, both views</td><td class="n">Secondary · md</td><td class="note">Gains hover, focus and pressed; one boundary treatment</td></tr>
+          <tr><td class="n">.tier.pop .cta</td><td class="note">Dark pricing tier</td><td class="n">Primary · md (on dark)</td><td class="note">Gains hover and pressed</td></tr>
+          <tr><td class="n">.solid</td><td class="note">Business card</td><td class="n">Primary · lg (on dark)</td><td class="note">Mobile gains the hover desktop already had; both land on 15px</td></tr>
+          <tr><td class="n">.outline</td><td class="note">Business card</td><td class="n">Secondary · lg (on dark)</td><td class="note">Border to 48% white; gains fill on hover and pressed</td></tr>
+          <tr><td class="n">.util a / .login</td><td class="note">Header pill</td><td class="n">Primary · sm, white variant</td><td class="note">One fill, one hover</td></tr>
+          <tr><td class="n">footer links</td><td class="note">Both footers</td><td class="n">Ghost · sm</td><td class="note">Mobile tap height 16px → 32px</td></tr>
+          <tr><td class="n">.go</td><td class="note">Feature panels</td><td class="n">Icon button</td><td class="note">34 → 40px; gains hover, focus, pressed</td></tr>
+          <tr><td class="n">.states button</td><td class="note">Hero carousel</td><td class="n">stays bespoke</td><td class="note">Needs a hover; 24×24 is at the minimum</td></tr>
+          <tr><td class="n">.menu-btn</td><td class="note">Mobile header</td><td class="n">Icon button · sm</td><td class="note">Gains hover and pressed</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <h3>Still open</h3>
+      <p>The business CTAs now render at 15px in both views, matching your Figma file and the mobile design &mdash; say the word if you want 14px instead. Typography, spacing and radius are the next sweep.</p>
+    </div>
+  </section>
+
+  <footer>
+    Built from the live styles in redesign/04-final and redesign/05-mobile · contrast computed per WCAG 2.1 · nothing on the product pages has been changed by this sheet
+  </footer>
+</div>
+</body>
+</html>

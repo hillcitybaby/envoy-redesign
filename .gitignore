@@ -1,0 +1,15 @@
+# Throwaway Chrome profiles from the build checks (now written to the OS temp dir,
+# but older runs left them here). Regenerated on every run — never commit.
+redesign/_system/.chrome-*
+
+# Verification captures produced by the check scripts while building.
+redesign/*/review/
+
+# Unpacked sources from the Claude Design export (the bundle itself is kept).
+redesign/05-mobile/_src/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp

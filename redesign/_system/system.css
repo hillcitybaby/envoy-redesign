@@ -1,0 +1,154 @@
+/* =============================================================================
+   ENVOY DESIGN SYSTEM — the single source of truth.
+
+   This file is injected verbatim into every page between the markers
+       /* ==ENVOY-SYSTEM:START== */ /*  and  */ /* ==ENVOY-SYSTEM:END== */ /*
+   by redesign/_system/apply.py. Do not edit the copy inside a page — it is
+   overwritten on every build, and check.mjs fails the build if it drifts.
+
+   Rules enforced by redesign/_system/check.mjs:
+     1. Every interactive control is at least 24x24 (WCAG 2.5.8), hit area included.
+     2. Every interactive control has a visible hover change and a focus ring.
+     3. Every .btn resolves to the token values for its variant — no local overrides.
+     4. No colour outside the palette below may appear on a system component.
+     5. Text contrast >= 4.5:1, boundaries and focus rings >= 3:1, on every surface.
+   ============================================================================= */
+
+:root{
+  /* ---- neutrals ---- */
+  --card:#FFFFFF;        /* cards, sheets, primary fill on dark   */
+  --wash:#F4F5FC;        /* quiet panels inside white             */
+  --ground:#EAECFA;      /* the page behind everything            */
+  --line:#E5E7F4;        /* dividers                              */
+  --line-2:#D2D5EA;      /* decorative borders                    */
+  --line-3:#7F849F;      /* control boundaries — the only one that clears 3:1 */
+
+  /* ---- text ---- */
+  --ink:#0C1024;
+  --muted:#484D6B;
+  --faint:#5A5F7D;
+
+  /* ---- indigo ramp — button states are positions on this ramp ---- */
+  --indigo-50:#E9E8FD;
+  --indigo-100:#C9C3FF;
+  --indigo-200:#A79BFF;
+  --indigo-300:#8F86FF;
+  --indigo-600:#3A34D6;
+  --indigo-700:#2B26AC;
+
+  /* ---- dark surface ---- */
+  --biz:#191735;
+  --on-dark:#FFFFFF;
+  --on-dark-muted:#C6C4DE;
+  --on-dark-eyebrow:#B3AEE8;
+
+  /* ---- roles ---- */
+  --focus:var(--indigo-600);        /* 6.77:1 on the ground, 7.95:1 on white */
+  --focus-dark:var(--indigo-200);   /* 7.22:1 on the business card — indigo-600 is only 2.17:1 there */
+  --error:#B3261E;                  /* semantic, not brand: 5.56:1 on the ground, holds under all CVD sims */
+  --shadow-ink:8,10,26;             /* one shadow ink for the whole site */
+
+  /* ---- aliases kept so existing rules keep resolving ---- */
+  --indigo:var(--indigo-600);
+  --indigo-hi:var(--indigo-700);
+  --indigo-soft:var(--indigo-50);
+  --tag:var(--indigo-100);
+  --tip-stroke:var(--muted);
+
+  --f:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  /* ---- type scale — rem so it follows the reader's own font size,
+          and the fluid steps use rem at both ends so the floor moves too ---- */
+  --t-display:clamp(2rem, 1.45rem + 1.4vw, 2.75rem);      /* 32 → 44 */
+  --t-h1:clamp(1.625rem, 1.1rem + 1.4vw, 2.375rem);       /* 26 → 38 */
+  --t-h2:clamp(1.25rem, 1.05rem + 0.6vw, 1.625rem);       /* 20 → 26 */
+  --t-lead:1.125rem;                                       /* 18 */
+  --t-body:1rem;                                           /* 16 */
+  --t-ui:0.875rem;                                         /* 14 */
+  --t-small:0.8125rem;                                     /* 13 */
+  --t-micro:0.6875rem;                                     /* 11 */
+  /* decorative outlined words — aria-hidden, clipped by design, fluid so they
+     don't swamp a small screen */
+  --t-ghost-xl:clamp(6rem, 14vw, 13.75rem);
+  --t-ghost-l:clamp(4.5rem, 9vw, 9.375rem);
+  --t-ghost-m:clamp(3.5rem, 6vw, 6.125rem);
+
+  /* ---- spacing scale, 4px grid ---- */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px;
+  --sp-6:32px; --sp-7:40px; --sp-8:56px; --sp-9:80px;
+
+  /* ---- comfortable measure for body copy ---- */
+  --measure:65ch;
+}
+
+/* =============================== BUTTONS ================================== */
+.btn{
+  font-family:var(--f);font-weight:600;border-radius:999px;
+  border:1px solid transparent;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  white-space:nowrap;text-decoration:none;cursor:pointer;
+  transition:background-color .15s ease,border-color .15s ease,color .15s ease,transform .06s ease;
+}
+.btn-sm{font-size:var(--t-small);line-height:16px;padding:var(--sp-2) var(--sp-4);min-height:34px}
+.btn-md{font-size:var(--t-ui);line-height:17px;padding:var(--sp-3) var(--sp-5);min-height:44px}
+.btn-lg{font-size:var(--t-body);line-height:18px;padding:var(--sp-4) var(--sp-5);min-height:50px}
+
+.btn:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+/* pressed never rests on colour: fill steps down the ramp, the button shifts, and it gains a lip */
+.btn:active{transform:translateY(1px);box-shadow:inset 0 1px 2px rgba(var(--shadow-ink),.22)}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.42;cursor:not-allowed;transform:none}
+
+/* ---- primary: the one action that matters ---- */
+.btn-primary{background:var(--ink);color:var(--card)}
+.btn-primary:hover{background:var(--indigo-600)}
+.btn-primary:active{background:var(--indigo-700)}
+
+/* ---- secondary: a real but lesser choice ---- */
+.btn-secondary{background:transparent;color:var(--ink);border-color:var(--line-3)}
+.btn-secondary:hover{background:rgba(12,16,36,.06);border-color:var(--ink)}
+.btn-secondary:active{background:rgba(12,16,36,.12);border-color:var(--ink)}
+
+/* ---- ghost: recedes ---- */
+.btn-ghost{background:transparent;color:var(--muted)}
+.btn-ghost:hover{background:rgba(12,16,36,.06);color:var(--ink)}
+.btn-ghost:active{background:rgba(12,16,36,.12);color:var(--ink)}
+
+/* ---- chip: a white pill on photography or a tinted ground ---- */
+.btn-chip{background:var(--card);color:var(--ink)}
+.btn-chip:hover{background:var(--indigo-100)}
+.btn-chip:active{background:var(--indigo-200)}
+
+/* ---- on dark: same ramp, mirrored from the pale end ---- */
+/* on a dark surface every control uses the dark ring, not just buttons */
+.on-dark :focus-visible{outline-color:var(--focus-dark)}
+.on-dark .btn:focus-visible{outline-color:var(--focus-dark)}
+.on-dark .btn-primary{background:var(--card);color:var(--ink)}
+.on-dark .btn-primary:hover{background:var(--indigo-200)}
+.on-dark .btn-primary:active{background:var(--indigo-300)}
+.on-dark .btn-secondary{background:transparent;color:var(--on-dark);border-color:rgba(255,255,255,.48)}
+.on-dark .btn-secondary:hover{background:rgba(255,255,255,.06);border-color:var(--on-dark)}
+.on-dark .btn-secondary:active{background:rgba(255,255,255,.12);border-color:var(--on-dark)}
+.on-dark .btn-ghost{background:transparent;color:var(--on-dark-muted)}
+.on-dark .btn-ghost:hover{background:rgba(255,255,255,.06);color:var(--on-dark)}
+.on-dark .btn-ghost:active{background:rgba(255,255,255,.12);color:var(--on-dark)}
+
+/* ---- icon button ---- */
+.btn-icon{
+  width:40px;height:40px;padding:0;border-radius:999px;border:1px solid transparent;
+  background:rgba(255,255,255,.94);color:var(--ink);
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:background-color .15s ease,transform .06s ease;
+}
+.btn-icon:hover{background:var(--card)}
+.btn-icon:active{transform:translateY(1px);box-shadow:inset 0 1px 2px rgba(var(--shadow-ink),.22)}
+.btn-icon:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.on-dark .btn-icon:focus-visible{outline-color:var(--focus-dark)}
+
+/* ---- any control that is smaller than 24px gets its hit area extended here,
+        never by changing layout ---- */
+.hit-extend{position:relative}
+.hit-extend::after{content:"";position:absolute;inset:-9px -6px}
+
+@media (prefers-reduced-motion:reduce){
+  .btn,.btn-icon{transition:none}
+}

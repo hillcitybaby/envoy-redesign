@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy Layout Audit</title>
+<meta name="description" content="Where the Envoy page breaks between breakpoints, and proposed typography, spacing and sizing scales.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F8FD; --surface:#FFFFFF; --ink:#0C1024; --muted:#484D6B; --faint:#6B7091;
+  --rule:#DFE2F2; --rule-soft:#ECEEF9; --accent:#3A34D6;
+  --ok:#126B51; --ok-bg:#E4F2EC; --warn:#9C4715; --warn-bg:#F8EBE1; --info-bg:#E9E8FD;
+  --f:"Instrument Sans",system-ui,-apple-system,sans-serif; --m:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0A0D1E; --surface:#141833; --ink:#EDECF7; --muted:#A9AEC9; --faint:#878CAB;
+  --rule:#2A2F4E; --rule-soft:#1E2340; --accent:#9B95FF;
+  --ok:#5FD3AC; --ok-bg:#12332A; --warn:#E9A473; --warn-bg:#38220F; --info-bg:#22224A; } }
+:root[data-theme="dark"]{
+  --paper:#0A0D1E; --surface:#141833; --ink:#EDECF7; --muted:#A9AEC9; --faint:#878CAB;
+  --rule:#2A2F4E; --rule-soft:#1E2340; --accent:#9B95FF;
+  --ok:#5FD3AC; --ok-bg:#12332A; --warn:#E9A473; --warn-bg:#38220F; --info-bg:#22224A; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:60px 28px 120px}
+.mast{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:14px}
+.eyebrow{font-family:var(--m);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+h1{font-size:clamp(2.1rem,5.5vw,3rem);line-height:1.02;letter-spacing:-.04em;font-weight:600;margin:0;text-wrap:balance}
+.sub{color:var(--muted);max-width:64ch;margin:16px 0 0;font-size:17px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin:0 0 54px;padding-top:12px;font-family:var(--m);font-size:11.5px;color:var(--faint)}
+.meta b{color:var(--muted);font-weight:500}
+h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.13em;margin:0 0 4px;font-family:var(--m)}
+.h2rule{height:1px;background:var(--ink);margin:0 0 26px;opacity:.85}
+h3{font-size:18px;font-weight:600;letter-spacing:-.02em;margin:0 0 6px;line-height:1.3;text-wrap:balance}
+h4{font-size:13px;font-weight:600;margin:28px 0 12px;font-family:var(--m);text-transform:uppercase;letter-spacing:.08em;color:var(--faint)}
+p{margin:0 0 14px;color:var(--muted);max-width:72ch}
+section{margin:0 0 62px}
+code{font-family:var(--m);font-size:.84em;background:var(--rule-soft);padding:1.5px 5px;border-radius:3px;color:var(--ink)}
+.mono{font-family:var(--m);font-variant-numeric:tabular-nums}
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:0 0 60px;border-radius:3px;overflow:hidden}
+.score div{background:var(--surface);padding:18px 20px}
+.score .n{font-family:var(--m);font-variant-numeric:tabular-nums;font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1;display:block}
+.score .k{font-size:11px;text-transform:uppercase;letter-spacing:.11em;color:var(--faint);margin-top:9px;display:block;font-weight:500}
+.score .wn .n{color:var(--warn)} .score .ok .n{color:var(--ok)}
+.scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface);margin:0 0 22px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:600px;background:var(--paper)}
+th{text-align:left;font-family:var(--m);font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);padding:11px 14px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n{font-family:var(--m);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.note{color:var(--muted);font-size:12.5px}
+.hit{color:var(--ok);font-weight:600} .miss{color:var(--warn);font-weight:600}
+.tag{display:inline-block;font-family:var(--m);font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;padding:3px 7px;border-radius:3px}
+.t-warn{background:var(--warn-bg);color:var(--warn)} .t-ok{background:var(--ok-bg);color:var(--ok)} .t-info{background:var(--info-bg);color:var(--accent)}
+.callout{border:1px solid var(--rule);border-left:3px solid var(--accent);background:var(--surface);padding:16px 18px;border-radius:3px;margin:0 0 18px;color:var(--muted)}
+.callout h3{font-size:15px;margin-bottom:5px;color:var(--ink)}
+.callout p:last-child{margin:0}
+ul,ol{margin:0 0 14px;padding-left:20px;color:var(--muted);max-width:72ch}
+li{margin-bottom:6px}
+/* breakage ruler */
+.ruler{position:relative;height:34px;background:var(--rule-soft);border-radius:3px;margin:6px 0 2px;overflow:hidden}
+.ruler i{position:absolute;top:0;bottom:0;background:var(--warn);opacity:.72}
+.ruler b{position:absolute;top:0;bottom:0;width:1px;background:var(--ink);opacity:.25}
+.ruler span{position:absolute;left:8px;top:8px;font-family:var(--m);font-size:11px;color:var(--ink)}
+.rlabels{display:flex;justify-content:space-between;font-family:var(--m);font-size:10px;color:var(--faint);margin-bottom:18px}
+.swatchrow{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.sp{background:var(--accent);opacity:.8;border-radius:2px;height:14px}
+footer{margin-top:20px;padding-top:20px;border-top:1px solid var(--rule);font-family:var(--m);font-size:11px;color:var(--faint)}
+@media (max-width:620px){.wrap{padding:40px 18px 80px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Layout audit · spacing, type, breakpoints</p>
+    <h1>Envoy Layout Audit</h1>
+    <p class="sub">Measured at every width from 320 to 1600. Four components broke between breakpoints, all for the same reason: fixed pixel dimensions that no breakpoint restated. All of it is now fixed and enforced — the findings below are kept as the record of what was wrong.</p>
+  </header>
+  <p class="meta">
+    <span><b>Widths tested</b> 65</span>
+    <span><b>Type sizes found</b> 28</span>
+    <span><b>Spacing values found</b> 33</span>
+    <span><b>Fixed widths with no breakpoint</b> 32</span>
+  </p>
+
+  <div class="score">
+    <div class="wn"><span class="n">4</span><span class="k">Broken ranges</span></div>
+    <div class="wn"><span class="n">20</span><span class="k">Fixed heights</span></div>
+    <div class="wn"><span class="n">28</span><span class="k">Type sizes</span></div>
+    <div class="ok"><span class="n">9</span><span class="k">Proposed steps</span></div>
+    <div class="wn"><span class="n">33</span><span class="k">Spacing values</span></div>
+    <div class="ok"><span class="n">9</span><span class="k">Proposed steps</span></div>
+  </div>
+
+  <!-- ================= BREAKAGE ================= -->
+  <section>
+    <h2>Where it breaks</h2>
+    <div class="h2rule"></div>
+    <p>Each bar is 320 → 1600px. The orange band is where that component overflows the space it has. Because the page clips horizontal overflow, none of this produces a scrollbar — it is silently cut off, which is why it is easy to miss.</p>
+
+    <h4>Features row — heading pushed off the screen</h4>
+    <div class="ruler"><i style="left:70.3%;width:14.1%"></i><b style="left:35%"></b><b style="left:55%"></b><span>1220 – 1400px</span></div>
+    <div class="rlabels"><span>320px</span><span>ticks: 768 · 1024</span><span>1600px</span></div>
+    <p>The rail is a fixed <code>982px</code> and the heading block a fixed <code>334px</code>, with <code>flex:none</code> on both, so neither can shrink. Together with the gap they need <strong>1418px</strong> of viewport. Below that the heading is pushed past the right edge — up to <strong>164px off-screen at 1220px</strong>, where "Big plans made easy." and its paragraph simply disappear. The layout only stacks at 1180, which is 240px too late.</p>
+
+    <h4>Business row — same shape, same cause</h4>
+    <div class="ruler"><i style="left:70.3%;width:17.2%"></i><b style="left:35%"></b><b style="left:55%"></b><span>1220 – 1440px</span></div>
+    <div class="rlabels"><span>320px</span><span>ticks: 768 · 1024</span><span>1600px</span></div>
+    <p>Copy column fixed at <code>433px</code>, rail fixed at <code>765px</code>, 50px gap, 62px padding each side: <strong>1460px</strong> needed. It also stacks at 1180, so there is a 260px band where the rail runs out of the card.</p>
+
+    <h4>Pricing tiers — content taller than the card</h4>
+    <div class="ruler"><i style="left:46.9%;width:32.8%"></i><b style="left:35%"></b><b style="left:55%"></b><span>920 – 1340px</span></div>
+    <div class="rlabels"><span>320px</span><span>ticks: 768 · 1024</span><span>1600px</span></div>
+    <p><code>.tier</code> has a hard <code>height:408px</code> from the Figma frame. As the columns narrow the feature lists wrap onto more lines, and by 940px the Agency tier needs <strong>65px more than it has</strong> — its button escapes the bottom of the card. The height is only released at 900px.</p>
+
+    <h4>Hero copy — fixed block height</h4>
+    <div class="ruler"><i style="left:48.4%;width:5.5%"></i><b style="left:35%"></b><b style="left:55%"></b><span>940 – 1010px</span></div>
+    <div class="rlabels"><span>320px</span><span>ticks: 768 · 1024</span><span>1600px</span></div>
+    <p>A narrow band, but the same mistake: <code>.ov-mid</code> is pinned to <code>height:219px</code> — the measurement I took from your Figma frame — while the headline inside wraps to a third line around 1000px. Content exceeds the box by <strong>20px</strong> and the lede collides with the gap below it.</p>
+
+    <h4>The conversation starter on mobile</h4>
+    <p>Two separate problems, in opposite directions:</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Viewport</th><th>Composer</th><th>Text field</th><th>Button</th><th>Problem</th></tr></thead>
+        <tbody>
+          <tr><td class="n">320</td><td class="n">296</td><td class="n miss">130</td><td class="n">130</td><td class="note">Field and button are the same width — the placeholder is unreadable</td></tr>
+          <tr><td class="n">360</td><td class="n">336</td><td class="n miss">170</td><td class="n">130</td><td class="note">Still cramped</td></tr>
+          <tr><td class="n">390</td><td class="n">366</td><td class="n">200</td><td class="n">130</td><td class="note">Workable</td></tr>
+          <tr><td class="n">414</td><td class="n">369</td><td class="n">203</td><td class="n">130</td><td class="note">Hits the <code>369px</code> cap</td></tr>
+          <tr><td class="n">600</td><td class="n miss">369</td><td class="n">203</td><td class="n">130</td><td class="note">Page is 520 wide, composer still 369 — undersized and off-centre</td></tr>
+          <tr><td class="n">744</td><td class="n miss">369</td><td class="n">203</td><td class="n">130</td><td class="note">Same</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The <code>369px</code> width is a literal from the Claude Design file, and the <em>Start project</em> button is <code>flex:none</code> so it never gives ground. Below 390 the field is squeezed to nothing; above 414 the whole control stops growing while the page keeps going to 520.</p>
+  </section>
+
+  <!-- ================= ROOT CAUSE ================= -->
+  <section>
+    <h2>One root cause</h2>
+    <div class="h2rule"></div>
+    <p><strong>32 fixed pixel widths are declared outside any media query</strong>, and the type scale is almost as rigid: of the desktop's 12 sizes, only 4 are ever restated, and all of those are below 900px. Between 900 and 1440 — the whole laptop and tablet range — <em>nothing in the type scale changes at all</em>. On mobile it is absolute: 20 sizes, none restated at any width, so a 320px phone renders exactly the type intended for 402.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Fixed value</th><th>Component</th><th>Restated at a breakpoint?</th></tr></thead>
+        <tbody>
+          <tr><td class="n">width 982px</td><td>Features rail</td><td class="n">only ≤1400 (to <code>100%</code>, but <code>flex:none</code> keeps it rigid)</td></tr>
+          <tr><td class="n">width 334px</td><td>Features heading block</td><td class="n miss">no</td></tr>
+          <tr><td class="n">width 433px</td><td>Business copy column</td><td class="n miss">only ≤1180</td></tr>
+          <tr><td class="n">width 765px</td><td>Business rail</td><td class="n miss">only ≤1180</td></tr>
+          <tr><td class="n">height 408px</td><td>Pricing tier</td><td class="n miss">only ≤900</td></tr>
+          <tr><td class="n">height 219px</td><td>Hero copy block</td><td class="n miss">only ≤900</td></tr>
+          <tr><td class="n">width 369px</td><td>Mobile composer</td><td class="n miss">no</td></tr>
+          <tr><td class="n">width 1032px</td><td>About statement</td><td class="n">≤1400</td></tr>
+          <tr><td class="n">max-width 403 / 371px</td><td>Hero headline / lede</td><td class="n">≤900</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= IMPLEMENTED ================= -->
+  <section>
+    <h2>Implemented</h2>
+    <div class="h2rule"></div>
+    <p>All of it is in, in both builds, and the build now refuses to publish a page that breaks any of it.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Pass</th><th>Desktop</th><th>Mobile</th><th>What it did</th></tr></thead>
+        <tbody>
+          <tr><td>Fixed heights &rarr; <code>min-height</code></td><td class="n">25</td><td class="n">9</td><td class="note">Boxes keep their designed proportion but can grow</td></tr>
+          <tr><td>Font sizes &rarr; scale</td><td class="n">32</td><td class="n">25</td><td class="note">28 sizes became 8 rem steps plus 3 decorative</td></tr>
+          <tr><td>Spacing &rarr; scale</td><td class="n">23</td><td class="n">19</td><td class="note">Rhythm values snapped to the 4px grid</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Results</h4>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Check</th><th>Before</th><th>After</th></tr></thead>
+        <tbody>
+          <tr><td>Features heading pushed off-screen</td><td class="n miss">1220–1400px, up to 164px off</td><td class="n hit">never</td></tr>
+          <tr><td>Business rail out of its card</td><td class="n miss">1220–1440px</td><td class="n hit">never</td></tr>
+          <tr><td>Pricing tier content past the card</td><td class="n miss">920–1340px, up to 65px</td><td class="n hit">0 at every width</td></tr>
+          <tr><td>Hero copy past its block</td><td class="n miss">940–1010px</td><td class="n hit">never</td></tr>
+          <tr><td>Text cut off, 20 widths 320→1600</td><td class="n miss">found at 1280</td><td class="n hit">none at any width</td></tr>
+          <tr><td>WCAG 1.4.12 text spacing</td><td class="n miss">fails at 375, 768, 1024, 1440</td><td class="n hit">passes at all four</td></tr>
+          <tr><td>Responds to the reader's font size</td><td class="n miss">no — every size fixed in px</td><td class="n hit">yes — all six probes scale</td></tr>
+          <tr><td>Longest line of body copy</td><td class="n miss">107 characters</td><td class="n hit">within 35–75</td></tr>
+          <tr><td>Tap targets under 24&times;24</td><td class="n hit">0</td><td class="n hit">0</td></tr>
+          <tr><td>Contrast below AA</td><td class="n hit">0</td><td class="n hit">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Three things the implementation turned up</h4>
+    <ul>
+      <li><strong>Releasing a height has to release the minimum too.</strong> The breakpoints that said <code>height:auto</code> were there to cancel a fixed height. Once those heights became minimums, <code>height:auto</code> no longer cancelled anything, and the panel captions were clipped at 768–900. Every one of those overrides now sets <code>min-height:0</code> as well.</li>
+      <li><strong>The hero reflow moved from 900 to 1100.</strong> The hero card is absolutely positioned with a percentage height, so it was tight from about 940px up. Rather than keep patching it, it now reflows to the stacked layout at 1100 — a content-driven point, like the other two.</li>
+      <li><strong>Two places were losing content under a reader's text settings</strong> rather than growing: the stacked rail clipped a caption, and the composer's text field swallowed overflow. The rail no longer clips in the stacked layout — the overlap it was hiding only exists in the side-by-side one — and the field scrolls instead.</li>
+    </ul>
+
+    <h4>Now enforced</h4>
+    <p>Four more laws run on every build, alongside the five button laws:</p>
+    <ol>
+      <li>No text clipped by an ancestor, at 320, 375, 768, 1024 and 1440.</li>
+      <li>Nothing extends past the viewport.</li>
+      <li>The WCAG 1.4.12 text-spacing overrides cost no content, tested at 375 and 1024.</li>
+      <li>No font-size or structural height is hard-coded outside the system.</li>
+    </ol>
+    <p>That last one is what stops the scales eroding: a <code>font-size:15px</code> or a new <code>height:380px</code> anywhere in either build now fails the build by name.</p>
+    <div class="callout">
+      <h3>What this cost</h3>
+      <p>The page no longer matches the Figma frames to the pixel — spacing moved by 1–4px in 42 places, the type scale is fluid rather than fixed, and the hero reflows 200px earlier. That was the trade you approved, and it is what let every other number above go green.</p>
+    </div>
+  </section>
+
+  <!-- ================= STANDARDS ================= -->
+  <section>
+    <h2>Checked against the standards</h2>
+    <div class="h2rule"></div>
+    <p>Before implementing, I tested the proposals themselves. <strong>Three of them were wrong</strong>, and the testing turned up a failure I had not looked for.</p>
+
+    <h4><span class="tag t-warn">Correction 1</span> &nbsp;The type scale must be in rem, not px</h4>
+    <p>I proposed the scale in pixels. That ignores the reader's own font-size setting. I raised the browser default from 16px to 20px and measured the page:</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Element</th><th>At 16px default</th><th>At 20px default</th><th>Responds?</th></tr></thead>
+        <tbody>
+          <tr><td>Hero headline</td><td class="n">40px</td><td class="n">40px</td><td class="n miss">no</td></tr>
+          <tr><td>Hero lede</td><td class="n">18px</td><td class="n">18px</td><td class="n miss">no</td></tr>
+          <tr><td>About statement</td><td class="n">40px</td><td class="n">40px</td><td class="n miss">no</td></tr>
+          <tr><td>Panel caption</td><td class="n">22px</td><td class="n">22px</td><td class="n miss">no</td></tr>
+          <tr><td>Button label</td><td class="n">14px</td><td class="n">14px</td><td class="n miss">no</td></tr>
+          <tr><td>Footer link</td><td class="n">14px</td><td class="n">14px</td><td class="n miss">no</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Nothing moves. Page zoom still works, so this is not a WCAG 1.4.4 failure, but someone who has set a larger default font gets no benefit anywhere on the page. The scale should be in <code>rem</code>, and the fluid steps need <code>rem</code> at both ends too — a <code>px</code> floor inside <code>clamp()</code> locks the minimum no matter what the reader has chosen.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Step</th><th>Was proposed</th><th>Corrected</th></tr></thead>
+        <tbody>
+          <tr><td class="n">--t-display</td><td class="n miss">clamp(32px, 2.2rem + 1.4vw, 44px)</td><td class="n hit">clamp(2rem, 1.45rem + 1.4vw, 2.75rem)</td></tr>
+          <tr><td class="n">--t-h1</td><td class="n miss">clamp(26px, 1.5rem + 1.4vw, 38px)</td><td class="n hit">clamp(1.625rem, 1.1rem + 1.4vw, 2.375rem)</td></tr>
+          <tr><td class="n">--t-h2</td><td class="n miss">clamp(20px, 1.2rem + 0.6vw, 26px)</td><td class="n hit">clamp(1.25rem, 1.05rem + 0.6vw, 1.625rem)</td></tr>
+          <tr><td class="n">--t-lead … --t-micro</td><td class="n miss">18 / 16 / 14 / 13 / 11px</td><td class="n hit">1.125 / 1 / 0.875 / 0.8125 / 0.6875rem</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4><span class="tag t-warn">Correction 2</span> &nbsp;<code>min-height</code> has to apply to all 20 fixed heights, not the two I named</h4>
+    <p>I ran the <strong>WCAG 1.4.12 Text Spacing</strong> test, which the audit had not covered: a reader may override line height to 1.5, letter spacing to 0.12em, word spacing to 0.16em and paragraph spacing to 2em, and no content may be lost. <strong>The page fails this today</strong>, in far more places than the two I proposed to fix:</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Block</th><th>Needs</th><th>Has</th><th>At</th></tr></thead>
+        <tbody>
+          <tr><td class="n">.ov-mid — hero copy</td><td class="n">375</td><td class="n miss">219</td><td class="n">1024</td></tr>
+          <tr><td class="n">.stack — panel caption staircase</td><td class="n">286</td><td class="n miss">195</td><td class="n">1440</td></tr>
+          <tr><td class="n">.about — section</td><td class="n">377</td><td class="n miss">369</td><td class="n">1024 and up</td></tr>
+          <tr><td class="n">.rail — features rail</td><td class="n">1213</td><td class="n miss">1156</td><td class="n">768</td></tr>
+          <tr><td class="n">.cell — stacked panel</td><td class="n">337</td><td class="n miss">280</td><td class="n">768</td></tr>
+          <tr><td class="n">.ov-copy</td><td class="n">475</td><td class="n miss">462</td><td class="n">1024</td></tr>
+          <tr><td class="n">textarea — composer field</td><td class="n">88</td><td class="n miss">52</td><td class="n">375</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>There are <strong>20 fixed heights</strong> across the two builds, nearly all measured straight off the Figma frames. Every one of them should be <code>min-height</code>. That keeps the designed proportion at the design widths — the content already fits exactly there — while letting the box grow when a reader's settings or a narrower column demand it. Only genuinely fixed graphics stay fixed: the 1px rule, the icon boxes, the carousel dots.</p>
+
+    <h4><span class="tag t-warn">Correction 3</span> &nbsp;The composer button should stack, not become an icon</h4>
+    <p>I suggested dropping to an icon-only arrow below 360px. That trades a clear label for a glyph at exactly the moment the screen is hardest to read, and it is the kind of thing that tests badly. The standard pattern is better: below about 400px, let the button go full-width underneath the field. The label survives, and the target becomes a comfortable 44px tall across the whole width.</p>
+
+    <h4><span class="tag t-ok">New finding</span> &nbsp;One paragraph runs to 107 characters a line</h4>
+    <p>Comfortable measure is roughly 45–75 characters. At 1024px the business paragraph goes full width when that section stacks, giving <strong>107 characters per line</strong>. Body copy in the stacked layouts needs a <code>max-width</code> of about <code>65ch</code>. Everything else sits inside the range at every width I tested, apart from a few deliberately short lines in narrow columns.</p>
+
+    <h4><span class="tag t-ok">What held up</span></h4>
+    <ul>
+      <li><strong>Reflow (WCAG 1.4.10).</strong> At 320px there is no horizontal scrolling and nothing is lost — already true, and the fixes keep it that way.</li>
+      <li><strong>Content-driven breakpoints.</strong> Choosing 1420 and 1460 because that is where the content stops fitting is the right method; round numbers chosen in advance are the thing to avoid.</li>
+      <li><strong>The 4px spacing grid</strong> and the 9-step scale.</li>
+      <li><strong>Target sizes</strong> — verified at 24px minimum in the last pass, unaffected by any of this.</li>
+      <li><strong><code>min-height</code> over <code>height</code></strong> — right instinct, just far too narrowly applied.</li>
+    </ul>
+  </section>
+
+  <!-- ================= FIXES ================= -->
+  <section>
+    <h2>Recommended fixes</h2>
+    <div class="h2rule"></div>
+    <p>Split into the one-line changes that remove the breakage now, and the deeper change that stops it recurring.</p>
+
+    <h4><span class="tag t-ok">Small</span> &nbsp;Five changes that close all four broken ranges</h4>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Change</th><th>From</th><th>To</th><th>Fixes</th></tr></thead>
+        <tbody>
+          <tr><td>All 20 fixed heights</td><td class="n">height:Npx</td><td class="n hit">min-height:Npx</td><td class="note">920–1340 and 940–1010 bands, plus the WCAG 1.4.12 failures</td></tr>
+          <tr><td>Features stacking point</td><td class="n">max-width:1180px</td><td class="n hit">max-width:1420px</td><td class="note">1220–1400 band</td></tr>
+          <tr><td>Business stacking point</td><td class="n">max-width:1180px</td><td class="n hit">max-width:1460px</td><td class="note">1220–1440 band</td></tr>
+          <tr><td>Mobile composer</td><td class="n">width:min(369px,100%)</td><td class="n hit">width:100%</td><td class="note">Fills the page at every width</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Both <code>height</code> → <code>min-height</code> swaps are safe: at the design widths the content already fits exactly, so nothing moves at 1440 or 402 — they only stop clipping when it doesn't. The two stacking points simply stack earlier, using a layout that already exists.</p>
+    <p>Below about 400px the composer button goes full-width under the field, keeping its label and gaining a 44px target. Body copy in the stacked layouts gets <code>max-width:65ch</code>.</p>
+
+    <h4><span class="tag t-info">Larger</span> &nbsp;Make the two rails fluid</h4>
+    <p>Stacking earlier is a workaround; the rails are rigid because the cards are positioned with hard pixel offsets (<code>left:0 / 217 / 434 / 651</code>) derived from the Figma frame. Making them percentage-based would let both sections stay side-by-side right down to the stacking point and remove two of the fixed widths for good. It is a contained change — the offsets are already computed from CSS variables for the hover interaction — but it will shift the panel overlap by a pixel or two from the Figma match, so it is your call whether that trade is worth it.</p>
+  </section>
+
+  <!-- ================= TYPE ================= -->
+  <section>
+    <h2>Typography</h2>
+    <div class="h2rule"></div>
+    <p><strong>28 distinct sizes</strong> across the two views, several of them a fraction apart and doing the same job. Collapsing near-neighbours gives <strong>8 UI steps plus one decorative</strong>.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Proposed step</th><th>Value</th><th>Absorbs</th><th>Used for</th></tr></thead>
+        <tbody>
+          <tr><td class="n">--t-display</td><td class="n hit">clamp(32px, 2.2rem + 1.4vw, 44px)</td><td class="n">44, 40</td><td class="note">Hero headline, section headlines</td></tr>
+          <tr><td class="n">--t-h1</td><td class="n hit">clamp(26px, 1.5rem + 1.4vw, 38px)</td><td class="n">38, 36, 34, 30</td><td class="note">About statement, business headline</td></tr>
+          <tr><td class="n">--t-h2</td><td class="n hit">clamp(20px, 1.2rem + 0.6vw, 26px)</td><td class="n">26, 24, 22, 21.6</td><td class="note">Panel captions, tier names</td></tr>
+          <tr><td class="n">--t-lead</td><td class="n">18px</td><td class="n">18, 17</td><td class="note">Hero lede, wordmark</td></tr>
+          <tr><td class="n">--t-body</td><td class="n">16px</td><td class="n">16, 15</td><td class="note">Body copy</td></tr>
+          <tr><td class="n">--t-ui</td><td class="n">14px</td><td class="n">14, 13.5</td><td class="note">Buttons, lists, labels</td></tr>
+          <tr><td class="n">--t-small</td><td class="n">13px</td><td class="n">13, 12.5, 12</td><td class="note">Captions, tooltips, footer</td></tr>
+          <tr><td class="n">--t-micro</td><td class="n">11px</td><td class="n">11, 10.5, 10</td><td class="note">Eyebrows, tags</td></tr>
+          <tr><td class="n">--t-ghost</td><td class="n">clamp(72px, 8vw, 150px)</td><td class="n">220, 150, 130, 120, 98, 96, 72</td><td class="note">Decorative outlined words and the watermark</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The three fluid steps are what fix the tablet range: they scale continuously between 320 and 1440 instead of jumping at one breakpoint. Note that this finally retires the fractional sizes — <span class="mono">21.6, 13.5, 12.5, 10.5</span> — which came in from the scaled Claude Design frame and have been following us since the first audit.</p>
+  </section>
+
+  <!-- ================= SPACING ================= -->
+  <section>
+    <h2>Spacing</h2>
+    <div class="h2rule"></div>
+    <p><strong>33 distinct values</strong>, 21 of them off a 4px grid. Most are within 1–2px of a neighbour, which is the signature of values measured out of a design file one at a time rather than drawn from a scale.</p>
+    <div class="swatchrow">
+      <span class="sp" style="width:4px"></span><span class="sp" style="width:8px"></span><span class="sp" style="width:12px"></span>
+      <span class="sp" style="width:16px"></span><span class="sp" style="width:24px"></span><span class="sp" style="width:32px"></span>
+      <span class="sp" style="width:40px"></span><span class="sp" style="width:56px"></span><span class="sp" style="width:80px"></span>
+    </div>
+    <p class="mono" style="font-size:11px;color:var(--faint)">4 · 8 · 12 · 16 · 24 · 32 · 40 · 56 · 80</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Proposed</th><th>Absorbs</th><th>Typical use</th></tr></thead>
+        <tbody>
+          <tr><td class="n hit">4</td><td class="n">2, 4, 5, 6</td><td class="note">Icon gaps, hairline nudges</td></tr>
+          <tr><td class="n hit">8</td><td class="n">7, 8, 9, 10</td><td class="note">Inside a control</td></tr>
+          <tr><td class="n hit">12</td><td class="n">11, 12, 13, 14</td><td class="note">Between related lines</td></tr>
+          <tr><td class="n hit">16</td><td class="n">15, 16, 18</td><td class="note">Between elements</td></tr>
+          <tr><td class="n hit">24</td><td class="n">19, 20, 22, 24, 26</td><td class="note">Card padding, list gaps</td></tr>
+          <tr><td class="n hit">32</td><td class="n">28, 30, 34</td><td class="note">Between groups</td></tr>
+          <tr><td class="n hit">40</td><td class="n">38, 40, 44</td><td class="note">Section inner padding</td></tr>
+          <tr><td class="n hit">56</td><td class="n">50, 56, 58, 62, 64</td><td class="note">Between blocks</td></tr>
+          <tr><td class="n hit">80</td><td class="n">80, 140</td><td class="note">Between sections</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Worth being honest about the cost: applying this moves things by 1–4px in a lot of places, and the page will no longer match the Figma frames to the pixel. Everything we have built so far has been measured against those frames, so this is the first change that deliberately breaks that tie. I would do it — a page that is 2px off a frame but internally consistent is easier to maintain than one that matches a frame and has 33 spacing values — but it should be a decision, not a side effect.</p>
+  </section>
+
+  <!-- ================= BREAKPOINTS ================= -->
+  <section>
+    <h2>Breakpoints</h2>
+    <div class="h2rule"></div>
+    <p>There are currently five, set independently in two files: the view switch at 768, then 1400, 1180, 900 and 560 inside the desktop build, plus 521 in the mobile build. None of them line up with where things actually break.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Name</th><th>Width</th><th>What changes</th></tr></thead>
+        <tbody>
+          <tr><td class="n">sm</td><td class="n">&lt; 600</td><td class="note">Mobile design, single column, fluid composer</td></tr>
+          <tr><td class="n">md</td><td class="n">600 – 1023</td><td class="note">Mobile design centred up to 520, or the desktop stacked layout above 768</td></tr>
+          <tr><td class="n">lg</td><td class="n">1024 – 1439</td><td class="note">Desktop, sections stacked rather than side-by-side</td></tr>
+          <tr><td class="n">xl</td><td class="n">≥ 1440</td><td class="note">Desktop at full width — the Figma frame</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Moving the two stacking points to 1420 and 1460 is the pragmatic version of this: it keeps the existing structure and closes both bands. Making <code>lg</code> a real breakpoint at 1440 is the tidier version, because that is the width the desktop frame was drawn at — below it, the side-by-side layouts were never designed to fit.</p>
+  </section>
+
+  <section>
+    <h2>Suggested order</h2>
+    <div class="h2rule"></div>
+    <ol>
+      <li><strong>The small fixes.</strong> All 20 heights to <code>min-height</code>, the two stacking points, the composer. They close every broken range and the 1.4.12 failures, and nothing moves at the design widths.</li>
+      <li><strong>The type scale.</strong> Biggest visible improvement in the tablet range, and it retires the fractional sizes.</li>
+      <li><strong>The spacing scale.</strong> Largest diff, least visible gain — worth doing, but only once you have decided to let go of the pixel-for-pixel Figma match.</li>
+      <li><strong>Fluid rails.</strong> Optional. Removes the last two rigid widths.</li>
+    </ol>
+    <div class="callout">
+      <h3>What I would add to the laws</h3>
+      <p>Once the fixes are in, the build check can enforce them: no text clipped by an ancestor at any tested width, nothing past the viewport, every font-size and spacing value drawn from the scale, and the WCAG 1.4.12 text-spacing overrides applied as part of the run. That last one is the test that caught the most here, and it is cheap to automate.</p>
+    </div>
+  </section>
+
+  <footer>
+    Measured at 65 viewport widths from 320 to 1600 · CSS parsed brace-aware from both source builds · nothing changed by this audit
+  </footer>
+</div>
+</body>
+</html>

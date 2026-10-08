@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy — Meet your planning partner</title>
+<meta name="description" content="Describe your project. Get an instant vendor lineup. Envoy reaches out for you and keeps track of quotes and communication. Free to plan, no card required.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Envoy — Meet your planning partner">
+<meta property="og:description" content="Describe your project. Get an instant vendor lineup. Envoy reaches out for you and keeps track of quotes and communication.">
+<meta property="og:image" content="img/hero-wedding.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Tokens — read directly from the Figma file, not eyeballed
+   ============================================================ */
+:root{
+  --ground:#EAECFA; --card:#FFFFFF; --wash:#F4F5FC;
+  --line:#E5E7F4; --line-2:#D2D5EA;
+  --ink:#0C1024; --muted:#484D6B; --faint:#5A5F7D;
+  --indigo:#3A34D6; --indigo-hi:#2B26AC; --indigo-soft:#E9E8FD;
+  --tip-stroke:#484D6B;
+  --pad:34px;
+  --f:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:var(--indigo-hi)}
+:focus-visible{outline:2.5px solid var(--indigo);outline-offset:3px;border-radius:8px}
+h1,h2,h3{margin:0;font-weight:500}
+p{margin:0}
+.skip{position:absolute;left:10px;top:-60px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;z-index:400;transition:top .2s;font-size:14px;text-decoration:none}
+.skip:focus{top:10px}
+.sec{max-width:1440px;margin:0 auto;padding-inline:var(--pad)}
+
+/* rule label — 10.5px Bold / .19em / 72×1 rule / 12px gap */
+.rule-lab{display:inline-flex;align-items:center;gap:12px;font-size:10px;font-weight:700;letter-spacing:.19em;
+  text-transform:uppercase;color:var(--faint);line-height:13px}
+.rule-lab::after{content:"";width:72px;height:1px;background:var(--line-2);flex:none}
+
+/* ============================================================
+   1 · HERO — stage 1372×830 r38 · card 563×764 @22,22 p26 r30
+   ============================================================ */
+.hero{padding:var(--pad) var(--pad) 0}
+.stage{position:relative;max-width:1372px;margin:0 auto;border-radius:38px;overflow:hidden;background:#0C1024;aspect-ratio:1372/830}
+.photo{position:absolute;inset:0}
+.photo img{position:absolute;opacity:0;transition:opacity .7s ease;max-width:none}
+.photo img.on{opacity:1}
+/* exact Figma crop rects, expressed against the 1372×830 stage */
+#ph-wed{left:-12.828%;top:-3.133%;width:143.878%;height:132.771%}
+#ph-kit{left:-39.723%;top:-2.530%;width:149.854%;height:105.060%}
+#ph-off{left:-41.691%;top:-4.337%;width:154.956%;height:108.675%}
+
+/* Log in pill — 86×32 @1264,22 · p8/15/8/11 · r999 · #fff@94 */
+.util{position:absolute;top:2.651%;right:1.604%;z-index:8}
+.util a{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.94);border-radius:999px;
+  padding:8px 15px 8px 11px;font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;line-height:16px}
+.util a:hover{background:#fff}
+.util svg{width:15px;height:15px;flex:none}
+
+/* tooltips — 66px tall · #0C1024 · 1px #484D6B · 13px Medium / 18px · white · centred */
+.tips{position:absolute;inset:0;z-index:6;pointer-events:none}
+.tip{position:absolute;background:var(--ink);color:#fff;
+  border:1px solid var(--tip-stroke);width:var(--tw);height:66px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;white-space:nowrap;
+  box-shadow:0 6px 12px rgba(0,0,0,.20);opacity:0;transition:opacity .5s ease;
+  font-size:13px;font-weight:500;line-height:18px}
+.tip.on{opacity:1}
+.tip.r22{border-radius:22px}
+.tip.r14{border-radius:14px}
+/* tail: --tb base along the edge, --tp protrusion, --to centre offset — all from Figma */
+.tip::after{content:"";position:absolute;width:0;height:0;border-style:solid;border-color:transparent}
+.tip[data-tail="down"]::after{top:100%;left:var(--to);transform:translateX(-50%);
+  border-width:var(--tp) calc(var(--tb)/2) 0;border-top-color:var(--ink)}
+.tip[data-tail="up"]::after{bottom:100%;left:var(--to);transform:translateX(-50%);
+  border-width:0 calc(var(--tb)/2) var(--tp);border-bottom-color:var(--ink)}
+.tip[data-tail="right"]::after{left:100%;top:var(--to);transform:translateY(-50%);
+  border-width:calc(var(--tb)/2) 0 calc(var(--tb)/2) var(--tp);border-left-color:var(--ink)}
+.tip[data-tail="left"]::after{right:100%;top:var(--to);transform:translateY(-50%);
+  border-width:calc(var(--tb)/2) var(--tp) calc(var(--tb)/2) 0;border-right-color:var(--ink)}
+
+/* overlay card */
+.overlay{position:absolute;left:1.604%;top:2.651%;width:41.035%;height:94.699%;z-index:7;
+  background:var(--card);border-radius:30px;padding:26px;display:flex;flex-direction:column;
+  box-shadow:0 30px 70px -24px rgba(8,10,26,.35)}
+.brand{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);
+  font-weight:600;font-size:17px;letter-spacing:-.02em;line-height:21px;align-self:flex-start;padding-block:4px}
+.brand svg{width:20px;height:20px;flex:none;color:var(--indigo)}
+/* Hero copy: 30px top pad, space-between — the large gap is deliberate */
+.ov-copy{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding-top:30px;min-height:0}
+/* Figma "Frame 1": fixed 219px, space-between -> ~51px gap under the headline */
+.ov-mid{height:219px;display:flex;flex-direction:column;justify-content:space-between}
+.ov-mid h1{font-size:40px;line-height:1.06;letter-spacing:-.035em;max-width:403px}
+.ov-lede{font-size:18px;line-height:1.55;color:var(--muted);max-width:371px}
+.ov-start{display:flex;flex-direction:column;align-items:center;gap:16px}
+.composer{width:100%;border:1px solid var(--line-2);border-radius:22px;overflow:hidden;background:var(--card);
+  box-shadow:0 26px 60px -40px rgba(8,10,26,.40)}
+.composer:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(58,52,214,.14)}
+.composer label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.composer textarea{display:block;width:100%;height:92px;border:0;resize:none;background:transparent;
+  font:inherit;font-size:16px;line-height:1.5;color:var(--ink);padding:19px 19px 0}
+.composer textarea::placeholder{color:var(--faint)}
+.composer textarea:focus{outline:none}
+.comp-bar{display:flex;align-items:center;gap:10px;padding:10px 12px 12px 19px;border-top:1px solid var(--line);min-height:63px}
+.comp-loc{flex:1 1 auto;min-width:0;border:0;background:transparent;font:inherit;font-size:14px;color:var(--ink);
+  padding-block:4px;margin-block:-4px;padding-inline:0}  /* 22px -> 30px tap height; negative margin keeps the bar identical */
+.comp-loc::placeholder{color:var(--faint)}
+.comp-loc:focus{outline:2px solid var(--indigo);outline-offset:2px;border-radius:8px}
+.btn-start{white-space:nowrap;border:0;cursor:pointer;font-family:var(--f);font-size:14px;font-weight:600;
+  color:#fff;background:var(--ink);border-radius:999px;padding:12px 22px;line-height:17px}
+.btn-start:hover{background:var(--indigo)}
+.micro{font-size:13px;color:var(--muted);text-align:center;line-height:16px}
+
+.states{position:absolute;right:22px;bottom:22px;z-index:8;display:flex;gap:2px;
+  background:rgba(10,13,32,.5);backdrop-filter:blur(10px);padding:4px 8px;border-radius:999px}
+.states button{width:24px;height:24px;padding:0;border:0;background:transparent;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center}
+.states button::before{content:"";width:9px;height:9px;border-radius:99px;background:rgba(255,255,255,.42);transition:.2s}
+.states button[aria-selected="true"]::before{background:#fff;width:22px}
+.tipchips{display:none}
+
+/* ============================================================
+   white shell — overlaps the hero by 38px
+   ============================================================ */
+/* Figma: hero wrapper ends y864, White shell starts y904 -> a 40px band of --ground shows through */
+.shell{max-width:1440px;margin:40px auto 0;background:var(--card);border-radius:38px;position:relative;z-index:2}
+
+/* ---- 2 · About — fixed 369 · p80/34 · gap30 · content centred ---- */
+.about{position:relative;height:369px;padding:80px var(--pad);display:flex;flex-direction:column;
+  justify-content:center;align-items:flex-start;gap:30px;overflow:hidden}
+.about .wm{position:absolute;right:-20px;top:34px;z-index:0;pointer-events:none;
+  font-size:220px;font-weight:700;letter-spacing:-.06em;line-height:.8;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1.5px rgba(12,16,36,.05)}
+.about>*{position:relative;z-index:1}
+.about-stmt{width:1032px;max-width:100%;font-size:40px;font-weight:500;line-height:1.24;letter-spacing:-.035em}
+
+/* ---- 3 · Features — fixed 544 · p80/34 · rail 982×384 · panels overlap ---- */
+.features{height:544px;padding:80px var(--pad);display:flex;align-items:center;justify-content:space-between;gap:34px}
+/* Figma: each frame is 201px inactive / 331px active with a 16px gap, but the art inside is
+   always 331px and does NOT clip — so a later panel covers the overflow of the one before it.
+   201*3 + 331 + 16*3 = 982, so the rail stays exact whichever card is active. Hovering a card
+   widens its frame to 331 and the others shuffle aside. At rest the last card is the active one. */
+.rail{position:relative;width:982px;height:384px;flex:none;overflow:hidden;
+  --w1:201px;--w2:201px;--w3:201px;--w4:331px}
+.rail:has(.cell:nth-child(1):hover),.rail:has(.cell:nth-child(1):focus-within){--w1:331px;--w2:201px;--w3:201px;--w4:201px}
+.rail:has(.cell:nth-child(2):hover),.rail:has(.cell:nth-child(2):focus-within){--w1:201px;--w2:331px;--w3:201px;--w4:201px}
+.rail:has(.cell:nth-child(3):hover),.rail:has(.cell:nth-child(3):focus-within){--w1:201px;--w2:201px;--w3:331px;--w4:201px}
+.rail:has(.cell:nth-child(4):hover),.rail:has(.cell:nth-child(4):focus-within){--w1:201px;--w2:201px;--w3:201px;--w4:331px}
+/* the cell is the 331px art plus the 16px gap, so neighbours touch and hover never falls in a hole */
+.cell{position:absolute;top:0;width:347px;height:384px;
+  transition:left .45s cubic-bezier(.22,.61,.36,1)}
+.cell:nth-child(1){z-index:1} .cell:nth-child(2){z-index:2}
+.cell:nth-child(3){z-index:3} .cell:nth-child(4){z-index:4}
+.cell:nth-child(1){left:0}
+.cell:nth-child(2){left:calc(var(--w1) + 16px)}
+.cell:nth-child(3){left:calc(var(--w1) + var(--w2) + 32px)}
+.cell:nth-child(4){left:calc(var(--w1) + var(--w2) + var(--w3) + 48px)}
+@media(prefers-reduced-motion:reduce){ .cell{transition:none} }
+.art{position:absolute;left:0;top:0;width:331px;height:384px;border-radius:22px;overflow:hidden}
+.a1{background:radial-gradient(130% 130% at 20% 16%,#7A66E8,#332A8E)}
+.a2{background:radial-gradient(130% 130% at 20% 16%,#4C8FC8,#1B3F63)}
+.a3{background:radial-gradient(130% 130% at 20% 16%,#3FA98F,#14464F)}
+.a4{background:radial-gradient(130% 130% at 20% 16%,#6E7CE6,#26306F)}
+/* ghost + label: 31px in, 13px down, space-between, staircase heights */
+.stack{position:absolute;left:31px;top:13px;display:flex;flex-direction:column;justify-content:space-between;gap:40px}
+.ghost{font-size:98px;font-weight:700;line-height:.8;letter-spacing:-.06em;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1px rgba(12,16,36,.25)}
+.lab{font-size:22px;font-weight:600;line-height:1.18;letter-spacing:-.02em;width:149px}
+.cell:nth-child(1) .stack{height:195px} .cell:nth-child(1) .lab{color:#FFFFFF;width:147px}
+.cell:nth-child(2) .stack{height:242px} .cell:nth-child(2) .lab{color:#FFFFFF}
+.cell:nth-child(3) .stack{height:292px} .cell:nth-child(3) .lab{color:#FFFFFF}
+.cell:nth-child(4) .stack{height:344px} .cell:nth-child(4) .lab{color:#FFFFFF}
+.go{position:absolute;left:284px;bottom:13px;width:34px;height:34px;border-radius:999px;border:0;cursor:pointer;
+  background:rgba(255,255,255,.94);color:var(--ink);display:inline-flex;align-items:center;justify-content:center}
+.go svg{width:14px;height:14px}
+.feat-head{width:334px;flex:none;display:flex;flex-direction:column;gap:30px}
+.feat-head h2{font-size:40px;line-height:1.06;letter-spacing:-.035em;max-width:244px}
+.feat-head p{font-size:14px;line-height:1.55;color:var(--muted);max-width:221px}
+
+/* ---- 4 · Pricing — p80/34 · panel p56 gap38 r38 · tiers 409×408 p26 r30 ---- */
+.pricing{padding:80px var(--pad)}
+.pr-panel{background:var(--wash);border-radius:38px;padding:56px;display:flex;flex-direction:column;align-items:center;gap:38px}
+.pr-head{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.pr-head h2{font-size:40px;line-height:1.06;letter-spacing:-.035em}
+.pr-head p{font-size:16px;line-height:1.6;color:var(--muted);max-width:448px}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%}
+.tier{background:var(--card);border-radius:30px;padding:26px;display:flex;flex-direction:column;gap:13px;height:408px}
+.tier.pop{background:linear-gradient(160deg,#1B1836,#0C1024);color:#EDECF7}
+.tier.pop p,.tier.pop li{color:#C6C4DE}
+.tier.pop li svg{color:#A79BFF}
+.ptag{align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink);background:#C9C3FF;padding:5px 11px;border-radius:999px}
+.tier h3{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:26px}
+.price{font-size:38px;font-weight:500;letter-spacing:-.04em;line-height:47px}
+.price small{font-size:14px;font-weight:500;color:var(--muted);letter-spacing:0}
+.tier.pop .price small{color:#C6C4DE}
+.tier>p{font-size:14px;color:var(--muted);line-height:21px}
+.tier ul{list-style:none;margin:0;padding:6px 0 0;display:grid;gap:10px;font-size:14px;color:var(--muted)}
+.tier li{display:flex;gap:9px;align-items:flex-start;line-height:20px}
+.tier li svg{flex:none;margin-top:4px;color:var(--indigo)}
+.tier .cta{margin-top:auto;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:999px;padding:12px 22px;font-size:14px;font-weight:600;line-height:17px;text-decoration:none;
+  border:1px solid var(--line-2);color:var(--ink);background:var(--card)}
+.tier.pop .cta{background:#fff;border-color:#fff;color:var(--ink)}
+
+/* ---- 5 · For business — card p62 gap50 r38 · rail 765 wide ---- */
+.biz-sec{padding:80px var(--pad)}
+.biz{position:relative;border-radius:38px;overflow:hidden;padding:62px;display:flex;align-items:center;gap:50px;
+  background:linear-gradient(150deg,#191735,#0C1024);color:#EDECF7}
+.biz .scrim{position:absolute;inset:0;z-index:0;
+  background:linear-gradient(100deg,rgba(8,10,22,.93) 0%,rgba(8,10,22,.76) 46%,rgba(8,10,22,.34) 72%,rgba(8,10,22,.06) 100%)}
+.biz>*:not(.scrim){position:relative;z-index:1}
+.biz-copy{width:433px;flex:none;display:flex;flex-direction:column;gap:16px}
+.biz-copy .rule-lab{color:#B3AEE8}
+.biz-copy .rule-lab::after{background:rgba(255,255,255,.32)}
+.biz-copy h2{font-size:40px;line-height:1.06;letter-spacing:-.035em;color:#fff;max-width:409px}
+.biz-copy>p{font-size:16px;line-height:1.6;color:#CBC9E2}
+.biz-cta{display:flex;flex-wrap:wrap;gap:11px;padding-top:12px}
+.biz-cta a{display:inline-flex;align-items:center;justify-content:center;padding:15px 28px;border-radius:999px;
+  font-size:14px;font-weight:600;text-decoration:none;border:1px solid transparent;line-height:18px}
+.biz-cta .solid{background:#fff;color:var(--ink)}
+.biz-cta .solid:hover{background:#C9C3FF}
+.biz-cta .outline{color:#fff;border-color:rgba(255,255,255,.34)}
+.biz-cta .outline:hover{border-color:#fff}
+.biz .rail{width:765px;--w3:331px;--w4:201px}   /* 201*2 + 331 + 16*2 = 765 */
+.biz .rail .lab{width:170px}
+.biz .rail .cell:nth-child(1) .stack{height:242px}
+.biz .rail .cell:nth-child(1) .lab{color:#FFFFFF;width:170px}
+.biz .rail .cell:nth-child(2) .stack{height:292px}
+.biz .rail .cell:nth-child(2) .lab{color:#FFFFFF;width:170px}
+.biz .rail .cell:nth-child(3) .stack{height:344px}
+.biz .rail .cell:nth-child(3) .lab{color:#FFFFFF;width:170px}
+
+/* ---- footer — p34/34/26/34 · space-between ---- */
+footer{max-width:1440px;margin:0 auto;min-height:122px;padding:34px var(--pad) 26px;display:flex;flex-wrap:wrap;gap:20px;
+  align-items:center;justify-content:space-between;font-size:13px;color:var(--faint)}
+footer nav{display:flex;gap:18px;flex-wrap:wrap}
+footer nav a{font-size:14px;color:var(--muted);text-decoration:none;display:inline-block;padding-block:6px}
+footer nav a:hover{color:var(--ink)}
+
+/* ============================================================
+   Responsive — 1440 is pixel-exact; below that it adapts
+   ============================================================ */
+@media(max-width:1400px){ .rail{width:100%;max-width:982px} .about-stmt{width:100%} }
+@media(max-width:1180px){
+  .features{height:auto;flex-direction:column;align-items:flex-start;gap:40px;padding-block:64px}
+  .feat-head{width:100%}
+  .feat-head h2,.feat-head p{max-width:none}
+  .biz{flex-direction:column;align-items:flex-start;gap:40px;padding:44px}
+  .biz-copy{width:100%}
+  .biz .rail{width:100%}
+}
+@media(max-width:900px){
+  .tier{height:auto}
+  footer{min-height:0}
+  .stage{aspect-ratio:auto;border-radius:0;background:transparent;overflow:visible}
+  .photo{position:relative;inset:auto;aspect-ratio:16/11;border-radius:30px;overflow:hidden}
+  .photo img{width:auto;height:100%;left:50%!important;top:0!important;transform:translateX(-50%)}
+  .tips{display:none}
+  .overlay{position:static;width:auto;height:auto;margin:-34px 8px 0;box-shadow:0 20px 50px -34px rgba(8,10,26,.5)}
+  .ov-copy{padding-top:24px;gap:26px}
+  .ov-mid{height:auto;display:block}
+  .ov-mid h1{font-size:clamp(1.8rem,7vw,2.5rem);max-width:none}
+  .ov-lede{font-size:16px;max-width:none;margin-top:16px}
+  .util{top:14px;right:14px}
+  .states{right:auto;left:14px;bottom:auto;top:14px}
+  .tipchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;padding:0;list-style:none}
+  .tipchips li{font-size:12px;font-weight:600;color:var(--ink);background:var(--indigo-soft);
+    border:1px solid #DAD8FB;border-radius:999px;padding:6px 12px}
+  .tipchips li span{color:var(--muted);font-weight:500}
+  .shell{margin-top:26px;border-radius:30px}
+  .about{height:auto;padding:56px var(--pad)}
+  .about-stmt{font-size:clamp(1.5rem,5.2vw,2.2rem)}
+  .about .wm{font-size:120px;right:-30px;top:10px}
+  .rail,.biz .rail{height:auto;display:grid;grid-template-columns:1fr;gap:12px;width:100%}
+  .cell{position:relative!important;left:auto!important;width:100%;height:280px;transition:none}
+  .art{width:100%;height:100%}
+  .go{left:auto;right:13px}
+  .stack{height:auto!important;right:31px}
+  .ghost{font-size:72px}
+  .pricing{padding:56px var(--pad)}
+  .pr-panel{padding:28px;border-radius:30px}
+  .tiers{grid-template-columns:1fr}
+  .biz{padding:28px;border-radius:30px}
+  .biz-copy h2{font-size:clamp(1.6rem,6vw,2.2rem);max-width:none}
+}
+@media(max-width:560px){ .comp-bar{flex-wrap:wrap} .btn-start{flex:1 1 100%} }
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<main id="main">
+
+<!-- ==================== 1 · HERO ==================== -->
+<section class="hero" aria-labelledby="h-hero">
+  <div class="stage">
+    <div class="photo">
+      <img id="ph-kit" class="on" src="img/hero-kitchen.jpg" alt="A kitchen renovation in progress — a couple reviewing plans with tradespeople while cabinetry and timber are carried in.">
+      <img id="ph-wed" src="img/hero-wedding.jpg" alt="An events team setting up a wedding reception — staff laying tables, arranging white florals and rigging lighting in a timber-framed barn.">
+      <img id="ph-off" src="img/hero-offsite.jpg" alt="A company offsite being set up in a lodge — staff arranging round tables, place cards and a projector screen.">
+    </div>
+
+    <div class="util"><a href="#">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6" stroke="currentColor" stroke-width="2"/><path d="M4.8 20c.9-3.4 3.7-5.3 7.2-5.3s6.3 1.9 7.2 5.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Log in</a></div>
+
+    <div class="tips" id="tips" aria-hidden="true"></div>
+
+    <div class="overlay">
+      <a class="brand" href="#">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 21.5 6.5 12 21 2.5 6.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 8.2c3.4 1.6 6.6 1.6 10 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Envoy
+      </a>
+
+      <div class="ov-copy">
+        <div class="ov-mid">
+          <h1 id="h-hero">Meet your planning partner, Envoy.</h1>
+          <p class="ov-lede">Describe your project. Get an instant vendor lineup. Envoy reaches out for you and keeps track of quotes and communication.</p>
+          <ul class="tipchips" id="tipchips"></ul>
+        </div>
+
+        <form class="ov-start" id="finder">
+          <div class="composer">
+            <label for="proj">Describe your project</label>
+            <textarea id="proj" placeholder="Large kitchen renovation"></textarea>
+            <div class="comp-bar">
+              <label for="loc">Location</label>
+              <input class="comp-loc" id="loc" type="text" placeholder="Topeka, Kansas" autocomplete="off">
+              <button class="btn-start" type="submit">Start project</button>
+            </div>
+          </div>
+          <p class="micro">Free to plan, no card required.</p>
+        </form>
+      </div>
+    </div>
+
+    <div class="states" role="tablist" aria-label="Example projects">
+      <button role="tab" type="button" data-k="kit" aria-selected="true"  aria-label="Kitchen renovation"></button>
+      <button role="tab" type="button" data-k="wed" aria-selected="false" aria-label="Outdoor wedding" tabindex="-1"></button>
+      <button role="tab" type="button" data-k="off" aria-selected="false" aria-label="Company offsite" tabindex="-1"></button>
+    </div>
+  </div>
+</section>
+
+<div class="shell">
+
+  <!-- ==================== 2 · ABOUT ==================== -->
+  <section class="about" aria-labelledby="h-about">
+    <span class="wm" aria-hidden="true">Envoy</span>
+    <span class="rule-lab">Bringing the joy back to planning</span>
+    <h2 class="about-stmt" id="h-about">Envoy finds the vendors and handles the communication, so you can focus on the big decisions.</h2>
+  </section>
+
+  <!-- ==================== 3 · FEATURES ==================== -->
+  <section class="features" aria-labelledby="h-feat">
+    <div class="rail">
+      <article class="cell">
+        <div class="art a1"></div>
+        <div class="stack"><span class="ghost" aria-hidden="true">search</span><p class="lab">Envoy does the research</p></div>
+        <button class="go" type="button" aria-label="More about research"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </article>
+      <article class="cell">
+        <div class="art a2"></div>
+        <div class="stack"><span class="ghost" aria-hidden="true">draft</span><p class="lab">Envoy drafts each message</p></div>
+        <button class="go" type="button" aria-label="More about drafting"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </article>
+      <article class="cell">
+        <div class="art a3"></div>
+        <div class="stack"><span class="ghost" aria-hidden="true">approve</span><p class="lab">You approve the responses</p></div>
+        <button class="go" type="button" aria-label="More about approvals"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </article>
+      <article class="cell">
+        <div class="art a4"></div>
+        <div class="stack"><span class="ghost" aria-hidden="true">track</span><p class="lab">Envoy keeps it all in one place</p></div>
+        <button class="go" type="button" aria-label="More about tracking"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </article>
+    </div>
+    <div class="feat-head">
+      <h2 id="h-feat">Big plans made easy.</h2>
+      <p>Envoy handles the admin while you make the decisions.</p>
+    </div>
+  </section>
+
+  <!-- ==================== 4 · PRICING ==================== -->
+  <section class="pricing" id="pricing" aria-labelledby="h-pricing">
+    <div class="pr-panel">
+      <div class="pr-head">
+        <h2 id="h-pricing">Plan with Envoy</h2>
+        <p>Envoy is free. Paid plans enjoy automated outreach.</p>
+      </div>
+      <div class="tiers">
+        <article class="tier">
+          <h3>Free</h3>
+          <div class="price">Free</div>
+          <p>Plan projects and reach out to vendors yourself.</p>
+          <ul>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>1 active project</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Envoy-built vendor lineups</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Reach out to vendors yourself</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Track every reply in one place</li>
+          </ul>
+          <a class="cta" href="#">Get started free</a>
+        </article>
+
+        <article class="tier pop">
+          <span class="ptag">Most popular</span>
+          <h3>Pro</h3>
+          <div class="price">$96<small> /yr</small></div>
+          <p>Unlock unlimited projects and Pro mode.</p>
+          <ul>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Free</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pro mode</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited projects</li>
+          </ul>
+          <a class="cta" href="#">Choose Pro</a>
+        </article>
+
+        <article class="tier">
+          <h3>Agency</h3>
+          <div class="price">$200<small> /yr per user</small></div>
+          <p>Let Envoy draft and send outreach for your whole team.</p>
+          <ul>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Pro</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Automated Envoy outreach to vendors</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Envoy drafts replies &amp; follow-ups in your voice</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Multiple seats for your whole team</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority vendor responses</li>
+          </ul>
+          <a class="cta" href="#">Choose Agency</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5 · FOR BUSINESS ==================== -->
+  <section class="biz-sec" id="biz" aria-labelledby="h-biz">
+    <div class="biz">
+      <div class="scrim" aria-hidden="true"></div>
+      <div class="biz-copy">
+        <span class="rule-lab">Envoy for Business</span>
+        <h2 id="h-biz">Do you want to win more work, without chasing leads?</h2>
+        <p>Envoy puts your business in front of potential customers and helps you respond faster than the competition.</p>
+        <div class="biz-cta">
+          <a class="solid" href="#">Join Envoy for Business</a>
+          <a class="outline" href="#pricing">See pricing</a>
+        </div>
+      </div>
+      <div class="rail">
+        <article class="cell">
+          <div class="art a2"></div>
+          <div class="stack"><span class="ghost" aria-hidden="true">48hrs</span><p class="lab">48 hours average time to first reply</p></div>
+        </article>
+        <article class="cell">
+          <div class="art a3"></div>
+          <div class="stack"><span class="ghost" aria-hidden="true">4x</span><p class="lab">4x more qualified leads</p></div>
+        </article>
+        <article class="cell">
+          <div class="art a4"></div>
+          <div class="stack"><span class="ghost" aria-hidden="true">250</span><p class="lab">250 credits to start</p></div>
+          <button class="go" type="button" aria-label="More about getting started"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</main>
+
+<footer>
+  <span>© 2026 Envoy · Your digital representative for outreach.</span>
+  <span>this site was designed by a human.</span>
+  <nav aria-label="Footer">
+    <a href="#">Start a project</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#biz">For business</a>
+    <a href="#">Privacy</a>
+  </nav>
+</footer>
+
+<script>
+(function(){
+  var STATES = {
+    kit:{ img:'ph-kit', ph:'Large kitchen renovation', loc:'Topeka, Kansas',
+      tips:[ {t:'Cabinetmaker',           n:'4 contacted',  x:69.242, y:17.349, w:119, r:'r14', tail:'down',  tb:18, tp:9, to:60},
+             {t:'General contractor',     n:'7 contacted',  x:46.428, y:48.675, w:147, r:'r22', tail:'up',    tb:28, tp:8, to:74},
+             {t:'Certified electrician',  n:'21 contacted', x:80.831, y:39.277, w:152, r:'r22', tail:'up',    tb:28, tp:8, to:130} ] },
+    wed:{ img:'ph-wed', ph:'An outdoor wedding for 150 guests this fall…', loc:'Austin, Texas',
+      tips:[ {t:'Day-of Coordinator',     n:'23 contacted', x:45.190, y:29.759, w:177, r:'r22', tail:'down',  tb:28, tp:8, to:22},
+             {t:'DJ + Lighting Services', n:'16 contacted', x:72.959, y: 8.072, w:164, r:'r14', tail:'right', tb:18, tp:9, to:22},
+             {t:'Florist',                n:'12 contacted', x:75.729, y:32.289, w:109, r:'r14', tail:'down',  tb:18, tp:9, to:55} ] },
+    off:{ img:'ph-off', ph:'A company offsite for 40 people', loc:'Burlington, Vermont',
+      tips:[ {t:'AV Setup',               n:'4 contacted',  x:61.297, y:16.988, w:105, r:'r22', tail:'left',  tb:28, tp:8, to:23},
+             {t:'Catering',               n:'34 contacted', x:83.601, y:32.651, w:112, r:'r14', tail:'right', tb:18, tp:9, to:22},
+             {t:'Venue',                  n:'11 contacted', x:62.318, y:53.976, w:107, r:'r14', tail:'up',    tb:18, tp:9, to:54} ] }
+  };
+  var order=['kit','wed','off'], cur='kit', timer=null;
+  var tips=document.getElementById('tips'), chips=document.getElementById('tipchips'),
+      proj=document.getElementById('proj'), loc=document.getElementById('loc'),
+      btns=[].slice.call(document.querySelectorAll('.states button')),
+      stage=document.querySelector('.stage');
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function show(k, focus){
+    cur=k;
+    var d=STATES[k];
+    order.forEach(function(key){ document.getElementById(STATES[key].img).classList.toggle('on', key===k); });
+    proj.placeholder=d.ph; loc.placeholder=d.loc;
+    tips.innerHTML=''; chips.innerHTML='';
+    d.tips.forEach(function(t){
+      var el=document.createElement('div');
+      el.className='tip '+t.r;
+      el.setAttribute('data-tail',t.tail);
+      el.style.left=t.x+'%'; el.style.top=t.y+'%';
+      el.style.setProperty('--tw', t.w+'px');
+      el.style.setProperty('--tb', t.tb+'px');
+      el.style.setProperty('--tp', t.tp+'px');
+      el.style.setProperty('--to', t.to+'px');
+      el.appendChild(document.createTextNode(t.t));
+      el.appendChild(document.createElement('br'));
+      el.appendChild(document.createTextNode(t.n));
+      tips.appendChild(el);
+      requestAnimationFrame(function(){ el.classList.add('on'); });
+      var li=document.createElement('li');
+      li.appendChild(document.createTextNode(t.t+' '));
+      var sp=document.createElement('span'); sp.textContent=t.n; li.appendChild(sp);
+      chips.appendChild(li);
+    });
+    btns.forEach(function(b){
+      var on=b.dataset.k===k;
+      b.setAttribute('aria-selected',String(on));
+      b.tabIndex=on?0:-1;
+      if(on&&focus) b.focus();
+    });
+  }
+  function advance(){ show(order[(order.indexOf(cur)+1)%order.length], false); }
+  function start(){ if(reduced) return; stop(); timer=setInterval(advance, 6000); }
+  function stop(){ if(timer){ clearInterval(timer); timer=null; } }
+
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){ show(b.dataset.k,false); start(); });
+    b.addEventListener('keydown', function(e){
+      var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;
+      if(!d) return; e.preventDefault();
+      show(order[(order.indexOf(cur)+d+order.length)%order.length], true); start();
+    });
+  });
+  stage.addEventListener('mouseenter',stop);
+  stage.addEventListener('mouseleave',start);
+  stage.addEventListener('focusin',stop);
+  document.getElementById('finder').addEventListener('submit',function(e){ e.preventDefault(); proj.focus(); });
+
+  show('kit',false); start();
+})();
+</script>
+</body>
+</html>

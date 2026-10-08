@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Envoy — Meet your planning partner</title>
+<meta name="description" content="Describe your project. Get an instant vendor lineup. Envoy reaches out for you and keeps track of quotes and communication.">
+<meta name="theme-color" content="#EAECFA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Source: Claude Design · "Envoy Mobile" · screen 1c (402 × 874 iPhone frame).
+   Every value below is transcribed from that file. */
+:root{
+  --ground:#EAECFA; --wash:#F4F5FC; --card:#FFFFFF;
+  --ink:#0C1024; --muted:#484D6B; --faint:#5A5F7D;
+  --line:#E5E7F4; --line-2:#D2D5EA;
+  --indigo:#3A34D6; --tag:#C9C3FF;
+  --biz-eyebrow:#B3AEE8; --biz-copy:#CBC9E2; --biz-foot:#C6C4DE;
+  --f:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  /* In the design the 62px top pad is the iOS status bar and 34 of the composer's 40px
+     bottom pad is the home indicator. On a real device the OS/browser owns those, so the
+     live page uses the device safe areas; preview.html restores the design's exact 62/40. */
+  --inset-top:calc(env(safe-area-inset-top,0px) + 18px);
+  --inset-bottom:max(12px, calc(env(safe-area-inset-bottom,0px) + 6px));
+}
+:root.framed{ --inset-top:62px; --inset-bottom:40px }
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f);-webkit-font-smoothing:antialiased}
+:root.framed{scrollbar-width:none} :root.framed::-webkit-scrollbar{display:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer}
+textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--indigo);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.page{position:relative;min-height:100vh;max-width:520px;margin:0 auto;background:var(--ground)}
+
+/* ---------- top ---------- */
+.top{padding:var(--inset-top) 22px 0;overflow:hidden;position:relative}
+.nav{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.menu-btn{width:38px;height:32px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px var(--line-2);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px}
+.menu-btn i{display:block;width:14px;height:1.5px;background:var(--ink)}
+.login{border-radius:999px;background:#fff;padding:8px 15px;font-weight:600;font-size:13px;line-height:16px}
+.login:hover{color:var(--indigo)}
+
+.marquee{margin:26px -22px 0;overflow:hidden}
+.marquee-track{display:flex;width:max-content;animation:marquee 22s linear infinite}
+.marquee-track span{font-weight:700;font-size:96px;line-height:.9;letter-spacing:-.06em;white-space:nowrap;padding-right:40px}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+h1{margin:30px 0 0;font-weight:500;font-size:44px;line-height:1.02;letter-spacing:-.04em;text-wrap:pretty}
+.lede{margin:18px 0 0;font-size:16px;line-height:1.55;color:var(--muted);max-width:320px}
+.micro{margin:14px 0 0;font-size:13px;color:var(--muted)}
+
+/* ---------- menu ---------- */
+.menu{position:fixed;inset:0;z-index:40;background:rgba(234,236,250,.97);
+  padding:calc(var(--inset-top) + 58px) 34px calc(var(--inset-top) + 58px);
+  display:none;flex-direction:column;gap:26px;
+  font-weight:500;font-size:34px;letter-spacing:-.035em;line-height:1.06}
+.menu.open{display:flex}
+@media (min-width:521px){ .menu{left:calc(50% - 260px);right:calc(50% - 260px)} }
+.menu a{align-self:flex-start}
+.menu a:hover{color:var(--indigo)}
+.menu .dim{color:var(--muted)}
+.menu .hint{margin-top:auto;font-size:13px;letter-spacing:0;font-weight:400;line-height:normal;color:var(--faint)}
+
+/* ---------- white shell ---------- */
+.shell{margin-top:56px;background:var(--card);border-radius:38px 38px 0 0;padding:44px 22px 0}
+.stmt{margin:0;font-weight:500;font-size:30px;line-height:1.2;letter-spacing:-.035em;text-wrap:pretty}
+.feat-head{display:flex;justify-content:space-between;align-items:flex-end;margin-top:64px}
+.h-36{margin:0;font-weight:500;font-size:36px;line-height:1.06;letter-spacing:-.035em}
+.feat-head .h-36{max-width:200px}
+.step{font-weight:700;font-size:10.5px;letter-spacing:.19em;color:var(--faint)}
+
+/* ---------- stacked decks ---------- */
+.deck{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:22px}
+.deck-f{height:470px;margin-top:20px}
+.deck-b{height:340px;margin-top:30px}
+.card{position:absolute;left:0;right:0;border-radius:22px;overflow:hidden;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.deck-f .card{top:40px;height:420px;box-shadow:0 24px 44px -28px rgba(8,10,26,.5)}
+.deck-b .card{top:30px;height:300px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6)}
+.ghost{position:absolute;font-weight:700;line-height:.8;letter-spacing:-.06em;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1px rgba(12,16,36,.25)}
+.deck-f .ghost{left:-6px;top:-22px;font-size:150px}
+.deck-b .ghost{left:-4px;top:-18px;font-size:130px}
+.cap{position:absolute;margin:0;font-weight:600}
+.deck-f .cap{left:28px;bottom:28px;width:220px;font-size:26px;line-height:1.14;letter-spacing:-.025em}
+.deck-b .cap{left:24px;bottom:24px;width:200px;font-size:22px;line-height:1.18;letter-spacing:-.02em}
+.go{position:absolute;right:13px;bottom:13px;width:34px;height:34px;border-radius:999px;background:rgba(255,255,255,.94);
+  display:flex;align-items:center;justify-content:center}
+.go i{display:block;width:7px;height:7px;border-top:1.5px solid var(--ink);border-right:1.5px solid var(--ink);transform:rotate(45deg)}
+
+/* ---------- pricing ---------- */
+#pricing{margin-top:80px;scroll-margin-top:24px}
+.pr-sub{margin:12px 0 0;font-size:15px;line-height:1.6;color:var(--muted)}
+.tiers{margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.tier{border-radius:26px;overflow:hidden;cursor:pointer;transition:background .3s;
+  background:var(--wash);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);
+  --sub:var(--muted);--dot:var(--line-2)}
+.tier.open{background:linear-gradient(159deg,rgb(27,24,54) 0%,rgb(12,16,36) 77%);color:#EDECF7;box-shadow:none;
+  --sub:var(--biz-foot);--dot:var(--tag)}
+.tier-head{width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 24px;text-align:left}
+.tier-name{display:flex;align-items:center;gap:12px}
+.tier-name b{font-weight:600;font-size:21.6px;letter-spacing:-.02em}
+.badge{border-radius:999px;background:var(--tag);color:var(--ink);padding:5px 10px;font-weight:700;font-size:10px;letter-spacing:.13em}
+.tier-price{display:flex;gap:4px;align-items:baseline;white-space:nowrap}
+.tier-price b{font-weight:500;font-size:24px;letter-spacing:-.04em}
+.tier-price small{font-weight:500;font-size:12.5px;color:var(--sub)}
+.tier-body{padding:0 24px 24px;display:none;flex-direction:column;gap:13px}
+.tier.open .tier-body{display:flex}
+.tier-desc{margin:0;font-size:14px;line-height:1.5;color:var(--sub)}
+.tier ul{list-style:none;margin:0;padding:4px 0;display:flex;flex-direction:column;gap:10px}
+.tier li{display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--sub)}
+.tier li::before{content:"";flex:none;width:5px;height:5px;border-radius:50%;background:var(--dot)}
+.tier-cta{margin-top:6px;border-radius:999px;padding:13px;text-align:center;font-weight:600;font-size:14px;
+  background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line-2)}
+.tier.open .tier-cta{background:#fff;box-shadow:none}
+
+/* ---------- business ---------- */
+.biz{margin:80px -22px 0;padding:44px 26px 140px;border-radius:38px 38px 0 0;color:#fff;scroll-margin-top:0;
+  background:linear-gradient(115deg,rgb(25,23,53) 6%,rgb(12,16,36) 70%)}
+.eyebrow{display:flex;align-items:center;gap:12px}
+.eyebrow span{font-weight:700;font-size:10.5px;letter-spacing:.19em;color:var(--biz-eyebrow)}
+.eyebrow i{display:block;width:40px;height:1px;background:rgba(255,255,255,.32)}
+.biz h2{margin:16px 0 0;font-weight:500;font-size:38px;line-height:1.04;letter-spacing:-.035em;text-wrap:pretty}
+.biz-p{margin:14px 0 0;font-size:15px;line-height:1.6;color:var(--biz-copy)}
+.biz-ctas{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.biz-ctas a{border-radius:999px;padding:15px 24px;font-weight:600;font-size:15px}
+.biz-ctas .solid{background:#fff;color:var(--ink)}
+.biz-ctas .outline{box-shadow:inset 0 0 0 1px rgba(255,255,255,.34)}
+.biz-ctas .outline:hover{box-shadow:inset 0 0 0 1px #fff}
+footer{margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);
+  display:flex;flex-direction:column;gap:14px;font-size:13px;color:var(--biz-foot)}
+footer nav{display:flex;gap:18px;flex-wrap:wrap;color:#fff}
+footer nav a{position:relative}
+/* 16px of text is below the 24px minimum; extend the hit area only — no layout shift */
+footer nav a::after{content:"";position:absolute;inset:-9px -6px}
+footer nav a:hover{color:var(--tag)}
+
+/* ---------- sticky composer ---------- */
+.dock{position:sticky;bottom:0;z-index:30;padding:12px 12px var(--inset-bottom);pointer-events:none;
+  background:linear-gradient(180deg,rgba(234,236,250,0) 0%,rgba(234,236,250,.9) 40%)}
+.composer{pointer-events:auto;border-radius:22px;background:#fff;
+  box-shadow:inset 0 0 0 1px var(--line-2),0 26px 60px -30px rgba(8,10,26,.5);
+  display:flex;align-items:center;gap:8px;padding:14px 10px 14px 18px;width:min(369px,100%);height:75px}
+.composer:focus-within{box-shadow:inset 0 0 0 1.5px var(--indigo),0 26px 60px -30px rgba(8,10,26,.5)}
+.composer textarea{flex:1;min-width:0;border:0;resize:none;overflow:hidden;padding:10px 0;margin:0;
+  font-size:15px;line-height:1.4;color:var(--ink);background:transparent;height:52px}
+.composer textarea::placeholder{color:var(--faint)}
+.composer textarea:focus{outline:none}
+.start{flex:none;border-radius:999px;background:var(--ink);color:#fff;padding:12px 18px;font-weight:600;font-size:14px;white-space:nowrap}
+.start:hover{background:#1d2244}
+
+@media (prefers-reduced-motion:reduce){
+  .marquee-track{animation:none}
+  .card,.tier{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div class="nav">
+      <button class="menu-btn" id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+      <a class="login" href="#">Log in</a>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track"><span>Envoy, bringing the joy back to planning.</span><span>Envoy, bringing the joy back to planning.</span></div>
+    </div>
+    <p class="sr">Envoy, bringing the joy back to planning.</p>
+    <h1>Meet your planning partner, Envoy.</h1>
+    <p class="lede">Describe your project. Get an instant vendor lineup. Envoy reaches out for you and keeps track of quotes and communication.</p>
+    <p class="micro">Free to plan, no card required.</p>
+  </header>
+
+  <nav class="menu" id="menu" aria-label="Menu" hidden>
+    <a href="#start" data-close>Start a project</a>
+    <a href="#pricing" data-close>Pricing</a>
+    <a href="#business" data-close>For business</a>
+    <a class="dim" href="#" data-close>Log in</a>
+    <span class="hint">Tap anywhere to close</span>
+  </nav>
+
+  <main class="shell">
+    <p class="stmt">Envoy finds the vendors and handles the communication, so you can focus on the big decisions.</p>
+
+    <div class="feat-head">
+      <h2 class="h-36">Big plans made easy.</h2>
+      <span class="step" id="feat-step" aria-hidden="true">01 / 04</span>
+    </div>
+    <div class="deck deck-f" id="deck-f" role="button" tabindex="0" aria-describedby="feat-live"></div>
+    <p class="sr" id="feat-live" aria-live="polite"></p>
+
+    <h2 class="h-36" id="pricing">Plan with Envoy</h2>
+    <p class="pr-sub">Envoy is free. Paid plans enjoy automated outreach.</p>
+    <div class="tiers" id="tiers"></div>
+
+    <section class="biz" id="business" aria-labelledby="h-biz">
+      <div class="eyebrow"><span>ENVOY FOR BUSINESS</span><i></i></div>
+      <h2 id="h-biz">Do you want to win more work, without chasing leads?</h2>
+      <p class="biz-p">Envoy puts your business in front of potential customers and helps you respond faster than the competition.</p>
+      <div class="deck deck-b" id="deck-b" role="button" tabindex="0" aria-describedby="biz-live"></div>
+      <p class="sr" id="biz-live" aria-live="polite"></p>
+      <div class="biz-ctas"><a class="solid" href="#">Join Envoy for Business</a><a class="outline" href="#pricing">See pricing</a></div>
+      <footer>
+        <nav aria-label="Footer"><a href="#start">Start a project</a><a href="#pricing">Pricing</a><a href="#business">For business</a><a href="#">Privacy</a></nav>
+        <span>© 2026 Envoy · Your digital representative for outreach.</span>
+        <span>this site was designed by a human.</span>
+      </footer>
+    </section>
+  </main>
+
+  <div class="dock">
+    <form class="composer" id="start" role="search" aria-label="Start a project">
+      <label class="sr" for="proj">Describe your project</label>
+      <textarea id="proj" rows="1" placeholder="An outdoor wedding for 150 guests this fall…"></textarea>
+      <button class="start" type="submit">Start project</button>
+    </form>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var FEAT=[
+    {word:'search', cap:'Envoy does the research',        bg:'radial-gradient(175px 201px at 26% 47%, rgb(122,102,232) 0%, rgb(51,42,142) 100%)', fg:'#FFFFFF'},
+    {word:'draft',  cap:'Envoy drafts each message',      bg:'radial-gradient(175px 181px at 28% 58%, rgb(76,143,200) 0%, rgb(27,63,99) 100%)',   fg:'#FFFFFF'},
+    {word:'approve',cap:'You approve the responses',      bg:'radial-gradient(225px 251px at 28% 75%, rgb(63,169,143) 0%, rgb(20,70,79) 100%)',   fg:'#FFFFFF'},
+    {word:'track',  cap:'Envoy keeps it all in one place',bg:'radial-gradient(405px 356px at 29% 86%, rgb(110,124,230) 0%, rgb(38,48,111) 100%)', fg:'#FFFFFF'}
+  ];
+  var BIZ=[
+    {word:'48hrs',cap:'48 hours average time to first reply',bg:'radial-gradient(175px 181px at 28% 58%, rgb(76,143,200) 0%, rgb(27,63,99) 100%)',   fg:'#FFFFFF'},
+    {word:'4x',   cap:'4x more qualified leads',             bg:'radial-gradient(225px 251px at 28% 75%, rgb(63,169,143) 0%, rgb(20,70,79) 100%)',   fg:'#FFFFFF'},
+    {word:'250',  cap:'250 credits to start',                bg:'radial-gradient(405px 356px at 29% 86%, rgb(110,124,230) 0%, rgb(38,48,111) 100%)', fg:'#FFFFFF'}
+  ];
+  var TIERS=[
+    {id:'pro',   name:'Pro',   price:'$96', per:'/yr',          desc:'Unlock unlimited projects and Pro mode.',
+     feat:['Everything in Free','Pro mode','Unlimited projects'], cta:'Choose Pro', badge:true},
+    {id:'free',  name:'Free',  price:'Free',per:'',             desc:'Plan projects and reach out to vendors yourself.',
+     feat:['1 active project','Envoy-built vendor lineups','Reach out to vendors yourself','Track every reply in one place'], cta:'Get started free'},
+    {id:'agency',name:'Agency',price:'$200',per:'/yr per user', desc:'Let Envoy draft and send outreach for your whole team.',
+     feat:['Everything in Pro','Automated Envoy outreach to vendors','Envoy drafts replies & follow-ups in your voice','Multiple seats for your whole team','Priority vendor responses'], cta:'Choose Agency'}
+  ];
+  var SPREAD=14; // the design's deckSpread default
+
+  function el(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+
+  /* ---- stacked decks: tap to send the top card to the back ---- */
+  function makeDeck(root, list, withArrow, onChange){
+    var n=list.length, off=0;
+    var cards=list.map(function(c){
+      var d=el('div','card'); d.style.background=c.bg;
+      d.appendChild(el('span','ghost',c.word)).setAttribute('aria-hidden','true');
+      var cap=el('p','cap',c.cap); cap.style.color=c.fg; d.appendChild(cap);
+      if(withArrow){ var g=el('span','go'); g.setAttribute('aria-hidden','true'); g.appendChild(el('i')); d.appendChild(g); }
+      root.appendChild(d); return d;
+    });
+    function paint(){
+      cards.forEach(function(d,i){
+        var p=(i-off+n)%n;
+        d.style.zIndex=n-p;
+        d.style.opacity=p>2?0:1;
+        d.style.transform='translateY('+(-SPREAD*p)+'px) scale('+(1-0.05*p)+')';
+        d.setAttribute('aria-hidden', p===0?'false':'true');
+      });
+      onChange(off%n, n, list[off%n]);
+    }
+    function next(){ off++; paint(); }
+    root.addEventListener('click',next);
+    root.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); next(); } });
+    paint();
+  }
+
+  var step=document.getElementById('feat-step'), featLive=document.getElementById('feat-live'), deckF=document.getElementById('deck-f');
+  makeDeck(deckF, FEAT, true, function(i,n,c){
+    step.textContent=String(i+1).padStart(2,'0')+' / '+String(n).padStart(2,'0');
+    deckF.setAttribute('aria-label','Feature '+(i+1)+' of '+n+'. Show next feature');
+    featLive.textContent=c.cap;
+  });
+  var bizLive=document.getElementById('biz-live'), deckB=document.getElementById('deck-b');
+  makeDeck(deckB, BIZ, false, function(i,n,c){
+    deckB.setAttribute('aria-label','Stat '+(i+1)+' of '+n+'. Show next');
+    bizLive.textContent=c.cap;
+  });
+
+  /* ---- pricing: one tier open at a time, Pro by default ---- */
+  var tiersEl=document.getElementById('tiers'), open='pro', rows=[];
+  TIERS.forEach(function(t){
+    var row=el('div','tier');
+    var head=el('button','tier-head'); head.type='button'; head.setAttribute('aria-controls','tier-'+t.id);
+    var nm=el('span','tier-name'); nm.appendChild(el('b',null,t.name));
+    if(t.badge) nm.appendChild(el('span','badge','MOST POPULAR'));
+    var pr=el('span','tier-price'); pr.appendChild(el('b',null,t.price)); if(t.per) pr.appendChild(el('small',null,t.per));
+    head.appendChild(nm); head.appendChild(pr);
+    var body=el('div','tier-body'); body.id='tier-'+t.id;
+    body.appendChild(el('p','tier-desc',t.desc));
+    var ul=el('ul'); t.feat.forEach(function(f){ ul.appendChild(el('li',null,f)); }); body.appendChild(ul);
+    var cta=el('a','tier-cta',t.cta); cta.href='#start'; body.appendChild(cta);
+    row.appendChild(head); row.appendChild(body);
+    row.addEventListener('click',function(){ if(open!==t.id){ open=t.id; paintTiers(); } });
+    tiersEl.appendChild(row); rows.push({t:t,row:row,head:head});
+  });
+  function paintTiers(){ rows.forEach(function(r){ var o=r.t.id===open; r.row.classList.toggle('open',o); r.head.setAttribute('aria-expanded',o); }); }
+  paintTiers();
+
+  /* ---- menu ---- */
+  var menu=document.getElementById('menu'), mb=document.getElementById('menu-btn');
+  function setMenu(on){
+    menu.hidden=!on; menu.classList.toggle('open',on);
+    mb.setAttribute('aria-expanded',on); mb.setAttribute('aria-label',on?'Close menu':'Open menu');
+    document.documentElement.style.overflow=on?'hidden':'';
+    if(on){ menu.querySelector('a').focus(); } else { mb.focus({preventScroll:true}); }
+  }
+  mb.addEventListener('click',function(){ setMenu(menu.hidden); });
+  menu.addEventListener('click',function(){ setMenu(false); }); // "Tap anywhere to close"
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!menu.hidden) setMenu(false); });
+
+  /* ---- composer (prototype: no backend yet) ---- */
+  var proj=document.getElementById('proj');
+  document.querySelectorAll('a[href="#start"]').forEach(function(a){
+    a.addEventListener('click',function(e){ e.preventDefault(); setTimeout(function(){ proj.focus(); },0); });
+  });
+  document.getElementById('start').addEventListener('submit',function(e){ e.preventDefault(); proj.focus(); });
+  proj.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); document.getElementById('start').requestSubmit(); } });
+
+  if(new URLSearchParams(location.search).has('frame')) document.documentElement.classList.add('framed');
+})();
+</script>
+</body>
+</html>

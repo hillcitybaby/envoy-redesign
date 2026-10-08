@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy — The next eight weeks, handled</title>
+<meta name="description" content="Every project has a messy middle. Here is what yours looks like with Envoy — from one sentence on day zero to signed vendors by week eight.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Envoy — The next eight weeks, handled">
+<meta property="og:description" content="Every project has a messy middle. Here is what yours looks like with Envoy — from one sentence on day zero to signed vendors by week eight.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F1E8; --paper-2:#EDE7DA; --card:#FCFAF4;
+  --ink:#16130F; --muted:#55503F; --faint:#6B6455;
+  --rule:#D8D0BE; --rule-2:#C3B99F;
+  --red:#9C2F1E; --red-soft:#F2E2DC;
+  --blue:#1C3F7A; --blue-hi:#142E5A; --blue-soft:#E3E8F1;
+  --pad:clamp(20px,5vw,56px);
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --maxw:1240px; --measure:1000px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--blue)}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:3px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+.narrow{max-width:var(--measure);margin-inline:auto}
+.skip{position:absolute;left:8px;top:-60px;background:var(--ink);color:var(--paper);padding:10px 16px;z-index:200;transition:top .2s;font-family:var(--sans);font-size:14px}
+.skip:focus{top:8px}
+
+h1,h2,h3{margin:0;font-family:var(--serif);font-weight:600;line-height:1.08;letter-spacing:-.014em}
+h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:500}
+h2{font-size:clamp(2rem,4.4vw,3.1rem);font-weight:500}
+h3{font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.25}
+p{margin:0 0 1.1em}
+.kicker{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin:0 0 18px;display:block}
+.deck{font-size:clamp(1.15rem,2vw,1.5rem);line-height:1.5;color:var(--muted);max-width:34ch;font-style:italic}
+.body-lg{font-size:clamp(1.05rem,1.5vw,1.22rem);line-height:1.68;max-width:62ch;color:var(--ink)}
+.meta{font-family:var(--sans);font-size:13px;color:var(--muted)}
+.rule{border:0;border-top:1px solid var(--rule);margin:0}
+
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--sans);font-weight:600;font-size:14.5px;
+  padding:14px 26px;text-decoration:none;border:1px solid transparent;cursor:pointer;border-radius:2px;transition:background .18s,color .18s,border-color .18s}
+.btn-primary{background:var(--ink);color:var(--paper)}
+.btn-primary:hover{background:var(--blue)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--rule-2)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-lg{padding:17px 34px;font-size:15.5px}
+
+/* ---------- masthead ---------- */
+header{border-bottom:2px solid var(--ink);position:sticky;top:0;z-index:100;background:var(--paper)}
+.nav{display:flex;align-items:center;gap:26px;height:66px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:-.01em}
+.mark{width:22px;height:22px;flex:none;color:var(--red)}
+.nav ul{list-style:none;display:flex;gap:26px;margin:0 0 0 auto;padding:0;font-family:var(--sans)}
+.nav ul a{color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:500}
+.nav ul a:hover{color:var(--ink)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+@media(max-width:900px){.nav ul{display:none}.nav-cta{margin-left:auto}.btn{padding:11px 18px}}
+
+/* ---------- opening ---------- */
+.open{padding-block:clamp(56px,8vw,110px) clamp(40px,6vw,72px)}
+.open-grid{display:grid;gap:clamp(28px,4vw,56px);grid-template-columns:1fr}
+@media(min-width:940px){.open-grid{grid-template-columns:1.35fr .65fr;align-items:end}}
+h1 em{font-style:italic;color:var(--red)}
+.open .deck{margin:0}
+.start{margin-top:clamp(32px,4vw,48px);padding-top:28px;border-top:1px solid var(--rule)}
+.finder{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--rule-2);padding:8px;border-radius:2px;max-width:760px}
+.finder label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.finder input{flex:1 1 auto;min-width:0;background:transparent;border:0;color:var(--ink);font-family:var(--serif);font-size:18px;padding:13px 12px}
+.finder input::placeholder{color:var(--faint);font-style:italic}
+.finder input:focus{outline:2px solid var(--blue);outline-offset:-1px}
+.finder .loc{flex:0 1 170px;border-left:1px solid var(--rule)}
+@media(max-width:700px){.finder{flex-wrap:wrap}.finder .loc{flex:1 1 100%;border-left:0;border-top:1px solid var(--rule)}.finder .btn{flex:1 1 100%}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;font-family:var(--sans)}
+.chip{background:transparent;border:1px solid var(--rule-2);color:var(--muted);font:inherit;font-size:13px;padding:7px 14px;border-radius:999px;cursor:pointer}
+.chip:hover{border-color:var(--red);color:var(--red)}
+.microcopy{font-family:var(--sans);font-size:13px;color:var(--muted);margin:16px 0 0}
+
+/* ---------- timeline ---------- */
+.timeline{padding-block:clamp(20px,4vw,40px) clamp(56px,8vw,100px)}
+.tl-intro{border-top:2px solid var(--ink);padding-top:20px;margin-bottom:clamp(40px,6vw,72px);display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:baseline}
+.tl-intro h2{max-width:20ch}
+.tl-intro p{margin:0;max-width:38ch;color:var(--muted);font-size:1.02rem}
+
+.wk{display:grid;grid-template-columns:1fr;gap:clamp(24px,3vw,40px);padding-block:clamp(40px,5vw,64px);border-top:1px solid var(--rule)}
+@media(min-width:960px){.wk{grid-template-columns:200px 1fr;gap:clamp(32px,4vw,64px)}}
+.wk-when{font-family:var(--sans)}
+.wk-when b{display:block;font-family:var(--serif);font-size:clamp(2rem,3.4vw,2.8rem);font-weight:600;line-height:1;letter-spacing:-.02em}
+.wk-when span{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-top:10px}
+@media(min-width:960px){.wk-when{position:sticky;top:96px;align-self:start}}
+.wk-body h3{margin-bottom:14px;max-width:24ch}
+.wk-body p{color:var(--muted);max-width:58ch;font-size:1.05rem}
+.wk-body p strong{color:var(--ink);font-weight:600}
+
+/* artifacts */
+.exlabel{display:inline-flex;align-items:center;font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--red);background:var(--red-soft);border:1px solid #E4CCC4;padding:5px 10px;border-radius:2px;white-space:nowrap}
+.artifact{background:var(--card);border:1px solid var(--rule-2);border-radius:2px;overflow:hidden;margin-top:26px;font-family:var(--sans);font-size:14px;line-height:1.55}
+.art-h{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--rule);background:var(--paper-2)}
+.art-h strong{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.04em}
+
+/* day 0 — what envoy understood */
+.infer{list-style:none;margin:0;padding:6px 8px}
+.infer li{display:flex;gap:14px;align-items:baseline;padding:12px 12px}
+.infer li+li{border-top:1px solid var(--rule)}
+.infer .k{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);flex:0 0 108px}
+.infer .v{font-weight:600}
+
+/* week 1 — lineup */
+.cats{list-style:none;margin:0;padding:6px 8px}
+.cats li{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding:14px 12px}
+.cats li+li{border-top:1px solid var(--rule)}
+.cats .cn{font-weight:700;flex:0 0 148px}
+.cats .cw{color:var(--muted);flex:1 1 260px;min-width:0}
+.cats .cc{margin-left:auto;font-size:12px;font-weight:700;color:var(--blue);background:var(--blue-soft);padding:4px 10px;border-radius:999px;white-space:nowrap}
+
+/* week 2 — draft */
+.draft-meta{padding:16px 18px;border-bottom:1px solid var(--rule);display:grid;gap:4px;font-size:13.5px;color:var(--muted)}
+.draft-meta b{color:var(--ink)}
+.draft-body{font-family:var(--serif);font-size:17px;line-height:1.7;white-space:pre-line;padding:20px 18px;margin:0}
+.approve{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:14px 18px;border-top:1px solid var(--rule);background:var(--paper-2)}
+.pending{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--red);margin-right:auto;letter-spacing:.02em}
+
+/* week 5 — canvas */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule)}
+@media(min-width:560px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--card);padding:20px 12px;text-align:center}
+.stat b{display:block;font-family:var(--serif);font-size:32px;font-weight:600;line-height:1}
+.stat span{display:block;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.stat.alert{background:var(--red-soft)}
+.stat.alert b{color:var(--red)}
+.moves{list-style:none;margin:0;padding:6px 8px;border-top:1px solid var(--rule)}
+.moves li{padding:14px 12px}
+.moves li+li{border-top:1px solid var(--rule)}
+.moves .who{font-weight:700;display:block;margin-bottom:3px}
+.moves .what{color:var(--muted)}
+.moves .mtag{display:inline-block;margin-top:7px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+/* week 8 — booked */
+.booked{list-style:none;margin:0;padding:6px 8px}
+.booked li{display:flex;gap:12px;align-items:center;padding:13px 12px}
+.booked li+li{border-top:1px solid var(--rule)}
+.booked .tick{width:16px;height:16px;flex:none;color:var(--blue)}
+.booked .cat{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:700;flex:0 0 128px}
+.booked .nm{font-weight:600}
+
+/* ---------- pull quote ---------- */
+.pull{padding-block:clamp(56px,8vw,104px);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);background:var(--paper-2)}
+.pull blockquote{margin:0;max-width:22ch;font-size:clamp(2.1rem,5vw,3.6rem);line-height:1.06;font-weight:500;letter-spacing:-.02em}
+.pull .sub{margin:26px 0 0;max-width:52ch;color:var(--muted);font-size:1.08rem}
+.pull-grid{display:grid;gap:clamp(28px,4vw,56px);grid-template-columns:1fr}
+@media(min-width:900px){.pull-grid{grid-template-columns:1fr 1fr;align-items:center}}
+.pull-list{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.pull-list li{padding:20px 0;border-top:1px solid var(--rule-2)}
+.pull-list li:last-child{border-bottom:1px solid var(--rule-2)}
+.pull-list h3{font-size:1.22rem;margin-bottom:6px}
+.pull-list p{margin:0;color:var(--muted);font-size:1rem}
+
+/* ---------- cases ---------- */
+.cases-sec{padding-block:clamp(56px,8vw,104px)}
+.cases{display:grid;gap:clamp(24px,3vw,36px);grid-template-columns:1fr;margin-top:44px}
+@media(min-width:820px){.cases{grid-template-columns:repeat(3,1fr)}}
+.case .ph{aspect-ratio:3/4;display:flex;align-items:flex-end;padding:18px;border:1px solid var(--rule-2);
+  background:repeating-linear-gradient(-45deg,#E9E2D2,#E9E2D2 12px,#E3DBC8 12px,#E3DBC8 24px);
+  color:var(--muted);font-family:var(--sans);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.case h3{margin:20px 0 8px}
+.case p{color:var(--muted);font-size:1.02rem;margin:0}
+.case .cats-line{font-family:var(--sans);font-size:12.5px;color:var(--muted);margin-top:12px;padding-top:12px;border-top:1px solid var(--rule)}
+
+/* ---------- pricing ---------- */
+.pricing-sec{padding-block:clamp(56px,8vw,104px);border-top:2px solid var(--ink);background:var(--paper-2)}
+.tiers{display:grid;gap:1px;background:var(--rule-2);border:1px solid var(--rule-2);margin-top:44px;grid-template-columns:1fr}
+@media(min-width:840px){.tiers{grid-template-columns:repeat(3,1fr)}}
+.tier{background:var(--paper);padding:30px;display:flex;flex-direction:column;gap:14px}
+.tier.pop{background:var(--card)}
+.tier h3{font-size:1.5rem}
+.tag{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:var(--red);align-self:flex-start;padding:5px 10px;border-radius:2px}
+.price{font-size:38px;font-weight:600;line-height:1;letter-spacing:-.02em}
+.price small{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--muted)}
+.tier>p{margin:0;color:var(--muted);font-size:1rem}
+.tier ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:11px;font-family:var(--sans);font-size:14px;color:var(--muted)}
+.tier li{display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.tier li svg{flex:none;margin-top:4px;color:var(--blue)}
+.tier .btn{margin-top:auto}
+
+/* ---------- proof ---------- */
+.proof{border:1px dashed var(--rule-2);padding:clamp(30px,5vw,52px);text-align:center;background:var(--card);margin-top:0}
+.proof h2{font-size:clamp(1.4rem,2.6vw,1.9rem);margin-top:16px}
+.proof p{margin:14px auto 0;color:var(--muted);max-width:56ch;font-size:1.02rem}
+
+/* ---------- vendor band ---------- */
+.vend{background:var(--ink);color:var(--paper);padding-block:clamp(44px,6vw,68px)}
+.vend .wrap{display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+.vend h2{font-size:clamp(1.6rem,3vw,2.2rem);color:var(--paper)}
+.vend p{margin:12px 0 0;color:#BDB4A0;max-width:52ch;font-size:1.02rem}
+.vend .kicker{color:#E0907C}
+.vend .btn-ghost{color:var(--paper);border-color:rgba(245,241,232,.42)}
+.vend .btn-ghost:hover{border-color:var(--paper)}
+
+/* ---------- close ---------- */
+.close{padding-block:clamp(64px,9vw,120px);text-align:center}
+.close h2{max-width:16ch;margin-inline:auto}
+.close p{margin:22px auto 0;max-width:46ch;color:var(--muted);font-size:1.1rem}
+.close .btn{margin-top:32px}
+
+/* ---------- footer ---------- */
+footer{border-top:2px solid var(--ink);padding-block:48px 34px;font-family:var(--sans)}
+.fgrid{display:grid;gap:32px;grid-template-columns:1fr}
+@media(min-width:760px){.fgrid{grid-template-columns:1.6fr 1fr 1fr}}
+.fgrid h3{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+.fgrid ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.fgrid a{color:var(--muted);text-decoration:none;font-size:14px;display:inline-block;padding-block:5px}
+.brand{padding-block:5px}
+.nav ul a{display:inline-block;padding-block:6px}
+.fgrid a:hover{color:var(--ink)}
+.tagline{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--muted);max-width:30ch;margin:12px 0 0}
+.fbot{margin-top:36px;padding-top:20px;border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;color:var(--muted);font-size:13px}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="wrap nav" aria-label="Primary">
+    <a class="brand" href="#top">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 21.5 6.5 12 21 2.5 6.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 8.2c3.4 1.6 6.6 1.6 10 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Envoy
+    </a>
+    <ul>
+      <li><a href="#timeline">How it works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#pros">For pros</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="#">Log in</a>
+      <a class="btn btn-primary" href="#top">Start a project</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ============ OPENING ============ -->
+<section class="open" id="top" aria-labelledby="h-open">
+  <div class="wrap">
+    <div class="open-grid">
+      <div>
+        <span class="kicker">Every project has one</span>
+        <h1 id="h-open">The messy middle,<br><em>handled.</em></h1>
+      </div>
+      <p class="deck">Nobody gives up at the idea stage. They give up eight weeks in, on the fortieth tab, waiting on the fourth florist to reply.</p>
+    </div>
+
+    <div class="start">
+      <form class="finder" id="finder" role="search" aria-label="Describe your project">
+        <label for="proj">Describe your project</label>
+        <input id="proj" name="proj" type="text" placeholder="A wedding, a renovation, an offsite…" autocomplete="off">
+        <label for="loc">Location</label>
+        <input id="loc" class="loc" name="loc" type="text" placeholder="Where?" autocomplete="off">
+        <button class="btn btn-primary" type="submit">Begin</button>
+      </form>
+      <div class="chips" role="group" aria-label="Example projects">
+        <button class="chip" type="button" data-fill="Outdoor wedding for 150 guests in fall">Outdoor wedding for 150 in fall</button>
+        <button class="chip" type="button" data-fill="Renovate a 1920s kitchen">Renovate a 1920s kitchen</button>
+        <button class="chip" type="button" data-fill="Company offsite for 40 people">Company offsite for 40</button>
+      </div>
+      <p class="microcopy">Free to plan — no card required. Or read on: here is what the next eight weeks looks like.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section class="timeline" id="timeline" aria-labelledby="h-tl">
+  <div class="wrap">
+    <div class="tl-intro">
+      <h2 id="h-tl">One wedding, eight weeks, ten kinds of vendor.</h2>
+      <p>Followed start to finish. Everything shown below is an <strong>illustrative example</strong> — a real project's shape, not a real project's data.</p>
+    </div>
+
+    <!-- DAY 0 -->
+    <article class="wk" aria-labelledby="wk0">
+      <div class="wk-when"><b>Day 0</b><span>One sentence</span></div>
+      <div class="wk-body">
+        <h3 id="wk0">You type a sentence. Envoy works out the rest.</h3>
+        <p>No forms, no categories to hunt through. <strong>“Outdoor wedding for 150 guests in fall, near Austin.”</strong> That is the entire brief. Envoy reads it the way a planner would — pulling out the constraints you didn't think to state.</p>
+        <div class="artifact">
+          <div class="art-h"><strong>What Envoy understood</strong><span class="exlabel">Example</span></div>
+          <ul class="infer">
+            <li><span class="k">Scale</span><span class="v">150 guests — rules out small-format caterers</span></li>
+            <li><span class="k">Season</span><span class="v">Autumn evenings — heating and lighting needed</span></li>
+            <li><span class="k">Setting</span><span class="v">Outdoor, no permanent cover — rain plan required</span></li>
+            <li><span class="k">Where</span><span class="v">Austin, Texas and surrounds</span></li>
+            <li><span class="k">Needs</span><span class="v">10 vendor categories</span></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- WEEK 1 -->
+    <article class="wk" aria-labelledby="wk1">
+      <div class="wk-when"><b>Week 1</b><span>The lineup</span></div>
+      <div class="wk-body">
+        <h3 id="wk1">Every vendor the project needs — and why it needs them.</h3>
+        <p>This is the part that normally takes a fortnight of evenings. Envoy returns a ranked shortlist by category, and, more usefully, <strong>the reason each category is on your list.</strong> You cut what you don't want before anything goes out.</p>
+        <div class="artifact">
+          <div class="art-h"><strong>Your vendor lineup</strong><span class="exlabel">Example</span></div>
+          <ul class="cats">
+            <li><span class="cn">Venue</span><span class="cw">Scenic, accommodates 150, with a weather contingency plan</span><span class="cc">13 found</span></li>
+            <li><span class="cn">Catering</span><span class="cw">Seasonal menus and beverage service at large-guest scale</span><span class="cc">8 found</span></li>
+            <li><span class="cn">Event rentals</span><span class="cw">Tents, heaters, seating and lighting for an uncovered site</span><span class="cc">11 found</span></li>
+            <li><span class="cn">Florist</span><span class="cw">Garden-style arrangements, autumn palette</span><span class="cc">9 found</span></li>
+            <li><span class="cn">Photography</span><span class="cw">Outdoor and low-light experience for a golden-hour ceremony</span><span class="cc">11 found</span></li>
+            <li><span class="cn">+ 5 more</span><span class="cw">Music, officiant, bar service, hair &amp; makeup, transportation</span><span class="cc">31 found</span></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- WEEK 2 -->
+    <article class="wk" aria-labelledby="wk2">
+      <div class="wk-when"><b>Week 2</b><span>First contact</span></div>
+      <div class="wk-body">
+        <h3 id="wk2">Envoy writes the introductions. You approve every one.</h3>
+        <p>Same dates, same details, twenty-three times over — the job nobody wants. Envoy drafts each one in <strong>your</strong> voice, from <strong>your</strong> address. Tell it the “hope this finds you well” opener feels stiff and it won't use it again.</p>
+        <div class="artifact">
+          <div class="art-h"><strong>Draft — introduction to a florist</strong><span class="exlabel">Example</span></div>
+          <div class="draft-meta">
+            <span><b>To:</b> Wildflower &amp; Fern Studio</span>
+            <span><b>From:</b> you@yourdomain.com</span>
+            <span><b>Subject:</b> Outdoor wedding florals — October 12, 150 guests</span>
+          </div>
+          <p class="draft-body">Hi Sarah,
+
+We're getting married on October 12th just outside Austin — an outdoor ceremony and reception for about 150 guests. We're after garden-style arrangements in a muted autumn palette.
+
+Do you have availability that date, and could you share pricing for ceremony florals plus fifteen tables?
+
+Thanks so much,
+Maya &amp; James</p>
+          <div class="approve">
+            <span class="pending"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.2"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Awaiting your approval</span>
+            <button class="btn btn-primary" type="button">Approve &amp; send</button>
+            <button class="btn btn-ghost" type="button">Edit draft</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- WEEK 5 -->
+    <article class="wk" aria-labelledby="wk5">
+      <div class="wk-when"><b>Week 5</b><span>The middle</span></div>
+      <div class="wk-body">
+        <h3 id="wk5">This is where projects normally come apart.</h3>
+        <p>Twenty-three conversations, running at different speeds, across ten categories. Instead of a spreadsheet you stopped updating, you get <strong>one view of where everything actually stands</strong> — and a short list of the only things that genuinely need you.</p>
+        <div class="artifact">
+          <div class="art-h"><strong>Your project, week five</strong><span class="exlabel">Example</span></div>
+          <div class="stats">
+            <div class="stat"><b>23</b><span>Contacts</span></div>
+            <div class="stat alert"><b>2</b><span>Needs you</span></div>
+            <div class="stat"><b>5</b><span>Reaching out</span></div>
+            <div class="stat"><b>13</b><span>Heard back</span></div>
+          </div>
+          <ul class="moves">
+            <li><span class="who">Magnolia Hill Vineyards</span><span class="what">Asking about the Saturday rate — wants to negotiate. Needs your call.</span><span class="mtag">Venue · Needs you</span></li>
+            <li><span class="who">Highland Pour Co.</span><span class="what">Asked about liquor liability and a signature drink. Envoy paused for your input.</span><span class="mtag">Bar service · Needs you</span></li>
+            <li><span class="who">Field Notes Photo Co.</span><span class="what">Added to the outreach queue. Envoy will introduce you in the next batch.</span><span class="mtag">Photography · Reaching out</span></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- WEEK 8 -->
+    <article class="wk" aria-labelledby="wk8">
+      <div class="wk-when"><b>Week 8</b><span>Decided</span></div>
+      <div class="wk-body">
+        <h3 id="wk8">Decisions, not dead ends.</h3>
+        <p>Every quote, reply and follow-up from the last two months sits in one place — so when it's time to choose, you have the whole picture rather than a memory of an email. <strong>The relationships are yours.</strong> Vendors have been replying to your address since week two.</p>
+        <div class="artifact">
+          <div class="art-h"><strong>Booked</strong><span class="exlabel">Example</span></div>
+          <ul class="booked">
+            <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Venue</span><span class="nm">Hill Country Estate</span></li>
+            <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Catering</span><span class="nm">Copper Table Catering</span></li>
+            <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Florals</span><span class="nm">Wildflower &amp; Fern Studio</span></li>
+            <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Rentals</span><span class="nm">Lone Star Event Supply</span></li>
+            <li><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Photography</span><span class="nm">Field Notes Photo Co.</span></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PULL QUOTE / WHY ============ -->
+<section class="pull" aria-labelledby="h-pull">
+  <div class="wrap pull-grid">
+    <div>
+      <span class="kicker">Why Envoy</span>
+      <blockquote id="h-pull">Not post-and-wait.</blockquote>
+      <p class="sub">Marketplaces work for one-off jobs. They break when you're coordinating ten categories for one date — and they keep the relationship you're trying to build.</p>
+    </div>
+    <ul class="pull-list">
+      <li>
+        <h3>Start before you sign up</h3>
+        <p>See the vendors your project needs, by category, before you create an account.</p>
+      </li>
+      <li>
+        <h3>Outreach from your inbox</h3>
+        <p>Vendors reply to you — not to a relay. Every message sends from your address, only after you approve it.</p>
+      </li>
+      <li>
+        <h3>Decisions, not dead ends</h3>
+        <p>Weeks of research and replies stay in one place, so you have the full picture when it matters.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CASES ============ -->
+<section class="cases-sec" aria-labelledby="h-cases">
+  <div class="wrap">
+    <span class="kicker">It isn't only weddings</span>
+    <h2 id="h-cases">Any project with more people to chase than hours to chase them.</h2>
+    <div class="cases">
+      <article class="case">
+        <div class="ph">[Photo — TBD · outdoor autumn reception]</div>
+        <h3>An outdoor wedding for 150</h3>
+        <p>Ten categories, one immovable date, and a rain plan that has to stay open until two weeks out.</p>
+        <p class="cats-line">Venue · Catering · Florals · Photography · Rentals · +5</p>
+      </article>
+      <article class="case">
+        <div class="ph">[Photo — TBD · kitchen mid-renovation]</div>
+        <h3>A 1920s kitchen renovation</h3>
+        <p>Trades that have to arrive in the right order, quotes that need comparing, and a house you're still living in.</p>
+        <p class="cats-line">General contractor · Cabinetmaker · Electrician · Plumber · +3</p>
+      </article>
+      <article class="case">
+        <div class="ph">[Photo — TBD · offsite workspace]</div>
+        <h3>A company offsite for 40</h3>
+        <p>Venue, travel, food and facilitation booked around forty calendars and a budget you have to defend.</p>
+        <p class="cats-line">Venue · Lodging · Catering · Transport · +2</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROOF ============ -->
+<section aria-labelledby="h-proof" style="padding-block:0 clamp(56px,8vw,90px)">
+  <div class="wrap">
+    <div class="proof">
+      <span class="exlabel">[Proof — TBD]</span>
+      <h2 id="h-proof">Reserved for real proof</h2>
+      <p>This slot holds a genuine customer quote, a named early user, or a real usage number — once one exists. Deliberately left empty rather than filled with invented social proof.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="pricing-sec" id="pricing" aria-labelledby="h-pricing">
+  <div class="wrap">
+    <span class="kicker">Pricing</span>
+    <h2 id="h-pricing">Free to plan. Pay only to automate.</h2>
+    <p class="body-lg" style="margin-top:18px">Planning a project? Envoy is free to use. Paid plans are for teams that want Envoy to handle the outreach for them.</p>
+    <div class="tiers">
+      <article class="tier">
+        <h3>Free</h3>
+        <div class="price">Free</div>
+        <p>Plan projects and reach out to vendors yourself.</p>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>1 active project</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Envoy-built vendor lineups</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Reach out to vendors yourself</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Track every reply in one place</li>
+        </ul>
+        <a class="btn btn-ghost" href="#top">Get started free</a>
+      </article>
+      <article class="tier pop">
+        <span class="tag">Most popular</span>
+        <h3>Pro</h3>
+        <div class="price">$96<small> /yr</small></div>
+        <p>Unlock unlimited projects and Pro mode.</p>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Free</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Pro mode</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited projects</li>
+        </ul>
+        <a class="btn btn-primary" href="#top">Choose Pro</a>
+      </article>
+      <article class="tier">
+        <h3>Agency</h3>
+        <div class="price">$200<small> /yr per user</small></div>
+        <p>Let Envoy draft and send outreach for your whole team.</p>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Pro</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Automated Envoy outreach to vendors</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Envoy drafts replies &amp; follow-ups in your voice</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Multiple seats for your whole team</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority vendor responses</li>
+        </ul>
+        <a class="btn btn-ghost" href="#top">Choose Agency</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VENDOR ============ -->
+<section class="vend" id="pros" aria-labelledby="h-pros">
+  <div class="wrap">
+    <div>
+      <span class="kicker">For vendors</span>
+      <h2 id="h-pros">Win more work, without chasing leads.</h2>
+      <p>Envoy puts your business in front of people actively planning projects — then helps you respond faster than anyone else.</p>
+    </div>
+    <a class="btn btn-ghost btn-lg" href="#">Envoy for Business</a>
+  </div>
+</section>
+
+<!-- ============ CLOSE ============ -->
+<section class="close" aria-labelledby="h-close">
+  <div class="wrap">
+    <span class="kicker">Eight weeks from now</span>
+    <h2 id="h-close">Start yours in a sentence.</h2>
+    <p>Describe your project and get a lineup in seconds. Free to start, no card needed.</p>
+    <a class="btn btn-primary btn-lg" href="#top">Start your project</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a class="brand" href="#top">
+          <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 21.5 6.5 12 21 2.5 6.5 12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 8.2c3.4 1.6 6.6 1.6 10 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Envoy
+        </a>
+        <p class="tagline">Your digital representative for outreach.</p>
+      </div>
+      <div>
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#timeline">How it works</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#pros">For pros</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="https://www.linkedin.com/company/hello-envoy/" rel="noopener noreferrer" target="_blank">LinkedIn</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span>© 2026 Envoy</span>
+      <span>Free to plan. Pay only to automate.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var proj=document.getElementById('proj');
+  document.querySelectorAll('.chip').forEach(function(c){
+    c.addEventListener('click',function(){proj.value=c.dataset.fill;proj.focus();});
+  });
+  document.getElementById('finder').addEventListener('submit',function(e){
+    e.preventDefault();
+    document.getElementById('timeline').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  });
+})();
+</script>
+</body>
+</html>

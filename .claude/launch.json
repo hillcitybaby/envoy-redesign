@@ -1,0 +1,41 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "envoy-final",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4321",
+        "--directory",
+        "redesign/04-final"
+      ],
+      "port": 4321
+    },
+    {
+      "name": "envoy-mobile",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4322",
+        "--directory",
+        "redesign/05-mobile"
+      ],
+      "port": 4322
+    },
+    {
+      "name": "envoy-responsive",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4323",
+        "--directory",
+        "redesign/06-responsive"
+      ],
+      "port": 4323
+    }
+  ]
+}

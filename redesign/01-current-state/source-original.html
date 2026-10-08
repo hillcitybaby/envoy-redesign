@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-W1CP3DNWCY"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-W1CP3DNWCY");
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Envoy helps you plan multi-vendor projects, compare providers, and send outreach from your own inbox — all in one place."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hello-envoy.com/" />
+    <meta
+      property="og:title"
+      content="Envoy — Plan any project. Line up the vendors."
+    />
+    <meta
+      property="og:description"
+      content="Envoy helps you plan multi-vendor projects, compare providers, and send outreach from your own inbox — all in one place."
+    />
+    <meta property="og:image" content="https://hello-envoy.com/og-image.png" />
+    <meta property="og:image:width" content="2400" />
+    <meta property="og:image:height" content="1260" />
+    <meta
+      property="og:image:alt"
+      content="Envoy — Plan any project. Line up the vendors."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Envoy — Plan any project. Line up the vendors."
+    />
+    <meta
+      name="twitter:description"
+      content="Envoy helps you plan multi-vendor projects, compare providers, and send outreach from your own inbox — all in one place."
+    />
+    <meta name="twitter:image" content="https://hello-envoy.com/og-image.png" />
+    <title>Envoy — Plan any project. Line up the vendors.</title>
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link
+      href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --color-primary: #003fb3;
+        --color-primary-mid: #7191f7;
+        --color-primary-light: #dde7fe;
+        --color-primary-soft: rgba(113, 145, 247, 0.18);
+        --color-bg: #061228;
+        --color-text: #dde7fe;
+        --color-muted: rgba(221, 231, 254, 0.72);
+        --color-border: rgba(221, 231, 254, 0.14);
+        --font: "Instrument Sans", system-ui, -apple-system, sans-serif;
+        --radius: 0.5rem;
+        --panel-pad: clamp(20px, 5vw, 40px);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font);
+        color: var(--color-text);
+        background: var(--color-bg);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      #shader-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      #shader-bg > div,
+      #shader-bg canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .readability-scrim {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(
+          180deg,
+          rgba(6, 18, 40, 0.34) 0%,
+          rgba(6, 18, 40, 0.06) 42%,
+          rgba(6, 18, 40, 0.06) 58%,
+          rgba(6, 18, 40, 0.38) 100%
+        );
+      }
+
+      .floating-cta {
+        position: fixed;
+        top: clamp(16px, 3vw, 24px);
+        right: clamp(16px, 3vw, 24px);
+        z-index: 100;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        border-radius: var(--radius);
+        padding: 10px 18px;
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -10%;
+        width: 120%;
+        height: 100%;
+        transform: skew(30deg);
+        transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+        z-index: 0;
+      }
+
+      .btn-primary::before {
+        background: #061228;
+      }
+
+      .btn span {
+        position: relative;
+        z-index: 1;
+        color: #fff;
+      }
+
+      .btn-primary {
+        background: var(--color-primary);
+        border: 1px solid var(--color-border);
+      }
+
+      .btn-primary:hover::before {
+        transform: translate3d(100%, 0, 0);
+      }
+
+      .btn-primary:hover {
+        background: var(--color-primary);
+      }
+
+      .btn:focus-visible {
+        outline: 2px solid var(--color-primary-mid);
+        outline-offset: 3px;
+      }
+
+      .btn-large {
+        padding: 14px 28px;
+        font-size: 15px;
+      }
+
+      .scroll-root {
+        position: relative;
+        z-index: 2;
+      }
+
+      .panel {
+        min-height: 100dvh;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 88px var(--panel-pad) 56px;
+      }
+
+      .panel-inner {
+        width: 100%;
+        max-width: 640px;
+      }
+
+      .panel-wide {
+        max-width: 720px;
+      }
+
+      .eyebrow {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--color-primary-mid);
+        margin-bottom: 16px;
+      }
+
+      .headline {
+        font-size: clamp(2rem, 6vw, 3.25rem);
+        font-weight: 700;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        margin: 0 0 20px;
+      }
+
+      .lead {
+        font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+        color: var(--color-muted);
+        margin: 0;
+        max-width: 52ch;
+        line-height: 1.65;
+      }
+
+      .hero-center .panel-inner {
+        max-width: 820px;
+      }
+
+      .logo-mark {
+        width: clamp(260px, 78vw, 520px);
+        aspect-ratio: 1024 / 255;
+        margin: 0 auto 36px;
+        background-color: var(--color-text);
+        -webkit-mask-image: url("envoy-logo.png");
+        mask-image: url("envoy-logo.png");
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+      }
+
+      .hero-center {
+        text-align: center;
+      }
+
+      .hero-center .lead {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .scroll-hint {
+        margin-top: 48px;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        color: var(--color-muted);
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        animation: bob 2.4s ease-in-out infinite;
+      }
+
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(5px);
+        }
+      }
+
+      .disclose {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.65s ease,
+          transform 0.65s ease;
+      }
+
+      .panel.is-active .disclose {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .panel.is-active .disclose:nth-child(1) {
+        transition-delay: 0.05s;
+      }
+      .panel.is-active .disclose:nth-child(2) {
+        transition-delay: 0.12s;
+      }
+      .panel.is-active .disclose:nth-child(3) {
+        transition-delay: 0.19s;
+      }
+      .panel.is-active .disclose:nth-child(4) {
+        transition-delay: 0.26s;
+      }
+      .panel.is-active .disclose:nth-child(5) {
+        transition-delay: 0.33s;
+      }
+      .panel.is-active .disclose:nth-child(6) {
+        transition-delay: 0.4s;
+      }
+
+      .stack-list {
+        list-style: none;
+        margin: 32px 0 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .stack-list li {
+        padding: 16px 18px;
+        background: rgba(6, 18, 40, 0.55);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        backdrop-filter: blur(12px);
+        font-size: 15px;
+        color: var(--color-text);
+        line-height: 1.5;
+      }
+
+      .step-list {
+        margin: 36px 0 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .step-list li {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+
+      .step-num {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-primary-soft);
+        color: var(--color-primary-light);
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .step-list h3 {
+        margin: 0 0 4px;
+        font-size: 17px;
+        font-weight: 600;
+      }
+
+      .step-list p {
+        margin: 0;
+        font-size: 15px;
+        color: var(--color-muted);
+        line-height: 1.55;
+      }
+
+      .feature-list {
+        margin: 36px 0 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .feature-list li {
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .feature-list li:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .feature-list h3 {
+        margin: 0 0 6px;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .feature-list p {
+        margin: 0;
+        font-size: 15px;
+        color: var(--color-muted);
+        line-height: 1.55;
+      }
+
+      .note {
+        margin-top: 28px;
+        padding: 14px 16px;
+        border-radius: var(--radius);
+        border: 1px solid var(--color-border);
+        background: rgba(6, 18, 40, 0.5);
+        backdrop-filter: blur(10px);
+        font-size: 14px;
+        color: var(--color-muted);
+      }
+
+      .note strong {
+        color: var(--color-text);
+        font-weight: 600;
+      }
+
+      .cta-panel {
+        text-align: center;
+        scroll-snap-stop: normal;
+      }
+
+      .cta-panel .lead {
+        margin: 0 auto 28px;
+      }
+
+      .footer-scroll-room {
+        height: 40dvh;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        pointer-events: none;
+      }
+
+      .site-footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 90;
+        border-top: 1px solid var(--color-border);
+        background: rgba(6, 18, 40, 0.92);
+        backdrop-filter: blur(16px);
+        padding: clamp(28px, 5vw, 40px) var(--panel-pad)
+          clamp(24px, 4vw, 32px);
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        transform: translateY(100%);
+        transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        pointer-events: none;
+      }
+
+      .site-footer.is-revealed {
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .site-footer-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(24px, 5vw, 48px);
+        align-items: start;
+      }
+
+      .footer-block h3 {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--color-primary-mid);
+      }
+
+      .footer-block p {
+        margin: 0;
+        font-size: 14px;
+        color: var(--color-muted);
+        line-height: 1.55;
+        max-width: 34ch;
+      }
+
+      .footer-block p + p {
+        margin-top: 10px;
+      }
+
+      .footer-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 14px;
+        color: var(--color-text);
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer-link:hover {
+        color: var(--color-primary-mid);
+      }
+
+      .footer-link:focus-visible {
+        outline: 2px solid var(--color-primary-mid);
+        outline-offset: 3px;
+        border-radius: 2px;
+      }
+
+      .footer-link svg {
+        flex-shrink: 0;
+      }
+
+      .footer-cta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .footer-cta .btn {
+        margin-top: 4px;
+      }
+
+      .footer-copy {
+        margin: 0;
+        padding-top: 4px;
+        border-top: 1px solid var(--color-border);
+        color: var(--color-muted);
+        font-size: 13px;
+      }
+
+      @media (max-width: 640px) {
+        .panel {
+          padding-top: 72px;
+          align-items: flex-start;
+          padding-bottom: 40px;
+        }
+
+        .hero-center {
+          padding-top: 12vh;
+        }
+
+        .floating-cta .btn {
+          font-size: 13px;
+          padding: 9px 14px;
+        }
+
+        .step-list li {
+          grid-template-columns: 32px 1fr;
+          gap: 12px;
+        }
+
+        .step-num {
+          width: 32px;
+          height: 32px;
+          font-size: 12px;
+        }
+
+        .site-footer-grid {
+          grid-template-columns: 1fr;
+          gap: 28px;
+        }
+
+        .footer-cta {
+          align-items: flex-start;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .disclose {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+
+        .btn::before {
+          transition: none;
+        }
+
+        .btn-primary:hover::before {
+          transform: skew(30deg);
+        }
+
+        .btn-primary:hover {
+          background: var(--color-primary);
+          border-color: var(--color-primary-mid);
+        }
+
+        .scroll-hint {
+          animation: none;
+        }
+
+        .site-footer {
+          transform: none;
+          pointer-events: auto;
+          transition: none;
+        }
+      }
+    </style>
+
+    <script>
+      const WAITLIST_URL = "https://forms.fillout.com/t/k29bspbPEWus";
+      function openWaitlist() {
+        window.open(WAITLIST_URL, "_blank");
+      }
+    </script>
+  </head>
+  <body>
+    <div id="shader-bg" aria-hidden="true"></div>
+    <div class="readability-scrim" aria-hidden="true"></div>
+
+    <div class="floating-cta">
+      <button class="btn btn-primary" onclick="openWaitlist()">
+        <span>Join the waitlist</span>
+      </button>
+    </div>
+
+    <main class="scroll-root">
+      <section class="panel hero-center" data-panel>
+        <div class="panel-inner">
+          <div
+            class="logo-mark disclose"
+            role="img"
+            aria-label="Envoy"
+          ></div>
+          <h1 class="headline disclose">
+            Plan any project.<br />We line up the vendors.
+          </h1>
+          <p class="lead disclose">
+            Describe what you need and where. Envoy brings your vendors, project
+            details, and outreach together — so you can compare options and decide
+            with confidence.
+          </p>
+          <div class="scroll-hint disclose" aria-hidden="true">
+            <span>Scroll</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12l7 7 7-7" />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel>
+        <div class="panel-inner">
+          <span class="eyebrow disclose">The problem</span>
+          <h2 class="headline disclose">Projects fail in the messy middle</h2>
+          <p class="lead disclose">
+            Not at the idea stage — when you're finding people, keeping details
+            straight, and waiting for replies.
+          </p>
+          <ul class="stack-list">
+            <li class="disclose">Searching for service providers across dozens of tabs</li>
+            <li class="disclose">Losing track of who you've contacted</li>
+            <li class="disclose">Writing the same intro emails over and over</li>
+            <li class="disclose">Losing context as replies trickle in over weeks</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="panel" data-panel>
+        <div class="panel-inner panel-wide">
+          <span class="eyebrow disclose">What is Envoy</span>
+          <h2 class="headline disclose">Everything you need to decide, one place</h2>
+          <p class="lead disclose">
+            A project hub for renovations, events, commercial build-outs, and any
+            multi-vendor project — with the contacts, context, and outreach tools to
+            move from research to decision.
+          </p>
+          <ul class="feature-list">
+            <li class="disclose">
+              <h3>Discover contacts</h3>
+              <p>
+                Describe your project and location. Envoy surfaces relevant providers
+                across every trade and category your project needs.
+              </p>
+            </li>
+            <li class="disclose">
+              <h3>Organize your project</h3>
+              <p>
+                Timeline, budget, goals, and contacts in one view — compare options
+                side by side instead of piecing together scattered notes.
+              </p>
+            </li>
+            <li class="disclose">
+              <h3>Plan with Envoy</h3>
+              <p>
+                Ask Envoy to sharpen your scope, timeline, and brief before you reach
+                out — grounded in your project, not generic advice.
+              </p>
+            </li>
+            <li class="disclose">
+              <h3>Send outreach</h3>
+              <p>
+                Draft, review, and send from your connected Gmail or Microsoft inbox.
+              </p>
+            </li>
+          </ul>
+          <p class="note disclose">
+            <strong>You're in control.</strong> Every message sends from your address
+            only after you approve it.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel" data-panel>
+        <div class="panel-inner panel-wide">
+          <span class="eyebrow disclose">How it works</span>
+          <h2 class="headline disclose">One project, every vendor type</h2>
+          <p class="lead disclose">
+            Envoy flips the marketplace model. Find providers across trades and
+            industries, shortlist your options, and reach out on your terms.
+          </p>
+          <ol class="step-list">
+            <li class="disclose">
+              <span class="step-num">1</span>
+              <div>
+                <h3>Discover</h3>
+                <p>
+                  Search by project and location. Find providers across every vendor
+                  type your project needs — contractors, caterers, AV, florists, and
+                  more — without jumping between sites.
+                </p>
+              </div>
+            </li>
+            <li class="disclose">
+              <span class="step-num">2</span>
+              <div>
+                <h3>Organize</h3>
+                <p>
+                  Attach contacts and capture what each pro needs — dates, budget,
+                  goals — so you can weigh options and decide from one hub.
+                </p>
+              </div>
+            </li>
+            <li class="disclose">
+              <span class="step-num">3</span>
+              <div>
+                <h3>Plan</h3>
+                <p>
+                  Ask Envoy to refine your scope and brief before your first email
+                  goes out.
+                </p>
+              </div>
+            </li>
+            <li class="disclose">
+              <span class="step-num">4</span>
+              <div>
+                <h3>Reach out</h3>
+                <p>Draft and send from your inbox. Follow up in the same thread.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="panel" data-panel>
+        <div class="panel-inner panel-wide">
+          <span class="eyebrow disclose">Why Envoy</span>
+          <h2 class="headline disclose">Not post-and-wait</h2>
+          <p class="lead disclose">
+            Marketplaces work for one-off jobs. They break when you're coordinating
+            multiple trades for one project.
+          </p>
+          <ul class="feature-list">
+            <li class="disclose">
+              <h3>Start before you sign up</h3>
+              <p>See relevant contacts by trade before you create an account.</p>
+            </li>
+            <li class="disclose">
+              <h3>Outreach from your inbox</h3>
+              <p>Contacts reply to you — not a marketplace relay.</p>
+            </li>
+            <li class="disclose">
+              <h3>Decisions, not dead ends</h3>
+              <p>
+                Weeks of research, replies, and follow-up stay in one project hub —
+                so you always have the full picture when it's time to choose.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="panel" data-panel>
+        <div class="panel-inner">
+          <span class="eyebrow disclose">Who it's for</span>
+          <h2 class="headline disclose">Anyone running a multi-vendor project</h2>
+          <ul class="stack-list">
+            <li class="disclose">
+              <strong>Homeowners</strong> planning renovations who want to run the
+              process themselves
+            </li>
+            <li class="disclose">
+              <strong>Small business owners</strong> opening locations or coordinating
+              launch vendors
+            </li>
+            <li class="disclose">
+              <strong>Project coordinators</strong> tired of repeating the same brief
+              in five different apps
+            </li>
+            <li class="disclose">
+              <strong>Couples and wedding planners</strong> coordinating venue,
+              catering, florals, photography, and more — without losing the thread
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="panel cta-panel" data-panel>
+        <div class="panel-inner">
+          <span class="eyebrow disclose">Early access</span>
+          <h2 class="headline disclose">Join the waitlist</h2>
+          <p class="lead disclose">
+            Be first to plan projects, discover contacts, and send outreach from your
+            own inbox.
+          </p>
+          <button class="btn btn-primary btn-large disclose" onclick="openWaitlist()">
+            <span>Join the waitlist</span>
+          </button>
+        </div>
+      </section>
+
+      <div class="footer-scroll-room" aria-hidden="true"></div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-grid">
+        <div class="footer-block">
+          <h3>Follow us</h3>
+          <a
+            class="footer-link"
+            href="https://www.linkedin.com/company/hello-envoy/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 114.126 0 2.065 2.065 0 01-2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            LinkedIn
+          </a>
+          <p>
+            Service providers interested in joining as a pro — join the waitlist
+            and we'll reach out as we onboard new categories.
+          </p>
+        </div>
+        <div class="footer-block footer-cta">
+          <h3>Keep in touch</h3>
+          <p>Join the waitlist for early access and product updates.</p>
+          <button class="btn btn-primary" onclick="openWaitlist()">
+            <span>Join the waitlist</span>
+          </button>
+        </div>
+      </div>
+      <p class="footer-copy">&copy; 2026 Envoy</p>
+    </footer>
+
+    <script type="module" src="assets/shader-bg.js"></script>
+
+    <script>
+      const panels = document.querySelectorAll("[data-panel]");
+      const firstPanel = panels[0];
+
+      firstPanel.classList.add("is-active");
+
+      const panelObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+              panels.forEach((p) => p.classList.remove("is-active"));
+              entry.target.classList.add("is-active");
+            }
+          });
+        },
+        { threshold: [0.45, 0.6, 0.75] }
+      );
+
+      panels.forEach((panel) => panelObserver.observe(panel));
+
+      const siteFooter = document.querySelector(".site-footer");
+      const footerScrollRoom = document.querySelector(".footer-scroll-room");
+
+      const footerObserver = new IntersectionObserver(
+        ([entry]) => {
+          siteFooter.classList.toggle("is-revealed", entry.isIntersecting);
+        },
+        { threshold: 0.08 }
+      );
+
+      footerObserver.observe(footerScrollRoom);
+    </script>
+  </body>
+</html>

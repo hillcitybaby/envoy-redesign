@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy — Describe your project. Envoy lines up the vendors.</title>
+<meta name="description" content="Describe your project once. Envoy lines up the right vendors and writes the outreach — you approve every send. Free to plan.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Envoy — Describe your project. Envoy lines up the vendors.">
+<meta property="og:description" content="Describe your project once. Envoy lines up the right vendors and writes the outreach — you approve every send. Free to plan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF9F6; --paper-2:#F4F0E9; --card:#FFFFFF;
+  --ink:#1A1714; --muted:#5A5248; --faint:#706859;
+  --line:#E5DDD2; --line-2:#D5CABB;
+  --blue:#143C9E; --blue-hi:#0F2F7E; --blue-soft:#EAEFFB;
+  --clay:#A94E2C; --clay-soft:#F7E9E1;
+  --r:12px; --r-lg:20px;
+  --pad:clamp(20px,5vw,56px);
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --maxw:1200px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.62;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:5px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+.skip{position:absolute;left:8px;top:-60px;background:var(--blue);color:#fff;padding:10px 16px;border-radius:var(--r);z-index:200;transition:top .2s}
+.skip:focus{top:8px}
+
+h1,h2,.serif{font-family:var(--serif);font-weight:600;font-variation-settings:"opsz" 120;letter-spacing:-.012em;line-height:1.1;margin:0}
+h1{font-size:clamp(2.3rem,5.4vw,3.9rem)}
+h2{font-size:clamp(1.8rem,3.7vw,2.7rem)}
+h3{margin:0;font-size:1.06rem;font-weight:600;letter-spacing:-.008em;line-height:1.35}
+.lead{font-size:clamp(1.04rem,1.55vw,1.2rem);color:var(--muted);margin:18px 0 0;max-width:56ch;line-height:1.62}
+.eyebrow{display:block;font-size:11.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--clay);margin:0 0 14px}
+section{padding-block:clamp(66px,9vw,120px)}
+.sec-head{max-width:62ch;margin-bottom:46px}
+
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--sans);font-weight:600;font-size:14.5px;
+  border-radius:999px;padding:12px 24px;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-hi)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-lg{padding:16px 32px;font-size:15.5px}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:100;background:rgba(251,249,246,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:30px;height:68px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink);font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:.02em}
+.mark{width:23px;height:23px;flex:none;color:var(--blue)}
+.nav ul{list-style:none;display:flex;gap:28px;margin:0 0 0 auto;padding:0}
+.nav ul a{color:var(--muted);text-decoration:none;font-size:14.5px;font-weight:500}
+.nav ul a:hover{color:var(--ink)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+@media(max-width:900px){.nav ul{display:none}.nav-cta{margin-left:auto}.nav-cta .btn{padding:10px 15px;font-size:13.5px}.nav{gap:12px}}
+
+/* ---------- hero ---------- */
+.hero{padding-block:clamp(52px,7vw,92px);background:
+  radial-gradient(90% 60% at 8% 0%,rgba(234,239,251,.9) 0%,rgba(251,249,246,0) 64%),
+  radial-gradient(70% 50% at 96% 6%,rgba(247,233,225,.85) 0%,rgba(251,249,246,0) 60%);
+  border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;gap:clamp(36px,5vw,64px);grid-template-columns:1fr;align-items:center}
+@media(min-width:1000px){.hero-grid{grid-template-columns:1.08fr .92fr}}
+.hero h1 em{font-style:italic;color:var(--clay)}
+.finder{margin-top:30px;background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:9px;
+  display:flex;gap:8px;align-items:center;box-shadow:0 18px 40px -30px rgba(26,23,20,.45)}
+.finder label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.finder input{flex:1 1 auto;min-width:0;background:transparent;border:0;color:var(--ink);font:inherit;font-size:15px;padding:13px 14px;border-radius:var(--r)}
+.finder input::placeholder{color:var(--faint)}
+.finder input:focus{outline:2px solid var(--blue);outline-offset:-1px}
+.finder .loc{flex:0 1 175px;border-left:1px solid var(--line)}
+@media(max-width:700px){.finder{flex-wrap:wrap}.finder .loc{flex:1 1 100%;border-left:0;border-top:1px solid var(--line)}.finder .btn{flex:1 1 100%}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{background:var(--card);border:1px solid var(--line-2);color:var(--ink);font:inherit;font-size:13.5px;padding:8px 15px;border-radius:999px;cursor:pointer}
+.chip:hover{border-color:var(--blue);color:var(--blue)}
+.microcopy{margin:18px 0 0;font-size:13.5px;color:var(--muted)}
+
+/* hero preview card */
+.preview{background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-lg);box-shadow:0 30px 70px -46px rgba(26,23,20,.6);overflow:hidden}
+.preview-h{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--paper-2)}
+.preview-h strong{font-size:13.5px}
+.preview-b{padding:8px 10px 14px}
+.prow{display:flex;gap:12px;align-items:center;padding:12px 12px;border-radius:var(--r)}
+.prow+.prow{border-top:1px solid var(--line)}
+.prow .cat{font-weight:600;font-size:14px}
+.prow .n{margin-left:auto;font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-soft);padding:3px 10px;border-radius:999px}
+.prow .tick{width:16px;height:16px;flex:none;color:var(--blue)}
+.preview-f{padding:12px 18px 16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+
+/* ---------- illustrative label ---------- */
+.exlabel{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--clay);background:var(--clay-soft);border:1px solid #EBD3C6;padding:5px 11px;border-radius:999px;white-space:nowrap}
+
+/* ---------- lineup ---------- */
+.band-paper{background:var(--paper-2);border-block:1px solid var(--line)}
+.lineup-head{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+.lineup-sum{color:var(--muted);font-size:15.5px;margin:16px 0 30px;max-width:62ch}
+.cats{display:grid;gap:16px}
+.cat-card{background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+.cat-top{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline;justify-content:space-between;padding:22px 24px 18px;border-bottom:1px solid var(--line)}
+.cat-top h3{font-family:var(--serif);font-size:1.25rem;font-weight:600}
+.cat-top p{margin:7px 0 0;color:var(--muted);font-size:14.5px;max-width:72ch;line-height:1.5}
+.count{font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-soft);padding:5px 12px;border-radius:999px;white-space:nowrap}
+.rows{list-style:none;margin:0;padding:6px 12px 8px}
+.row{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:14px 12px}
+.row+.row{border-top:1px solid var(--line)}
+.row .nm{font-weight:600;font-size:14.5px}
+.row .ct{color:var(--muted);font-size:13.5px}
+.row .meta{margin-left:auto;display:flex;gap:16px;align-items:center;color:var(--muted);font-size:13.5px}
+.more{display:block;width:100%;text-align:center;background:transparent;border:0;border-top:1px solid var(--line);
+  color:var(--blue);font:inherit;font-size:13.5px;font-weight:600;padding:15px;cursor:pointer}
+.more:hover{background:var(--blue-soft)}
+.lineup-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:28px}
+.lineup-cta .sub{color:var(--muted);font-size:14px;max-width:40ch}
+
+/* ---------- messy middle ---------- */
+.split{display:grid;gap:clamp(34px,5vw,60px);grid-template-columns:1fr}
+@media(min-width:960px){.split{grid-template-columns:.92fr 1.08fr;align-items:start}}
+.painlist{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:2px}
+.painlist li{display:flex;gap:13px;align-items:flex-start;padding:15px 2px;border-bottom:1px solid var(--line);font-size:15px;line-height:1.5}
+.painlist li:first-child{border-top:1px solid var(--line)}
+.painlist svg{flex:none;margin-top:4px;color:var(--clay)}
+.canvas{background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px;box-shadow:0 26px 60px -48px rgba(26,23,20,.55)}
+.canvas-h{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.canvas-h h3{font-family:var(--serif);font-size:1.15rem}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:560px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:15px 10px;text-align:center}
+.stat b{display:block;font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.02em}
+.stat span{display:block;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.stat.alert{border-color:#E7C4B4;background:var(--clay-soft)}
+.stat.alert b{color:var(--clay)}
+.talk{margin:20px 0 0;padding:0;list-style:none;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.talk li{display:flex;gap:10px;align-items:center;padding:12px 15px;font-size:13.5px}
+.talk li+li{border-top:1px solid var(--line)}
+.talk .who{font-weight:600}
+.talk .st{margin-left:auto;color:var(--muted);font-size:12.5px;display:flex;gap:12px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--blue);flex:none}
+.dot.wait{background:var(--line-2)}
+
+/* ---------- steps ---------- */
+.steps{display:grid;gap:20px;grid-template-columns:1fr;counter-reset:s}
+@media(min-width:840px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{padding-top:22px;border-top:2px solid var(--ink)}
+.step .n{font-family:var(--serif);font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--clay);display:block;margin-bottom:10px}
+.step p{margin:9px 0 0;color:var(--muted);font-size:14.5px;line-height:1.55}
+
+.draft{margin-top:34px;background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:0 30px 70px -50px rgba(26,23,20,.6);max-width:760px}
+.draft-h{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:15px 22px;background:var(--paper-2);border-bottom:1px solid var(--line)}
+.draft-h strong{font-size:14px}
+.draft-b{padding:22px}
+.draft-meta{font-size:13.5px;color:var(--muted);margin:0 0 16px;display:grid;gap:4px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.draft-meta b{color:var(--ink);font-weight:600}
+.draft-body{font-size:15px;line-height:1.7;margin:0;white-space:pre-line}
+.approve{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:16px 22px;border-top:1px solid var(--line);background:var(--paper-2)}
+.pending{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--clay);margin-right:auto}
+.trust{margin-top:26px;background:var(--blue-soft);border:1px solid #CFDBF6;border-radius:var(--r-lg);padding:20px 22px;font-size:15px;line-height:1.6;max-width:760px}
+.trust strong{font-family:var(--serif);font-size:1.06em}
+
+/* ---------- cases ---------- */
+.cases{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:800px){.cases{grid-template-columns:repeat(3,1fr)}}
+.case{background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column}
+.case .ph{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;
+  background:repeating-linear-gradient(45deg,#F0EBE3,#F0EBE3 10px,#EAE4DA 10px,#EAE4DA 20px);
+  border-bottom:1px solid var(--line);color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.case-b{padding:24px;display:flex;flex-direction:column;gap:10px;flex:1}
+.case-b h3{font-family:var(--serif);font-size:1.3rem;font-weight:600}
+.case-b p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.55}
+.case-tags{list-style:none;margin:auto 0 0;padding:16px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.case-tags li{font-size:12px;color:var(--muted);background:var(--paper-2);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+
+/* ---------- why ---------- */
+.why{display:grid;gap:24px;grid-template-columns:1fr}
+@media(min-width:800px){.why{grid-template-columns:repeat(3,1fr)}}
+.why div{border-left:2px solid var(--clay);padding-left:20px}
+.why h3{font-family:var(--serif);font-size:1.2rem}
+.why p{margin:9px 0 0;color:var(--muted);font-size:14.5px;line-height:1.55}
+
+/* ---------- pricing ---------- */
+.tiers{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:840px){.tiers{grid-template-columns:repeat(3,1fr)}}
+.tier{background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:28px;display:flex;flex-direction:column;gap:14px}
+.tier.pop{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
+.tier h3{font-family:var(--serif);font-size:1.35rem;font-weight:600}
+.tag{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--blue);align-self:flex-start;padding:5px 11px;border-radius:999px}
+.price{font-family:var(--serif);font-size:34px;font-weight:600;letter-spacing:-.02em}
+.price small{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--muted);letter-spacing:0}
+.tier>p{margin:0;color:var(--muted);font-size:14.5px}
+.tier ul{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:10px;font-size:14px;color:var(--muted)}
+.tier li{display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.tier li svg{flex:none;margin-top:4px;color:var(--blue)}
+.tier .btn{margin-top:auto}
+.pricing-note{margin:24px 0 0;color:var(--muted);font-size:14.5px}
+
+/* ---------- proof ---------- */
+.proof{border:1px dashed var(--line-2);border-radius:var(--r-lg);padding:clamp(30px,5vw,52px);text-align:center;background:var(--card)}
+.proof h2{font-size:clamp(1.35rem,2.4vw,1.8rem);margin-top:16px}
+.proof p{margin:14px auto 0;color:var(--muted);max-width:58ch;font-size:15px}
+
+/* ---------- vendor band ---------- */
+.vend{background:var(--ink);color:#F6F2EC}
+.vend .wrap{display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;padding-block:clamp(40px,5vw,60px)}
+.vend h2{font-size:clamp(1.4rem,2.5vw,1.9rem);color:#FCFAF7}
+.vend p{margin:10px 0 0;color:#C6BDB1;font-size:15px;max-width:54ch}
+.vend .eyebrow{color:#E5A889}
+.vend .btn-ghost{color:#FCFAF7;border-color:rgba(252,250,247,.4)}
+.vend .btn-ghost:hover{border-color:#FCFAF7}
+
+/* ---------- final ---------- */
+.final{text-align:center}
+.final .lead{margin-inline:auto}
+.final .btn{margin-top:28px}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding-block:52px 36px;background:var(--paper-2)}
+.fgrid{display:grid;gap:34px;grid-template-columns:1fr}
+@media(min-width:760px){.fgrid{grid-template-columns:1.5fr 1fr 1fr}}
+.fgrid h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay);margin-bottom:13px}
+.fgrid ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.fgrid a{color:var(--muted);text-decoration:none;font-size:14.5px;display:inline-block;padding-block:5px}
+.brand{padding-block:5px}
+.nav ul a{display:inline-block;padding-block:6px}
+.fgrid a:hover{color:var(--ink)}
+.tagline{color:var(--muted);font-size:14.5px;max-width:32ch;margin:12px 0 0;font-family:var(--serif);font-style:italic}
+.fbot{margin-top:38px;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;color:var(--muted);font-size:13px}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="wrap nav" aria-label="Primary">
+    <a class="brand" href="#top">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 21.5 6.5 12 21 2.5 6.5 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M7 8.2c3.4 1.6 6.6 1.6 10 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      Envoy
+    </a>
+    <ul>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#pros">For pros</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="#">Log in</a>
+      <a class="btn btn-primary" href="#top">Start a project</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top" aria-labelledby="h-hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1 id="h-hero">Describe it once.<br>Envoy lines up <em>everyone</em> you need.</h1>
+      <p class="lead">A wedding, a renovation, an offsite — tell Envoy in a sentence. It works out which vendors the project needs, finds them near you, and writes the introductions. You approve every send.</p>
+
+      <form class="finder" id="finder" role="search" aria-label="Describe your project">
+        <label for="proj">Describe your project</label>
+        <input id="proj" name="proj" type="text" placeholder="What are you planning?" autocomplete="off">
+        <label for="loc">Location</label>
+        <input id="loc" class="loc" name="loc" type="text" placeholder="Where?" autocomplete="off">
+        <button class="btn btn-primary" type="submit">Line up my vendors</button>
+      </form>
+
+      <div class="chips" role="group" aria-label="Example projects">
+        <button class="chip" type="button" data-fill="Outdoor wedding for 150 guests in fall">Outdoor wedding for 150 in fall</button>
+        <button class="chip" type="button" data-fill="Renovate a 1920s kitchen">Renovate a 1920s kitchen</button>
+        <button class="chip" type="button" data-fill="Company offsite for 40 people">Company offsite for 40</button>
+      </div>
+
+      <p class="microcopy">Free to plan — no card required.</p>
+    </div>
+
+    <aside class="preview" aria-label="Example of a vendor lineup">
+      <div class="preview-h">
+        <strong>Outdoor wedding, 150 guests</strong>
+        <span class="exlabel">Example</span>
+      </div>
+      <div class="preview-b">
+        <div class="prow"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Venue</span><span class="n">13 found</span></div>
+        <div class="prow"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Catering</span><span class="n">8 found</span></div>
+        <div class="prow"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Event rentals</span><span class="n">11 found</span></div>
+        <div class="prow"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Florist</span><span class="n">9 found</span></div>
+        <div class="prow"><svg class="tick" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cat">Photography</span><span class="n">11 found</span></div>
+      </div>
+      <p class="preview-f">…plus music, officiant, bar, beauty and transportation — ten categories in about thirty seconds.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ LINEUP ============ -->
+<section id="lineup" class="band-paper" aria-labelledby="h-lineup">
+  <div class="wrap">
+    <div class="lineup-head">
+      <div>
+        <span class="eyebrow">Your vendor lineup</span>
+        <h2 id="h-lineup">Every vendor the project needs — and why it needs them</h2>
+      </div>
+      <span class="exlabel">Illustrative example</span>
+    </div>
+    <p class="lineup-sum">An outdoor autumn wedding for 150 guests near Austin, Texas — needing a weather contingency, a large-format caterer, and a full-service production team.</p>
+
+    <div class="cats">
+      <article class="cat-card">
+        <div class="cat-top">
+          <div>
+            <h3>Venue</h3>
+            <p>Essential for securing a scenic Austin landscape that can accommodate 150 guests and provides a weather contingency plan.</p>
+          </div>
+          <span class="count">13 found</span>
+        </div>
+        <ul class="rows">
+          <li class="row"><span class="nm">Hill Country Estate</span><span class="ct">Austin, TX</span><span class="meta"><span>$$$</span><span>4.8 ★</span></span></li>
+          <li class="row"><span class="nm">Fieldhouse &amp; Vine</span><span class="ct">Dripping Springs, TX</span><span class="meta"><span>$$</span><span>4.6 ★</span></span></li>
+          <li class="row"><span class="nm">The Grove at Bee Cave</span><span class="ct">Bee Cave, TX</span><span class="meta"><span>$$$$</span><span>4.9 ★</span></span></li>
+        </ul>
+        <button class="more" type="button">See 10 more venues</button>
+      </article>
+
+      <article class="cat-card">
+        <div class="cat-top">
+          <div>
+            <h3>Catering</h3>
+            <p>Necessary to provide seasonal, locally-sourced menus and full-service beverage management for a large guest count.</p>
+          </div>
+          <span class="count">8 found</span>
+        </div>
+        <ul class="rows">
+          <li class="row"><span class="nm">Copper Table Catering</span><span class="ct">Austin, TX</span><span class="meta"><span>$$</span><span>4.4 ★</span></span></li>
+          <li class="row"><span class="nm">Saltgrass Provisions</span><span class="ct">Austin, TX</span><span class="meta"><span>$$$</span><span>4.7 ★</span></span></li>
+          <li class="row"><span class="nm">Wildflower Kitchen Co.</span><span class="ct">San Marcos, TX</span><span class="meta"><span>$$</span><span>4.5 ★</span></span></li>
+        </ul>
+        <button class="more" type="button">See 5 more caterers</button>
+      </article>
+
+      <article class="cat-card">
+        <div class="cat-top">
+          <div>
+            <h3>Event rentals</h3>
+            <p>Crucial for supplying tents, heaters for cool fall evenings, seating and lighting — the venue has no permanent cover.</p>
+          </div>
+          <span class="count">11 found</span>
+        </div>
+        <ul class="rows">
+          <li class="row"><span class="nm">Lone Star Event Supply</span><span class="ct">Austin, TX</span><span class="meta"><span>$$$</span><span>4.8 ★</span></span></li>
+          <li class="row"><span class="nm">Canvas &amp; Co. Rentals</span><span class="ct">Round Rock, TX</span><span class="meta"><span>$$</span><span>4.4 ★</span></span></li>
+        </ul>
+        <button class="more" type="button">See 9 more rental companies</button>
+      </article>
+    </div>
+
+    <div class="lineup-cta">
+      <a class="btn btn-primary btn-lg" href="#top">Start this project</a>
+      <a class="btn btn-ghost" href="#top">Email me this lineup to finish later</a>
+      <span class="sub">Every category comes with the reason it's on your list.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MESSY MIDDLE ============ -->
+<section aria-labelledby="h-middle">
+  <div class="wrap split">
+    <div>
+      <span class="eyebrow">The problem</span>
+      <h2 id="h-middle">Projects fail in the messy middle</h2>
+      <p class="lead">Not at the idea stage — when you're finding people, keeping details straight, and waiting for replies.</p>
+      <ul class="painlist">
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Forty browser tabs and a spreadsheet you stopped updating</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Losing track of who you've already contacted</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Writing the same introduction email over and over</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>Losing the thread as replies trickle in over weeks</li>
+      </ul>
+    </div>
+
+    <div class="canvas">
+      <div class="canvas-h">
+        <h3>The same project, week five</h3>
+        <span class="exlabel">Illustrative example</span>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>23</b><span>Contacts</span></div>
+        <div class="stat alert"><b>2</b><span>Needs you</span></div>
+        <div class="stat"><b>5</b><span>Reaching out</span></div>
+        <div class="stat"><b>13</b><span>Heard back</span></div>
+      </div>
+      <p class="eyebrow" style="margin:24px 0 10px">Who Envoy is talking to</p>
+      <ul class="talk">
+        <li><span class="dot" aria-hidden="true"></span><span class="who">Venue</span><span class="st"><span>2 replied</span><span>1 waiting</span></span></li>
+        <li><span class="dot" aria-hidden="true"></span><span class="who">Catering</span><span class="st"><span>2 replied</span><span>1 waiting</span></span></li>
+        <li><span class="dot" aria-hidden="true"></span><span class="who">Photography</span><span class="st"><span>1 replied</span><span>2 waiting</span></span></li>
+        <li><span class="dot" aria-hidden="true"></span><span class="who">Florist</span><span class="st"><span>2 replied</span><span>0 waiting</span></span></li>
+        <li><span class="dot wait" aria-hidden="true"></span><span class="who">Bar service</span><span class="st"><span>0 replied</span><span>2 waiting</span></span></li>
+        <li><span class="dot" aria-hidden="true"></span><span class="who">Transportation</span><span class="st"><span>1 replied</span><span>1 waiting</span></span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how" class="band-paper" aria-labelledby="h-how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">How it works</span>
+      <h2 id="h-how">From a sentence to sent</h2>
+      <p class="lead">No forms, no categories to hunt through. Tell Envoy what you're planning in plain language.</p>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <span class="n">Step one</span>
+        <h3>Describe your project</h3>
+        <p>A wedding, a renovation, an offsite. Add your location and Envoy works out which vendors the project actually needs.</p>
+      </article>
+      <article class="step">
+        <span class="n">Step two</span>
+        <h3>Get your lineup</h3>
+        <p>A ranked shortlist by category, each with the reason that category matters for your project. Fine-tune it before anything goes out.</p>
+      </article>
+      <article class="step">
+        <span class="n">Step three</span>
+        <h3>Envoy drafts. You approve.</h3>
+        <p>Envoy writes each introduction in your voice, with your dates and details. Nothing sends until you say so.</p>
+      </article>
+    </div>
+
+    <div class="draft">
+      <div class="draft-h">
+        <strong>Draft — introduction to a florist</strong>
+        <span class="exlabel">Illustrative example</span>
+      </div>
+      <div class="draft-b">
+        <div class="draft-meta">
+          <span><b>To:</b> Wildflower &amp; Fern Studio</span>
+          <span><b>From:</b> you@yourdomain.com</span>
+          <span><b>Subject:</b> Outdoor wedding florals — October 12, 150 guests</span>
+        </div>
+        <p class="draft-body">Hi Sarah,
+
+We're getting married on October 12th just outside Austin — an outdoor ceremony and reception for about 150 guests. We're after garden-style arrangements in a muted autumn palette.
+
+Do you have availability that date, and could you share pricing for ceremony florals plus fifteen tables?
+
+Thanks so much,
+Maya &amp; James</p>
+      </div>
+      <div class="approve">
+        <span class="pending"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Awaiting your approval</span>
+        <button class="btn btn-primary" type="button">Approve &amp; send</button>
+        <button class="btn btn-ghost" type="button">Edit draft</button>
+      </div>
+    </div>
+
+    <p class="trust"><strong>You're in control.</strong> Every message sends from your address only after you approve it — so vendors reply to you, not to a marketplace relay. Envoy learns your tone as you correct it, and never sends anything you haven't seen.</p>
+  </div>
+</section>
+
+<!-- ============ CASES ============ -->
+<section aria-labelledby="h-cases">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What people plan with Envoy</span>
+      <h2 id="h-cases">One tool, whatever you're coordinating</h2>
+      <p class="lead">Anything that needs more than a couple of vendors — weddings, events, renovations, repairs, fundraisers, company offsites.</p>
+    </div>
+    <div class="cases">
+      <article class="case">
+        <div class="ph">[Photo — TBD<br>outdoor autumn reception]</div>
+        <div class="case-b">
+          <h3>An outdoor wedding for 150</h3>
+          <p>Ten vendor categories, one immovable date, and a rain plan that has to stay open until two weeks out.</p>
+          <ul class="case-tags"><li>Venue</li><li>Catering</li><li>Florals</li><li>Photography</li><li>+6 more</li></ul>
+        </div>
+      </article>
+      <article class="case">
+        <div class="ph">[Photo — TBD<br>kitchen mid-renovation]</div>
+        <div class="case-b">
+          <h3>A 1920s kitchen renovation</h3>
+          <p>Trades that have to arrive in the right order, quotes that need comparing, and a house you're still living in.</p>
+          <ul class="case-tags"><li>General contractor</li><li>Cabinetmaker</li><li>Electrician</li><li>+4 more</li></ul>
+        </div>
+      </article>
+      <article class="case">
+        <div class="ph">[Photo — TBD<br>offsite workspace]</div>
+        <div class="case-b">
+          <h3>A company offsite for 40</h3>
+          <p>Venue, travel, food and facilitation booked around forty calendars and a budget you have to defend.</p>
+          <ul class="case-tags"><li>Venue</li><li>Lodging</li><li>Catering</li><li>Transport</li><li>+2 more</li></ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY ============ -->
+<section class="band-paper" aria-labelledby="h-why">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Why Envoy</span>
+      <h2 id="h-why">Not post-and-wait</h2>
+      <p class="lead">Marketplaces work for one-off jobs. They break when you're coordinating ten categories for one date.</p>
+    </div>
+    <div class="why">
+      <div>
+        <h3>Start before you sign up</h3>
+        <p>See the vendors your project needs, by category, before you create an account.</p>
+      </div>
+      <div>
+        <h3>Outreach from your inbox</h3>
+        <p>Vendors reply to you — not to a relay. You keep the relationship from the first email onward.</p>
+      </div>
+      <div>
+        <h3>Decisions, not dead ends</h3>
+        <p>Weeks of research, replies and follow-up stay in one place, so you have the full picture when it's time to choose.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROOF ============ -->
+<section aria-labelledby="h-proof" style="padding-block:clamp(50px,7vw,80px)">
+  <div class="wrap">
+    <div class="proof">
+      <span class="exlabel">[Proof — TBD]</span>
+      <h2 id="h-proof">Reserved for real proof</h2>
+      <p>This slot holds a genuine customer quote, a named early user, or a real usage number — once one exists. Deliberately left empty rather than filled with invented social proof.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing" class="band-paper" aria-labelledby="h-pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Pricing</span>
+      <h2 id="h-pricing">Free to plan. Pay only to automate.</h2>
+      <p class="lead">Planning a project? Envoy is free to use. Paid plans are for teams that want Envoy to handle the outreach for them.</p>
+    </div>
+    <div class="tiers">
+      <article class="tier">
+        <h3>Free</h3>
+        <div class="price">Free</div>
+        <p>Plan projects and reach out to vendors yourself.</p>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>1 active project</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Envoy-built vendor lineups</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Reach out to vendors yourself</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Track every reply in one place</li>
+        </ul>
+        <a class="btn btn-ghost" href="#top">Get started free</a>
+      </article>
+
+      <article class="tier pop">
+        <span class="tag">Most popular</span>
+        <h3>Pro</h3>
+        <div class="price">$96<small> /yr</small></div>
+        <p>Unlock unlimited projects and Pro mode.</p>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Free</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Pro mode</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited projects</li>
+        </ul>
+        <a class="btn btn-primary" href="#top">Choose Pro</a>
+      </article>
+
+      <article class="tier">
+        <h3>Agency</h3>
+        <div class="price">$200<small> /yr per user</small></div>
+        <p>Let Envoy draft and send outreach for your whole team.</p>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Pro</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Automated Envoy outreach to vendors</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Envoy drafts replies &amp; follow-ups in your voice</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Multiple seats for your whole team</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority vendor responses</li>
+        </ul>
+        <a class="btn btn-ghost" href="#top">Choose Agency</a>
+      </article>
+    </div>
+    <p class="pricing-note">Not sure which fits? Start free and explore the full lineup first.</p>
+  </div>
+</section>
+
+<!-- ============ VENDOR BAND ============ -->
+<section class="vend" id="pros" aria-labelledby="h-pros" style="padding-block:0">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">For vendors</span>
+      <h2 id="h-pros">Win more work, without chasing leads.</h2>
+      <p>Envoy puts your business in front of people actively planning projects — then helps you respond faster than anyone else.</p>
+    </div>
+    <a class="btn btn-ghost btn-lg" href="#">Envoy for Business</a>
+  </div>
+</section>
+
+<!-- ============ FINAL ============ -->
+<section class="final" aria-labelledby="h-final">
+  <div class="wrap">
+    <h2 id="h-final">Ready to line up your vendors?</h2>
+    <p class="lead">Describe your project and get a lineup in seconds. Free to start, no card needed.</p>
+    <a class="btn btn-primary btn-lg" href="#top">Start your project</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a class="brand" href="#top">
+          <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 21.5 6.5 12 21 2.5 6.5 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M7 8.2c3.4 1.6 6.6 1.6 10 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          Envoy
+        </a>
+        <p class="tagline">Your digital representative for outreach.</p>
+      </div>
+      <div>
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#lineup">Browse vendors</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#pros">For pros</a></li>
+          <li><a href="https://www.linkedin.com/company/hello-envoy/" rel="noopener noreferrer" target="_blank">LinkedIn</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span>© 2026 Envoy</span>
+      <span>Free to plan. Pay only to automate.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var proj=document.getElementById('proj');
+  document.querySelectorAll('.chip').forEach(function(c){
+    c.addEventListener('click',function(){proj.value=c.dataset.fill;proj.focus();});
+  });
+  document.getElementById('finder').addEventListener('submit',function(e){
+    e.preventDefault();
+    document.getElementById('lineup').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  });
+})();
+</script>
+</body>
+</html>

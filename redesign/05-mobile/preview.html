@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy Mobile — device preview</title>
+<style>
+  /* Mirrors ios-frame.jsx: 402×874, r48, island 126×37 @ top 11, status bar 62, home indicator 139×5 */
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f0eee9;
+    font-family:-apple-system,"SF Pro",system-ui,sans-serif}
+  .device{position:relative;width:402px;height:874px;border-radius:48px;overflow:hidden;background:#F4F5FC;
+    box-shadow:0 0 0 1px rgba(0,0,0,.12),0 40px 80px -30px rgba(0,0,0,.35)}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:126px;height:37px;border-radius:24px;background:#000;z-index:50;pointer-events:none}
+  .status{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;justify-content:center;gap:154px;padding:21px 24px 19px;pointer-events:none}
+  .status div{flex:1;height:22px;display:flex;align-items:center;justify-content:center}
+  .status span{font-weight:590;font-size:17px;line-height:22px;color:#000}
+  .home{position:absolute;bottom:0;left:0;right:0;height:34px;display:flex;justify-content:center;align-items:flex-end;padding-bottom:8px;z-index:60;pointer-events:none}
+  .home i{display:block;width:139px;height:5px;border-radius:100px;background:#000}
+</style>
+</head>
+<body>
+  <div class="device">
+    <iframe src="index.html?frame" title="Envoy mobile page"></iframe>
+    <div class="island"></div>
+    <div class="status"><div><span>9:41</span></div><div>
+      <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="7.5" width="3.2" height="4.5" rx=".7"/><rect x="4.8" y="5" width="3.2" height="7" rx=".7"/><rect x="9.6" y="2.5" width="3.2" height="9.5" rx=".7"/><rect x="14.4" y="0" width="3.2" height="12" rx=".7"/></svg>&nbsp;
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" stroke="#000" stroke-opacity=".35" fill="none"/><rect x="2" y="2" width="20" height="9" rx="2"/></svg>
+    </div></div>
+    <div class="home"><i></i></div>
+  </div>
+</body>
+</html>
