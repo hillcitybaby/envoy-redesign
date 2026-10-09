@@ -13,9 +13,12 @@ Edit the source pages, then re-run:   python redesign/06-responsive/build.py
 import re, shutil
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-DESK = HERE.parent / '04-final' / 'index.html'
-MOB = HERE.parent / '05-mobile' / 'index.html'
+HERE = Path(__file__).resolve().parent     # redesign/
+SRC = HERE / 'src'                         # the only files anyone edits
+OUT = HERE / 'build'                       # generated — overwritten every run
+SYS = HERE / '_system'
+DESK = OUT / 'desktop.html'                # written by _system/apply.py
+MOB = OUT / 'mobile.html'
 BREAK = 768
 
 
@@ -112,6 +115,10 @@ def prefix_mobile_ids(body, js):
 
 
 def main():
+    import subprocess, sys
+    r = subprocess.run([sys.executable, str(SYS / 'apply.py')], text=True)
+    if r.returncode: raise SystemExit('apply.py failed')
+
     d_head, d_css, d_body, d_js = parts(DESK.read_text(encoding='utf-8'))
     _, m_css, m_body, m_js = parts(MOB.read_text(encoding='utf-8'))
     m_body, m_js, ids = prefix_mobile_ids(m_body, m_js)
@@ -152,21 +159,16 @@ body{{margin:0}}
 </body>
 </html>
 """)
-    (HERE / 'index.html').write_text(page, encoding='utf-8')
-    wl = HERE.parent / '09-waitlist' / 'waitlist.html'
-    if wl.exists():
-        shutil.copy(wl, HERE / 'waitlist.html')
-        print(f'copied waitlist.html ({wl.stat().st_size:,} bytes)')
-
-    src_img, dst_img = DESK.parent / 'img', HERE / 'img'
+    (OUT / 'index.html').write_text(page, encoding='utf-8')
+    src_img, dst_img = SRC / 'img', OUT / 'img'
     shutil.copytree(src_img, dst_img, dirs_exist_ok=True)
-    print(f'wrote {HERE / "index.html"} ({len(page):,} bytes); mobile ids prefixed: {", ".join(ids)}')
+    print(f'wrote build/index.html ({len(page):,} bytes); mobile ids prefixed: {", ".join(ids)}')
 
     # the design system is not advisory — a page that breaks it does not ship
     import subprocess
     failed = False
     for name in ('check.mjs', 'layout-check.mjs'):
-        check = HERE.parent / '_system' / name
+        check = SYS / name
         if not check.exists():
             continue
         r = subprocess.run(['node', str(check)], capture_output=True, text=True)

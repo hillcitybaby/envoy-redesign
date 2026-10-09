@@ -14,6 +14,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
+SRC = ROOT / 'src'      # the only files anyone edits
+OUT = ROOT / 'build'    # generated — overwritten on every run
 START = '/* ==ENVOY-SYSTEM:START== */'
 END = '/* ==ENVOY-SYSTEM:END== */'
 
@@ -53,9 +55,9 @@ def drop_rules(css, selectors):
     return ''.join(out), dropped
 
 
-def apply_file(path, root_keep, drop, replacements, label, pre_css=(), post_css=''):
+def apply_file(src, out, root_keep, drop, replacements, label, pre_css=(), post_css=''):
     import transforms
-    s = io.open(path, encoding='utf-8').read()
+    s = io.open(src, encoding='utf-8').read()
     system = io.open(HERE / 'system.css', encoding='utf-8').read()
 
     head, css, tail = s[:s.index('<style>') + 7], s[s.index('<style>') + 7:s.index('</style>')], s[s.index('</style>'):]
@@ -94,7 +96,13 @@ def apply_file(path, root_keep, drop, replacements, label, pre_css=(), post_css=
             continue
         s = s.replace(old, new)
         applied.append(old[:40])
-    io.open(path, 'w', encoding='utf-8').write(s)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    nl = chr(10)
+    banner = (nl.join(['<!-- GENERATED FILE — do not edit.',
+                       '     Source: redesign/src/' + src.name,
+                       '     Rebuild: python redesign/build.py -->']) + nl)
+    s = s.replace('<!doctype html>', '<!doctype html>' + nl + banner, 1)
+    io.open(out, 'w', encoding='utf-8').write(s)
     print('  %s: dropped %d superseded rules, applied %d rewrites' % (label, len(dropped), len(applied)))
     return dropped
 
@@ -141,7 +149,6 @@ DESK_REPL = [
     ('background:rgba(10,13,32,.5);backdrop-filter', 'background:rgba(var(--shadow-ink),.5);backdrop-filter'),
     ('rgba(8,10,26,.35)', 'rgba(var(--shadow-ink),.35)'),
     ('rgba(8,10,26,.40)', 'rgba(var(--shadow-ink),.40)'),
-    ('rgba(8,10,26,.5)', 'rgba(var(--shadow-ink),.5)'),
 ]
 
 # ------------------------------------------------------------------ mobile ---
@@ -242,18 +249,33 @@ MOB_POST = """
 # is tight from about 940px up. Reflowing it at 1100 instead of 900 removes that
 # band entirely — a content-driven breakpoint rather than a round number.
 HERO_REFLOW = """@media(max-width:1100px){
-  .stage{aspect-ratio:auto;border-radius:0;background:transparent;overflow:visible}
-  .photo{position:relative;inset:auto;aspect-ratio:16/11;border-radius:30px;overflow:hidden}
+  /* Tablet: the stage becomes the white container. The photo is cropped to the
+     same 1372:830 frame the desktop uses — so the tooltip percentages still land
+     on the right part of the picture — and the copy and the conversation starter
+     sit beneath it inside the same card. */
+  .stage{aspect-ratio:auto;background:var(--card);border-radius:38px;overflow:hidden;
+    padding:8px;box-shadow:0 30px 70px -24px rgba(8,10,26,.35)}
+  .photo{position:relative;inset:auto;aspect-ratio:1372/830;border-radius:30px;overflow:hidden}
   .photo img{width:auto;height:100%;left:50%!important;top:0!important;transform:translateX(-50%)}
-  .tips{display:none}
-  .overlay{position:static;width:auto;height:auto;min-height:0;margin:-34px 8px 0;box-shadow:0 20px 50px -34px rgba(8,10,26,.5)}
-  .ov-copy{padding-top:24px;gap:26px}
+  /* the tooltip layer sits exactly over the photo, in the same proportions */
+  .tips{left:8px;right:8px;top:8px;bottom:auto;aspect-ratio:1372/830}
+  /* each tooltip scales from its own anchor, so it keeps pointing at the same
+     spot in the picture as everything shrinks */
+  .tips .tip{transform:scale(.62);transform-origin:top left}
+  .util{top:22px;right:22px}
+  .states{left:22px;right:auto;bottom:auto;top:22px}
+  .overlay{position:static;width:auto;height:auto;min-height:0;background:transparent;
+    box-shadow:none;margin:0;padding:var(--sp-5) var(--sp-3) var(--sp-3)}
+  .ov-copy{padding-top:0;gap:var(--sp-5)}
   .ov-mid{height:auto;min-height:0;display:block}
-  .ov-mid h1{font-size:clamp(1.8rem,7vw,2.5rem);max-width:none}
+  .ov-mid h1{font-size:clamp(1.8rem,5.2vw,2.5rem);max-width:none}
   .ov-lede{font-size:16px;max-width:var(--measure);margin-top:16px}
-  .util{top:14px;right:14px}
-  .states{right:auto;left:14px;bottom:auto;top:14px}
-  .tipchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;padding:0;list-style:none}
+  /* the tooltip layer is aria-hidden, so the chips stay for screen readers —
+     visually hidden rather than removed, or the vendor counts are lost here */
+  .tipchips{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+@media(max-width:880px){
+  .tips .tip{transform:scale(.5)}
 }
 @media(max-width:900px){
   .tier{height:auto}"""
@@ -264,6 +286,24 @@ DESK_PRE.append((
 
 HERO_ANCHOR = "@media(max-width:900px){" + chr(10) + "  .tier{height:auto}"
 DESK_PRE.append((HERO_ANCHOR, HERO_REFLOW))
+
+# The 900 block carried its own copy of the hero reflow. The 1100 block above now
+# owns the whole tablet range, so those lines are removed rather than left to
+# override it between 768 and 900.
+for _dead in [
+    "  .stage{aspect-ratio:auto;border-radius:0;background:transparent;overflow:visible}\n",
+    "  .photo{position:relative;inset:auto;aspect-ratio:16/11;border-radius:30px;overflow:hidden}\n",
+    "  .tips{display:none}\n",
+    "  .overlay{position:static;width:auto;height:auto;margin:-34px 8px 0;box-shadow:0 20px 50px -34px rgba(8,10,26,.5)}\n",
+    "  .ov-copy{padding-top:24px;gap:26px}\n",
+    "  .ov-mid{height:auto;display:block}\n",
+    "  .ov-mid h1{font-size:clamp(1.8rem,7vw,2.5rem);max-width:none}\n",
+    "  .ov-lede{font-size:16px;max-width:none;margin-top:16px}\n",
+    "  .util{top:14px;right:14px}\n",
+    "  .states{right:auto;left:14px;bottom:auto;top:14px}\n",
+    "  .tipchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;padding:0;list-style:none}\n",
+]:
+    DESK_PRE.append((_dead, ""))
 
 
 
@@ -300,13 +340,15 @@ if WAITLIST_LINKED:
 
 
 if __name__ == '__main__':
-    print('applying the system')
-    apply_file(ROOT / '04-final' / 'index.html',
+    print('applying the system  src/ -> build/')
+    apply_file(SRC / 'desktop.html', OUT / 'desktop.html',
                ':root{ --pad:34px }', DESK_DROP, DESK_REPL, 'desktop', DESK_PRE)
-    apply_file(ROOT / '05-mobile' / 'index.html',
-               ':root{\n  --inset-top:calc(env(safe-area-inset-top,0px) + 18px);\n'
-               '  --inset-bottom:max(12px, calc(env(safe-area-inset-bottom,0px) + 6px));\n}',
-               MOB_DROP, MOB_REPL, 'mobile', MOB_PRE, MOB_POST)
-    apply_file(ROOT / '09-waitlist' / 'waitlist.html',
+    MOB_ROOT = chr(10).join([
+        ':root{',
+        '  --inset-top:calc(env(safe-area-inset-top,0px) + 18px);',
+        '  --inset-bottom:max(12px, calc(env(safe-area-inset-bottom,0px) + 6px));',
+        '}'])
+    apply_file(SRC / 'mobile.html', OUT / 'mobile.html',
+               MOB_ROOT, MOB_DROP, MOB_REPL, 'mobile', MOB_PRE, MOB_POST)
+    apply_file(SRC / 'waitlist.html', OUT / 'waitlist.html',
                ':root{ --pad:34px }', set(), [], 'waitlist')
-    print('done — now run redesign/06-responsive/build.py')

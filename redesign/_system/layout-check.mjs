@@ -13,7 +13,7 @@ import os from 'os';
 import { fileURLToPath } from 'url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const DIR = path.join(HERE, '..', '06-responsive');
+const DIR = path.join(HERE, '..', 'build');
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const WIDTHS = [320, 375, 768, 1024, 1440];

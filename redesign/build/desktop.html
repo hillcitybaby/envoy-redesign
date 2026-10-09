@@ -398,34 +398,38 @@ footer nav a:hover{color:var(--ink)}
   .biz-copy>p{max-width:var(--measure)}
 }
 @media(max-width:1100px){
-  .stage{aspect-ratio:auto;border-radius:0;background:transparent;overflow:visible}
-  .photo{position:relative;inset:auto;aspect-ratio:16/11;border-radius:30px;overflow:hidden}
+  /* Tablet: the stage becomes the white container. The photo is cropped to the
+     same 1372:830 frame the desktop uses — so the tooltip percentages still land
+     on the right part of the picture — and the copy and the conversation starter
+     sit beneath it inside the same card. */
+  .stage{aspect-ratio:auto;background:var(--card);border-radius:38px;overflow:hidden;
+    padding:8px;box-shadow:0 30px 70px -24px rgba(var(--shadow-ink),.35)}
+  .photo{position:relative;inset:auto;aspect-ratio:1372/830;border-radius:30px;overflow:hidden}
   .photo img{width:auto;height:100%;left:50%!important;top:0!important;transform:translateX(-50%)}
-  .tips{display:none}
-  .overlay{position:static;width:auto;height:auto;min-height:0;min-height:0;margin:-34px 8px 0;box-shadow:0 20px 50px -34px rgba(var(--shadow-ink),.5)}
-  .ov-copy{padding-top:24px;gap:26px}
+  /* the tooltip layer sits exactly over the photo, in the same proportions */
+  .tips{left:8px;right:8px;top:8px;bottom:auto;aspect-ratio:1372/830}
+  /* each tooltip scales from its own anchor, so it keeps pointing at the same
+     spot in the picture as everything shrinks */
+  .tips .tip{transform:scale(.62);transform-origin:top left}
+  .util{top:22px;right:22px}
+  .states{left:22px;right:auto;bottom:auto;top:22px}
+  .overlay{position:static;width:auto;height:auto;min-height:0;min-height:0;background:transparent;
+    box-shadow:none;margin:0;padding:var(--sp-5) var(--sp-3) var(--sp-3)}
+  .ov-copy{padding-top:0;gap:var(--sp-5)}
   .ov-mid{height:auto;min-height:0;min-height:0;display:block}
-  .ov-mid h1{font-size:clamp(1.8rem,7vw,2.5rem);max-width:none}
+  .ov-mid h1{font-size:clamp(1.8rem,5.2vw,2.5rem);max-width:none}
   .ov-lede{font-size:var(--t-body);max-width:var(--measure);margin-top:16px}
-  .util{top:14px;right:14px}
-  .states{right:auto;left:14px;bottom:auto;top:14px}
-  .tipchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;padding:0;list-style:none}
+  /* the tooltip layer is aria-hidden, so the chips stay for screen readers —
+     visually hidden rather than removed, or the vendor counts are lost here */
+  .tipchips{position:absolute;width:1px;min-height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+@media(max-width:880px){
+  .tips .tip{transform:scale(.5)}
 }
 @media(max-width:900px){
   .tier{height:auto;min-height:0}
   footer{min-height:0}
-  .stage{aspect-ratio:auto;border-radius:0;background:transparent;overflow:visible}
-  .photo{position:relative;inset:auto;aspect-ratio:16/11;border-radius:30px;overflow:hidden}
   .photo img{width:auto;height:100%;left:50%!important;top:0!important;transform:translateX(-50%)}
-  .tips{display:none}
-  .overlay{position:static;width:auto;height:auto;min-height:0;margin:-34px 8px 0;box-shadow:0 20px 50px -34px rgba(var(--shadow-ink),.5)}
-  .ov-copy{padding-top:24px;gap:26px}
-  .ov-mid{height:auto;min-height:0;display:block}
-  .ov-mid h1{font-size:clamp(1.8rem,7vw,2.5rem);max-width:none}
-  .ov-lede{font-size:var(--t-body);max-width:none;margin-top:16px}
-  .util{top:14px;right:14px}
-  .states{right:auto;left:14px;bottom:auto;top:14px}
-  .tipchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;padding:0;list-style:none}
   .tipchips li{font-size:var(--t-small);font-weight:600;color:var(--ink);background:var(--indigo-soft);
     border:1px solid var(--line-2);border-radius:999px;padding:6px 12px}
   .tipchips li span{color:var(--muted);font-weight:500}
